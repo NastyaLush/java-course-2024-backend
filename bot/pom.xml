@@ -9,7 +9,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>bot</artifactId>
+    <artifactId>botListener</artifactId>
     <version>${revision}</version>
 
     <dependencies>
@@ -46,7 +46,7 @@
         <!-- Telegram -->
         <dependency>
             <groupId>com.github.pengrad</groupId>
-            <artifactId>java-telegram-bot-api</artifactId>
+            <artifactId>java-telegram-botListener-api</artifactId>
         </dependency>
 
         <!-- Dev Tools -->

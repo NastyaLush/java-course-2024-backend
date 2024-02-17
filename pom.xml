@@ -26,7 +26,7 @@
 
         <!-- Other -->
         <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
-        <java-telegram-bot-api.version>7.0.1</java-telegram-bot-api.version>
+        <java-telegram-botListener-api.version>7.0.1</java-telegram-botListener-api.version>
 
         <!-- Tests -->
         <testcontainers.version>1.19.4</testcontainers.version>
@@ -46,7 +46,7 @@
     </properties>
 
     <modules>
-        <module>bot</module>
+        <module>botListener</module>
         <module>scrapper</module>
     </modules>
 
@@ -54,8 +54,8 @@
         <dependencies>
             <dependency>
                 <groupId>com.github.pengrad</groupId>
-                <artifactId>java-telegram-bot-api</artifactId>
-                <version>${java-telegram-bot-api.version}</version>
+                <artifactId>java-telegram-botListener-api</artifactId>
+                <version>${java-telegram-botListener-api.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wiremock</groupId>
