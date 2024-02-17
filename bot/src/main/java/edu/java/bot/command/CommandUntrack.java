@@ -38,6 +38,7 @@ public class CommandUntrack implements Command {
         if (message.equals(command())) {
             return printer.getMessage(chatId, "Please enter url to untrack");
         }
+
         if (urlService.isUrl(message)) {
             return printer.getMessage(
                 chatId,

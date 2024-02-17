@@ -3,7 +3,6 @@ package edu.java.bot.bot;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
-import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.BaseResponse;
 import edu.java.bot.manager.UserManagerProcessorImpl;
 import java.util.List;
@@ -34,12 +33,7 @@ import org.springframework.stereotype.Component;
         return CONFIRMED_UPDATES_ALL;
     }
 
-    @Override public void start() {
-        log.info("listener starts");
-    }
-
     @Override public void close() {
-        execute(new SendMessage(1L, "the bot will come back. He need to be repaired!"));
         log.info("listener stopped");
     }
 }

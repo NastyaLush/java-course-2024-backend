@@ -28,7 +28,7 @@ public class CommandHelp implements Command {
 
     @Override
     public SendMessage handle(Update update, Printer printer) {
-        StringBuilder answer = new StringBuilder("AvailableCommands:\n");
+        StringBuilder answer = new StringBuilder("Available commands:\n");
         availableCommands.forEach(command -> answer.append(printer.makeBold(command.command())).append(" : ")
             .append(command.description()).append("\n"));
         return printer.getMessage(

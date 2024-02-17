@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
             return commandsMap.get(message).handle(update, printer);
         }
         Command prevCommand = commandsMap.get(chatCondition.get(chatId));
-        if (prevCommand.isCallabackable()) {
+        if (prevCommand != null && prevCommand.isCallabackable()) {
             return prevCommand.handle(update, printer);
         }
         return new SendMessage(chatId, "there is no this command((");
