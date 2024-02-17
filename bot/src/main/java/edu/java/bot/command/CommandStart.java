@@ -3,11 +3,10 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.print.Printer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommandStart implements Command{
+public class CommandStart implements Command {
 
     @Override
     public String command() {
@@ -21,6 +20,8 @@ public class CommandStart implements Command{
 
     @Override
     public SendMessage handle(Update update, Printer printer) {
-        return printer.getMessage(update.message().chat().id(),"start: welcome to our bot, i'm just being developed, this command will be added in the next versions");
+        return printer.getMessage(
+            update.message().chat().id(),
+            "start: welcome to our bot, i'm just being developed, this command will be added in the next versions");
     }
 }

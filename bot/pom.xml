@@ -9,7 +9,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>botListener</artifactId>
+    <artifactId>bot</artifactId>
     <version>${revision}</version>
 
     <dependencies>
@@ -46,7 +46,7 @@
         <!-- Telegram -->
         <dependency>
             <groupId>com.github.pengrad</groupId>
-            <artifactId>java-telegram-botListener-api</artifactId>
+            <artifactId>java-telegram-bot-api</artifactId>
         </dependency>
 
         <!-- Dev Tools -->
@@ -66,6 +66,12 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.12</version>
+        </dependency>
+
 
         <!-- Tests -->
         <dependency>
@@ -91,7 +97,7 @@
         </dependency>
         <dependency>
             <groupId>org.wiremock</groupId>
-            <artifactId>wiremock-standalone</artifactId>
+            <artifactId>wiremock</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

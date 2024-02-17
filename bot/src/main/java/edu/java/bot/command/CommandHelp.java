@@ -3,9 +3,9 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.print.Printer;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.util.List;
 
 @Component
 public class CommandHelp implements Command {
@@ -29,7 +29,8 @@ public class CommandHelp implements Command {
     @Override
     public SendMessage handle(Update update, Printer printer) {
         StringBuilder answer = new StringBuilder("AvailableCommands:\n");
-        availableCommands.forEach(command -> answer.append(printer.makeBold(command.command())).append(" : ").append(command.description()).append("\n"));
+        availableCommands.forEach(command -> answer.append(printer.makeBold(command.command())).append(" : ")
+            .append(command.description()).append("\n"));
         return printer.getMessage(
             update.message().chat().id(), answer.toString()
         );

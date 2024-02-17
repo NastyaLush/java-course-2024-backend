@@ -41,7 +41,7 @@ public class CommandTrack implements Command {
         if (urlService.isUrl(message)) {
             return printer.getMessage(
                 chatId,
-                "Url "+ message+ " is tracking"
+                "Url " + message + " is tracking"
             );
         }
         return printer.getMessage(

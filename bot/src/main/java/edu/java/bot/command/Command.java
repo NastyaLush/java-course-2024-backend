@@ -1,10 +1,8 @@
 package edu.java.bot.command;
 
-import com.pengrad.telegrambot.Callback;
 import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.response.SendResponse;
 import edu.java.bot.print.Printer;
 
 public interface Command {
@@ -14,7 +12,9 @@ public interface Command {
 
     SendMessage handle(Update update, Printer printer);
 
-    default boolean isCallabackable() { return false; }
+    default boolean isCallabackable() {
+        return false;
+    }
 
     default BotCommand toApiCommand() {
         return new BotCommand(command(), description());
