@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-![Bot](https://github.com/sanyarnd/java-course-2023-backend-template/actions/workflows/bot.yml/badge.svg)
-=======
 ![Bot](https://github.com/sanyarnd/java-course-2023-backend-template/actions/workflows/botListener.yml/badge.svg)
->>>>>>> hw1_main
 ![Scrapper](https://github.com/sanyarnd/java-course-2023-backend-template/actions/workflows/scrapper.yml/badge.svg)
 
 # Link Tracker
