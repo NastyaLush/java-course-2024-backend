@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 
 public class CommandHelpTest {
-    long ID = 1l;
+    long ID = 1L;
 
     @Test
     @DisplayName("help command if no available command")

@@ -9,7 +9,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component public class UserManagerProcessorImpl implements UserMessageProcessor {
+@Component
+public class UserManagerProcessorImpl implements UserMessageProcessor {
     private final Map<String, Command> commandsMap = new HashMap<>();
     private final Printer printer;
     private final Map<Long, String> chatCondition = new HashMap<>();
@@ -22,8 +23,6 @@ import org.springframework.stereotype.Component;
     public void register(Command command) {
         commandsMap.put(command.command(), command);
     }
-
-
 
     @Override public SendMessage process(Update update) {
         Long chatId = update.message().chat().id();

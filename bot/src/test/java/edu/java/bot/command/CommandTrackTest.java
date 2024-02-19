@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.mockito.Mockito;
 
 public class CommandTrackTest {
-    long ID=1l;
+    long ID= 1L;
 
     @Test
     @DisplayName("handle should allow enter url if track command called")

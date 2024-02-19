@@ -11,21 +11,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-@Component @Log4j2 public class BotListenerImpl implements BotListener {
+@Component
+@Log4j2
+public class BotListenerImpl implements BotListener {
     private final UserManagerProcessorImpl userManagerProcessor;
     private final TelegramBot telegramBot;
 
-    @Autowired @Lazy public BotListenerImpl(UserManagerProcessorImpl userManagerProcessor, TelegramBot telegramBot) {
+    @Autowired
+    @Lazy
+    public BotListenerImpl(UserManagerProcessorImpl userManagerProcessor, TelegramBot telegramBot) {
         this.userManagerProcessor = userManagerProcessor;
         this.telegramBot = telegramBot;
     }
 
-    @Override public <T extends BaseRequest<T, R>, R extends BaseResponse> void execute(BaseRequest<T, R> request) {
+    @Override
+    public <T extends BaseRequest<T, R>, R extends BaseResponse> void execute(BaseRequest<T, R> request) {
         telegramBot.execute(request);
 
     }
 
-    @Override public int process(List<Update> updates) {
+    @Override
+    public int process(List<Update> updates) {
         log.info("receive update: " + updates);
         updates.forEach(update -> {
             execute(userManagerProcessor.process(update));
@@ -33,7 +39,8 @@ import org.springframework.stereotype.Component;
         return CONFIRMED_UPDATES_ALL;
     }
 
-    @Override public void close() {
+    @Override
+    public void close() {
         log.info("listener stopped");
     }
 }

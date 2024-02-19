@@ -10,8 +10,10 @@ import java.util.List;
 public interface BotListener extends AutoCloseable, UpdatesListener {
     <T extends BaseRequest<T, R>, R extends BaseResponse> void execute(BaseRequest<T, R> request);
 
-    @Override int process(List<Update> updates);
+    @Override
+    int process(List<Update> updates);
 
 
-    @Override void close();
+    @Override
+    void close();
 }

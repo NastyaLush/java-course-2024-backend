@@ -41,13 +41,13 @@ public class CommandUntrack implements Command {
 
         if (urlService.isUrl(message)) {
             return printer.getMessage(
-                chatId,
-                "Url " + message + " removed from tracking"
+                    chatId,
+                    "Url " + message + " removed from tracking"
             );
         }
         return printer.getMessage(
-            chatId,
-            "It's not an url"
+                chatId,
+                "It's not an url"
         );
     }
 }

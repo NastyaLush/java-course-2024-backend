@@ -26,8 +26,8 @@ public class TelegramBotImpl extends TelegramBot {
     private void addCommandsMenu(List<Command> commands) {
 
         SetMyCommands setMyCommands = new SetMyCommands(
-            commands.stream().map(Command::toApiCommand)
-                .toArray(BotCommand[]::new)).languageCode("en");
+                commands.stream().map(Command::toApiCommand)
+                        .toArray(BotCommand[]::new)).languageCode("en");
 
         this.execute(setMyCommands, new Callback<SetMyCommands, BaseResponse>() {
             @Override

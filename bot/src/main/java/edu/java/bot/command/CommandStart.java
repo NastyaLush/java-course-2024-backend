@@ -21,7 +21,7 @@ public class CommandStart implements Command {
     @Override
     public SendMessage handle(Update update, Printer printer) {
         return printer.getMessage(
-            update.message().chat().id(),
-            "start: welcome to our bot, i'm just being developed, this command will be added in the next versions");
+                update.message().chat().id(),
+                "start: welcome to our bot, i'm just being developed, this command will be added in the next versions");
     }
 }

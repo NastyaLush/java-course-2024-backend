@@ -15,8 +15,8 @@ public class MarkDownPrinterTest {
     public void getMessage_shouldReturnSendMessageWithMarkdownMode() {
         MarkDownPrinter markDownPrinter = new MarkDownPrinter();
 
-        Map<String, Object> expected = new SendMessage(1l,"2").parseMode(ParseMode.Markdown).getParameters();
-        Map<String, Object> actual = markDownPrinter.getMessage(1l,"2").getParameters();
+        Map<String, Object> expected = new SendMessage(1L,"2").parseMode(ParseMode.Markdown).getParameters();
+        Map<String, Object> actual = markDownPrinter.getMessage(1L,"2").getParameters();
 
         assertEquals(expected, actual);
     }

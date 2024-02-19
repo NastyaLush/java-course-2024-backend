@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public interface UserMessageProcessor {
 
-    @Autowired void register(Command command);
+    void register(Command command);
 
     SendMessage process(Update update);
 

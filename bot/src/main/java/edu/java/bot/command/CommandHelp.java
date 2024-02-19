@@ -30,9 +30,9 @@ public class CommandHelp implements Command {
     public SendMessage handle(Update update, Printer printer) {
         StringBuilder answer = new StringBuilder("Available commands:\n");
         availableCommands.forEach(command -> answer.append(printer.makeBold(command.command())).append(" : ")
-            .append(command.description()).append("\n"));
+                .append(command.description()).append("\n"));
         return printer.getMessage(
-            update.message().chat().id(), answer.toString()
+                update.message().chat().id(), answer.toString()
         );
     }
 }
