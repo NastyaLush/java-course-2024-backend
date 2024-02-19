@@ -5,7 +5,6 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.command.Command;
 import edu.java.bot.print.Printer;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,14 +14,15 @@ import org.springframework.stereotype.Component;
     private final Printer printer;
     private final Map<Long, String> chatCondition = new HashMap<>();
 
-    @Autowired public UserManagerProcessorImpl(List<Command> commands, Printer printer) {
+    @Autowired public UserManagerProcessorImpl(Printer printer) {
         this.printer = printer;
-        initCommandsMap(commands);
+    }
+    @Override
+    public void register(Command command){
+        commandsMap.put(command.command(), command);
     }
 
-    private void initCommandsMap(List<Command> commands) {
-        commands.forEach((command -> commandsMap.put(command.command(), command)));
-    }
+
 
     @Override public SendMessage process(Update update) {
         Long chatId = update.message().chat().id();

@@ -26,7 +26,8 @@ public class UserManagerProcessorImplTest {
         List<Command> commands = List.of(command);
         Update update = Util.mockUpdate(CHAT_ID, commandName);
 
-        UserManagerProcessorImpl userManagerProcessor = new UserManagerProcessorImpl(commands, printer);
+        UserManagerProcessorImpl userManagerProcessor = new UserManagerProcessorImpl(printer);
+        commands.forEach(command1 -> command1.registerInUserMessageProcessor(userManagerProcessor));
         SendMessage actualSendMessage = userManagerProcessor.process(update);
 
         assertEquals(expectedSendMessage, actualSendMessage);
@@ -43,7 +44,8 @@ public class UserManagerProcessorImplTest {
         Update update = Util.mockUpdate(CHAT_ID, "hh");
         Update updatePrev = Util.mockUpdate(CHAT_ID, prevCommandName);
 
-        UserManagerProcessorImpl userManagerProcessor = new UserManagerProcessorImpl(commands, printer);
+        UserManagerProcessorImpl userManagerProcessor = new UserManagerProcessorImpl(printer);
+        commands.forEach(command -> command.registerInUserMessageProcessor(userManagerProcessor));
         userManagerProcessor.process(updatePrev);
         SendMessage actualSendMessage = userManagerProcessor.process(update);
 
@@ -59,7 +61,8 @@ public class UserManagerProcessorImplTest {
         List<Command> commands = List.of(Mockito.mock(Command.class), Mockito.mock(Command.class));
         Update update = Util.mockUpdate(CHAT_ID, commandName);
 
-        UserManagerProcessorImpl userManagerProcessor = new UserManagerProcessorImpl(commands, printer);
+        UserManagerProcessorImpl userManagerProcessor = new UserManagerProcessorImpl(printer);
+        commands.forEach(command -> command.registerInUserMessageProcessor(userManagerProcessor));
         SendMessage actualSendMessage = userManagerProcessor.process(update);
 
         assertEquals(expectedSendMessage.getParameters(), actualSendMessage.getParameters());
