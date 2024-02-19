@@ -17,8 +17,9 @@ import org.springframework.stereotype.Component;
     @Autowired public UserManagerProcessorImpl(Printer printer) {
         this.printer = printer;
     }
+
     @Override
-    public void register(Command command){
+    public void register(Command command) {
         commandsMap.put(command.command(), command);
     }
 

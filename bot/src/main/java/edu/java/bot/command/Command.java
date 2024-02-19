@@ -17,8 +17,9 @@ public interface Command {
     default boolean isCallabackable() {
         return false;
     }
+
     @Autowired
-    default void registerInUserMessageProcessor(UserMessageProcessor userMessageProcessor){
+    default void registerInUserMessageProcessor(UserMessageProcessor userMessageProcessor) {
         userMessageProcessor.register(this);
     }
 
