@@ -1,9 +1,12 @@
 package edu.java.stackoverflow;
 
 import edu.java.stackoverflow.dto.QuestionResponse;
+import jakarta.validation.constraints.NotNull;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 public class StackoverflowClientImpl implements StackoverflowClient{
@@ -20,15 +23,21 @@ public class StackoverflowClientImpl implements StackoverflowClient{
 
 
     @Override
-    public Mono<QuestionResponse> getQuestions(List<Integer> idList) {
+    public Mono<QuestionResponse> getQuestions(@NotNull List<Integer> idList) {
         String ids = idList.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(";"));
+
         return webClient
                 .get()
-                .uri("https://api.stackexchange.com/2.3/questions/{ids}?order=desc&sort=activity&site=stackoverflow", ids)
+                .uri(uriBuilder -> {
+                    URI build = uriBuilder.path("/2.3/questions/{ids}").queryParam("order", "desc")
+                            .queryParam("sort", "activity").queryParam("site", "stackoverflow").build(ids);
+                    System.out.println(build);
+                    return build;})
+//                        "/2.3/questions/{ids}?order=desc&sort=activity&site=stackoverflow", ids)
                 .retrieve()
-                .bodyToMono(QuestionResponse.class);
+                .bodyToMono(QuestionResponse.class).onErrorResume(WebClientResponseException.class, Mono::error);
     }
 
 }
