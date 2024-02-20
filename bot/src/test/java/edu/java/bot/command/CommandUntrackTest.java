@@ -19,7 +19,7 @@ public class CommandUntrackTest {
     public void handle_shouldAllowEnterUrlIfCommandWasCalled(){
         UrlService urlService = new UrlService();
         Printer printer = new MarkDownPrinter();
-        Update update = Util.mockUpdate(ID, "/track");
+        Update update = Util.mockUpdate(ID, "/untrack");
         CommandUntrack commandUntrack = new CommandUntrack(urlService);
 
         Map<String, Object> expectedAnswer = printer.getMessage(ID, "Please enter url to untrack").getParameters();
