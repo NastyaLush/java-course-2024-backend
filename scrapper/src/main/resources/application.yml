@@ -4,6 +4,7 @@ app:
     interval: 10s
     force-check-delay: 10s
 
+
 spring:
   application:
     name: scrapper
