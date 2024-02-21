@@ -6,7 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
-public class GithubClientImpl implements GithubClient{
+public class GithubClientImpl implements GithubClient {
     private static final String GITHUB_API_BASE_URL = "https://api.github.com";
 
     private final WebClient webClient;

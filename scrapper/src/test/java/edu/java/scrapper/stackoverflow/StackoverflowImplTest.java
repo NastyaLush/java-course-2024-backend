@@ -2,7 +2,8 @@ package edu.java.scrapper.stackoverflow;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.stackoverflow.StackoverflowClientImpl;
 import edu.java.stackoverflow.dto.QuestionResponse;
 import java.io.IOException;
@@ -11,30 +12,32 @@ import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+@WireMockTest
 public class StackoverflowImplTest {
     private static final List<Integer> questions = List.of(78027826, 8968641);
     private static final Path pathToCorrectExampleResponse = Path.of("src/test/java/edu/java/scrapper/stackoverflow/testData/correctResponseExample.txt");
     private static final Path pathToIncorrectExampleResponse = Path.of("src/test/java/edu/java/scrapper/stackoverflow/testData/incorrectResponseExample.txt");
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(WireMockConfiguration.wireMockConfig().dynamicPort());
+    @RegisterExtension
+    static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
+            .options(WireMockConfiguration.wireMockConfig().dynamicPort()).build();
 
     @Test
     public void getQuestions_shouldReturnListOfQuestions() throws IOException {
         String response = String.join("", Files.readAllLines(pathToCorrectExampleResponse));
         String questions = StackoverflowImplTest.questions.stream().map(Object::toString).collect(Collectors.joining("%3B"));
-        WireMock.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}"))
+        wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}"))
                 .withPathParam("ids", WireMock.equalTo(questions)).withQueryParam("order", WireMock.equalTo("desc"))
                 .withQueryParam("sort", WireMock.equalTo("activity"))
                 .withQueryParam("site", WireMock.equalTo("stackoverflow"))
                 .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
                         .withBody(response)));
 
-        StackoverflowClientImpl stackoverflowClient = new StackoverflowClientImpl(wireMockRule.baseUrl());
+        StackoverflowClientImpl stackoverflowClient = new StackoverflowClientImpl(wireMockExtension.baseUrl());
 
         Mono<QuestionResponse> stackoverflowClientQuestions = stackoverflowClient.getQuestions(StackoverflowImplTest.questions);
         QuestionResponse repositoryResponse = new QuestionResponse(List.of(
@@ -55,14 +58,14 @@ public class StackoverflowImplTest {
     public void getQuestions_shouldReturnEmptyListIfNoAnswerWithThisId() throws IOException {
         String response = String.join("", Files.readAllLines(pathToIncorrectExampleResponse));
         String questions = StackoverflowImplTest.questions.stream().map(Object::toString).collect(Collectors.joining("%3B"));
-        WireMock.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}"))
+        wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}"))
                 .withPathParam("ids", WireMock.equalTo(questions)).withQueryParam("order", WireMock.equalTo("desc"))
                 .withQueryParam("sort", WireMock.equalTo("activity"))
                 .withQueryParam("site", WireMock.equalTo("stackoverflow"))
                 .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
                         .withBody(response)));
 
-        StackoverflowClientImpl stackoverflowClient = new StackoverflowClientImpl(wireMockRule.baseUrl());
+        StackoverflowClientImpl stackoverflowClient = new StackoverflowClientImpl(wireMockExtension.baseUrl());
 
         Mono<QuestionResponse> stackoverflowClientQuestions = stackoverflowClient.getQuestions(StackoverflowImplTest.questions);
         QuestionResponse repositoryResponse = new QuestionResponse(List.of());

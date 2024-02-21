@@ -13,8 +13,9 @@ public class ClientConfiguration {
     public GithubClient githubClient() {
         return new GithubClientImpl();
     }
+
     @Bean
-    public StackoverflowClient stackOverflowClient(){
+    public StackoverflowClient stackOverflowClient() {
         return new StackoverflowClientImpl();
     }
 

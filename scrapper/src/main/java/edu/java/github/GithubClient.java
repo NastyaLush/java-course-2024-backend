@@ -4,5 +4,5 @@ import edu.java.github.dto.RepositoryResponse;
 import reactor.core.publisher.Mono;
 
 public interface GithubClient {
-    public Mono<RepositoryResponse> getGithubRepository(String owner, String repo);
+    Mono<RepositoryResponse> getGithubRepository(String owner, String repo);
 }

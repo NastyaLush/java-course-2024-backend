@@ -2,7 +2,7 @@ package edu.java.github.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
-import lombok.Data;
+
 public record RepositoryResponse(
         @JsonProperty("id") Integer id,
         @JsonProperty("name") String name,
