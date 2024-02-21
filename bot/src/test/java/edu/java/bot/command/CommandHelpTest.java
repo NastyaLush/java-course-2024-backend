@@ -7,7 +7,7 @@ import edu.java.bot.print.MarkDownPrinter;
 import edu.java.bot.print.Printer;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 
@@ -17,7 +17,7 @@ public class CommandHelpTest {
     @Test
     @DisplayName("help command if no available command")
     public void handle_shouldWorkCorrectlyIfNoAvailableCommands() {
-        List list = List.of();
+        List<Command> list = List.of();
         CommandHelp commandHelp = new CommandHelp(list);
         Printer printer = new MarkDownPrinter();
         Update update = Util.mockUpdate(ID, "");

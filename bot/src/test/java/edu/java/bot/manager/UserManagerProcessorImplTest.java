@@ -5,12 +5,10 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.Util;
 import edu.java.bot.command.Command;
 import edu.java.bot.print.Printer;
-import org.junit.Test;
-import org.mockito.Mockito;
-
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class UserManagerProcessorImplTest {
 
@@ -30,7 +28,7 @@ public class UserManagerProcessorImplTest {
         commands.forEach(command1 -> command1.registerInUserMessageProcessor(userManagerProcessor));
         SendMessage actualSendMessage = userManagerProcessor.process(update);
 
-        assertEquals(expectedSendMessage, actualSendMessage);
+        Assertions.assertEquals(expectedSendMessage, actualSendMessage);
     }
 
     @Test
@@ -49,7 +47,7 @@ public class UserManagerProcessorImplTest {
         userManagerProcessor.process(updatePrev);
         SendMessage actualSendMessage = userManagerProcessor.process(update);
 
-        assertEquals(expectedSendMessage, actualSendMessage);
+        Assertions.assertEquals(expectedSendMessage, actualSendMessage);
     }
 
     @Test
@@ -65,7 +63,7 @@ public class UserManagerProcessorImplTest {
         commands.forEach(command -> command.registerInUserMessageProcessor(userManagerProcessor));
         SendMessage actualSendMessage = userManagerProcessor.process(update);
 
-        assertEquals(expectedSendMessage.getParameters(), actualSendMessage.getParameters());
+        Assertions.assertEquals(expectedSendMessage.getParameters(), actualSendMessage.getParameters());
     }
 
     private Command createCommand(String commandName, SendMessage expectedSendMessage) {

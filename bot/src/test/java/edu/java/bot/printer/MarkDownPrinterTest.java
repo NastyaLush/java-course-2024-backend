@@ -5,9 +5,9 @@ import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.print.MarkDownPrinter;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class MarkDownPrinterTest {
     @Test
@@ -18,7 +18,7 @@ public class MarkDownPrinterTest {
         Map<String, Object> expected = new SendMessage(1L,"2").parseMode(ParseMode.Markdown).getParameters();
         Map<String, Object> actual = markDownPrinter.getMessage(1L,"2").getParameters();
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class MarkDownPrinterTest {
         String expected = "*text*";
         String  actual = markDownPrinter.makeBold("text");
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class MarkDownPrinterTest {
         String expected = "_text_";
         String  actual = markDownPrinter.makeItalic("text");
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
 
@@ -52,7 +52,7 @@ public class MarkDownPrinterTest {
         String expected = "text";
         String  actual = markDownPrinter.makeURL("text");
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class MarkDownPrinterTest {
         String expected = "[text](url)";
         String  actual = markDownPrinter.makeURL("text", "url");
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
 
@@ -75,7 +75,7 @@ public class MarkDownPrinterTest {
         String expected = "`text`";
         String  actual = markDownPrinter.makeInlineCode("text");
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
 
@@ -87,7 +87,7 @@ public class MarkDownPrinterTest {
         String expected = "```text```";
         String  actual = markDownPrinter.makeFormatedInlineCode("text");
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
 }

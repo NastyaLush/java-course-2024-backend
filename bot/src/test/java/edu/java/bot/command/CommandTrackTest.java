@@ -6,7 +6,7 @@ import edu.java.bot.print.MarkDownPrinter;
 import edu.java.bot.print.Printer;
 import edu.java.bot.url.UrlService;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.mockito.Mockito;
