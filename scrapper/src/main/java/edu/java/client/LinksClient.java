@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.core.publisher.Mono;
 
 public class LinksClient implements LinksApi {
+    public static final String HEADER_NAME = "Tg-Chat-Id";
     private static final String DEFAULT_URL = "http://localhost:8080/links";
 
     private final WebClient webClient;
@@ -27,7 +28,7 @@ public class LinksClient implements LinksApi {
     @Override
     public ResponseEntity<LinkResponse> linksDelete(Long tgChatId, RemoveLinkRequest removeLinkRequest) {
         return webClient.method(HttpMethod.DELETE).uri(uriBuilder -> uriBuilder.path(DEFAULT_URL).build())
-                .header("Tg-Chat-Id", String.valueOf(tgChatId))
+                .header(HEADER_NAME, String.valueOf(tgChatId))
                 .body(Mono.just(removeLinkRequest), RemoveLinkRequest.class).retrieve().toEntity(LinkResponse.class)
                 .onErrorResume(WebClientResponseException.class, Mono::error).block();
     }
@@ -35,14 +36,14 @@ public class LinksClient implements LinksApi {
     @Override
     public ResponseEntity<ListLinksResponse> linksGet(Long tgChatId) {
         return webClient.get().uri(uriBuilder -> uriBuilder.path(DEFAULT_URL).build())
-                .header("Tg-Chat-Id", String.valueOf(tgChatId)).retrieve().toEntity(ListLinksResponse.class)
+                .header(HEADER_NAME, String.valueOf(tgChatId)).retrieve().toEntity(ListLinksResponse.class)
                 .onErrorResume(WebClientResponseException.class, Mono::error).block();
     }
 
     @Override
     public ResponseEntity<LinkResponse> linksPost(Long tgChatId, AddLinkRequest addLinkRequest) {
         return webClient.method(HttpMethod.POST).uri(uriBuilder -> uriBuilder.path(DEFAULT_URL).build())
-                .header("Tg-Chat-Id", String.valueOf(tgChatId))
+                .header(HEADER_NAME, String.valueOf(tgChatId))
                 .body(Mono.just(addLinkRequest), AddLinkRequest.class).retrieve().toEntity(LinkResponse.class)
                 .onErrorResume(WebClientResponseException.class, Mono::error).block();
     }

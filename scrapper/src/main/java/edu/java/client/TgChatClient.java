@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
 
 public class TgChatClient implements TgChatApi {
     private static final String DEFAULT_URL = "http://localhost:8080/tg-chat";
+    public static final String ID = "/{id}";
 
     private final WebClient webClient;
 
@@ -21,13 +22,21 @@ public class TgChatClient implements TgChatApi {
 
     @Override
     public ResponseEntity<Void> tgChatIdDelete(Long id) {
-        return webClient.delete().uri(uriBuilder -> uriBuilder.path(DEFAULT_URL+"/{id}").build(id)).retrieve().toEntity(Void.class)
-                .onErrorResume(WebClientResponseException.class, Mono::error).block();
+        return webClient.delete()
+                .uri(uriBuilder -> uriBuilder.path(DEFAULT_URL + ID).build(id))
+                .retrieve()
+                .toEntity(Void.class)
+                .onErrorResume(WebClientResponseException.class, Mono::error)
+                .block();
     }
 
     @Override
     public ResponseEntity<Void> tgChatIdPost(Long id) {
-        return webClient.post().uri(uriBuilder -> uriBuilder.path(DEFAULT_URL+"/{id}").build(id)).retrieve().toEntity(Void.class)
-                .onErrorResume(WebClientResponseException.class, Mono::error).block();
+        return webClient.post()
+                .uri(uriBuilder -> uriBuilder.path(DEFAULT_URL + ID).build(id))
+                .retrieve()
+                .toEntity(Void.class)
+                .onErrorResume(WebClientResponseException.class, Mono::error)
+                .block();
     }
 }

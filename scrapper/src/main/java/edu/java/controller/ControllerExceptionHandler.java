@@ -1,6 +1,5 @@
 package edu.java.controller;
 
-import java.time.LocalDateTime;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;

@@ -26,7 +26,7 @@ public class LinksController implements LinksApi {
 
     @Override
     public ResponseEntity<LinkResponse> linksPost(Long tgChatId, AddLinkRequest addLinkRequest) {
-        log.info("links post tgChatId {} addLinkRequest {}", tgChatId,addLinkRequest);
+        log.info("links post tgChatId {} addLinkRequest {}", tgChatId, addLinkRequest);
         return LinksApi.super.linksPost(tgChatId, addLinkRequest);
     }
 }
