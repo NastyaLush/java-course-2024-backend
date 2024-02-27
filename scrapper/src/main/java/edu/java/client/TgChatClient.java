@@ -23,7 +23,7 @@ public class TgChatClient implements TgChatApi {
     @Override
     public ResponseEntity<Void> tgChatIdDelete(Long id) {
         return webClient.delete()
-                .uri(uriBuilder -> uriBuilder.path(DEFAULT_URL + ID).build(id))
+                .uri(uriBuilder -> uriBuilder.path(ID).build(id))
                 .retrieve()
                 .toEntity(Void.class)
                 .onErrorResume(WebClientResponseException.class, Mono::error)
@@ -33,7 +33,7 @@ public class TgChatClient implements TgChatApi {
     @Override
     public ResponseEntity<Void> tgChatIdPost(Long id) {
         return webClient.post()
-                .uri(uriBuilder -> uriBuilder.path(DEFAULT_URL + ID).build(id))
+                .uri(uriBuilder -> uriBuilder.path(ID).build(id))
                 .retrieve()
                 .toEntity(Void.class)
                 .onErrorResume(WebClientResponseException.class, Mono::error)
