@@ -5,7 +5,9 @@ create table if not exists url
 (
     id     bigint primary key ,
     domain text not null,
-    url    text
+    url    text,
+    last_update timestamp not null,
+    last_check timestamp not null default now()
 );
 create table if not exists chat
 (
