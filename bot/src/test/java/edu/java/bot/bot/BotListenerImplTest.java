@@ -22,9 +22,9 @@ public class BotListenerImplTest {
 
         Update update = mockUpdate(1L,"");
         List<Update> updates = List.of(update);
-        try (BotListenerImpl botListener = new BotListenerImpl(userManagerProcessor, telegramBot)) {
+      BotListenerImpl botListener = new BotListenerImpl(userManagerProcessor, telegramBot);
             botListener.process(updates);
-        }
+
 
 
         Mockito.verify(userManagerProcessor, Mockito.times(updates.size())).process(Mockito.any());
