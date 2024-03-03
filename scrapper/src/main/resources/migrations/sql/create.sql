@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 --changeset create_tables:1
-create table if not exists url
+create table if not exists link
 (
     id     bigint primary key ,
     domain text not null,
