@@ -4,6 +4,7 @@ app:
     interval: 10s
     force-check-delay: 10s
 
+
 spring:
   application:
     name: scrapper
@@ -13,3 +14,7 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui

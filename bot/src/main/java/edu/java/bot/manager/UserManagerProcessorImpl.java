@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+
 public class UserManagerProcessorImpl implements UserMessageProcessor {
     private final Map<String, Command> commandsMap = new HashMap<>();
     private final Printer printer;
