@@ -1,4 +1,4 @@
-package edu.java.bot.client;
+package edu.java.client;
 
 import edu.java.bot.api.UpdatesApi;
 import edu.java.bot.model.LinkUpdate;
