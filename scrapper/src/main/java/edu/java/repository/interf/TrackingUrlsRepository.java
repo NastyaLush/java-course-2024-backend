@@ -1,13 +1,15 @@
 package edu.java.repository.interf;
 
 import edu.java.repository.dto.TrackingUrlsDTO;
+import edu.java.repository.dto.TrackingUrlsDeleteDTO;
 import edu.java.repository.dto.TrackingUrlsInputDTO;
 import java.util.List;
 
 public interface TrackingUrlsRepository {
-    int add(TrackingUrlsInputDTO trackingUrlsDTO);
+    long add(TrackingUrlsInputDTO trackingUrlsDTO);
 
-    void remove(TrackingUrlsInputDTO trackingUrlsDTO);
+    long remove(TrackingUrlsDeleteDTO trackingUrlsDTO);
 
     List<TrackingUrlsDTO> findAll();
+    List<TrackingUrlsDTO> findByTgId(long tgId);
 }

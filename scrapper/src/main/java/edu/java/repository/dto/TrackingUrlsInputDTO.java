@@ -1,4 +1,6 @@
 package edu.java.repository.dto;
 
-public record TrackingUrlsInputDTO(Integer chatId, Integer urlId) {
+import java.net.URI;
+
+public record TrackingUrlsInputDTO(Long chatId, Long urlId) {
 }

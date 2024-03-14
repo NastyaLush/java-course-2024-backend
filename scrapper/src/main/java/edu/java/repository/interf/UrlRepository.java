@@ -2,12 +2,15 @@ package edu.java.repository.interf;
 
 import edu.java.repository.dto.UrlDTO;
 import edu.java.repository.dto.UrlInputDTO;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public interface UrlRepository {
-    int add(UrlInputDTO urlDTO);
+    long add(UrlInputDTO urlDTO);
 
-    void remove(String url);
+    long remove(String url);
 
     List<UrlDTO> findAll();
+    UrlDTO findById(long id);
+    List<UrlDTO> findNotCheckedForLongTime(ZonedDateTime max_last_check);
 }

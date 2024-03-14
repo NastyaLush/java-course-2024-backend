@@ -1,5 +1,6 @@
 package edu.java.repository.jdbc;
 
+import edu.java.repository.dto.TrackingUrlsDeleteDTO;
 import edu.java.repository.interf.TrackingUrlsRepository;
 import edu.java.repository.dto.TrackingUrlsDTO;
 import edu.java.repository.dto.TrackingUrlsInputDTO;
@@ -21,7 +22,7 @@ public class JdbcTrackingUrlsRepository implements TrackingUrlsRepository {
     }
 
     @Override
-    public int add(TrackingUrlsInputDTO trackingUrlsDTO) {
+    public long add(TrackingUrlsInputDTO trackingUrlsDTO) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int update = jdbcClient.sql("INSERT INTO tracking_urls (url_id, chat_id) VALUES (?, ?) Returning id")
                 .param(trackingUrlsDTO.urlId())
@@ -30,20 +31,32 @@ public class JdbcTrackingUrlsRepository implements TrackingUrlsRepository {
         if(update == 0) {
             throw new RuntimeException("Failed to add tracking url");
         }
-        return keyHolder.getKey().intValue();
+        return keyHolder.getKey().longValue();
     }
 
     @Override
-    public void remove(TrackingUrlsInputDTO trackingUrlsDTO) {
-        jdbcClient.sql("DELETE FROM tracking_urls WHERE url_id = ? AND chat_id = ?")
-                .param(trackingUrlsDTO.urlId())
+    public long remove(TrackingUrlsDeleteDTO trackingUrlsDTO) {
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int update = jdbcClient.sql("DELETE FROM tracking_urls join url on url.id = trackingUrlsDTO.url_id WHERE url.url = ? AND chat_id = ? Returning id")
+                .param(trackingUrlsDTO.url())
                 .param(trackingUrlsDTO.chatId())
-                .update();
+                .update(keyHolder);
+        if(update == 0) {
+            throw new RuntimeException("Failed to add tracking url");
+        }
+        return keyHolder.getKey().longValue();
     }
 
     @Override
     public List<TrackingUrlsDTO> findAll() {
         return jdbcClient.sql("SELECT * FROM tracking_urls").query(TrackingUrlsDTO.class)
                 .list();
+    }
+
+    @Override
+    public List<TrackingUrlsDTO> findByTgId(long tgId) {
+        return jdbcClient.sql("SELECT * FROM tracking_urls where chat_d = ?").param(tgId).query(TrackingUrlsDTO.class)
+            .list();
     }
 }
