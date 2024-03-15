@@ -53,7 +53,7 @@ public class JdbcUrlService implements UrlService {
             throw new IllegalArgumentException("this url is not supported");
         }
         long urlId = jdbcUrlRepository.add(new UrlInput(url.toString(), OffsetDateTime.now(), OffsetDateTime.now()));
-        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findById(tgChatId);
+        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findByTgId(tgChatId);
         if (chatEntity.isEmpty()) {
             throw new NotExistException(THIS_CHAT_IS_NOT_EXISTS_ERROR);
         }
@@ -65,7 +65,7 @@ public class JdbcUrlService implements UrlService {
     @Transactional
     public LinkResponse remove(long tgChatId, URI url) {
 
-        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findById(tgChatId);
+        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findByTgId(tgChatId);
         if (chatEntity.isEmpty()) {
             throw new NotExistException(THIS_CHAT_IS_NOT_EXISTS_ERROR);
         }
@@ -94,13 +94,13 @@ public class JdbcUrlService implements UrlService {
     @Override
     public List<ChatEntity> getChats(Long urlId) {
         return jdbcTrackingUrlsRepository.findByUrlId(urlId).stream()
-            .map(trackingUrlsDTO -> jdbcTgChatRepository.findById(
+            .map(trackingUrlsDTO -> jdbcTgChatRepository.findByTgId(
                 trackingUrlsDTO.chatId()).get()).toList();
     }
 
     @Override
     public ListLinksResponse listAll(long tgChatId) {
-        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findById(tgChatId);
+        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findByTgId(tgChatId);
         if (chatEntity.isEmpty()) {
             throw new NotExistException("this chat does not exists");
         }

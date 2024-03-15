@@ -11,5 +11,5 @@ public interface TgChatRepository {
 
     List<ChatEntity> findAll();
 
-    Optional<ChatEntity> findById(long chatId);
+    Optional<ChatEntity> findByTgId(long chatTgId);
 }

@@ -51,9 +51,9 @@ public class JdbcTgChatRepository implements TgChatRepository {
     }
 
     @Override
-    public Optional<ChatEntity> findById(long chatId) {
+    public Optional<ChatEntity> findByTgId(long chatTgId) {
         return jdbcClient.sql("SELECT *  FROM chat WHERE tg_chat_id = ?")
-            .param(chatId)
+            .param(chatTgId)
             .query((rs, rowNum) -> new ChatEntity(
                 rs.getLong("id"),
                 rs.getLong("tg_chat_id")

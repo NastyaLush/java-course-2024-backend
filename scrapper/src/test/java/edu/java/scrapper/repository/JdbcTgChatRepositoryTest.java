@@ -77,17 +77,17 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     @Rollback
     @Transactional
     void findById_shouldCorrectlyFindChatById() {
-        long id = jdbcTgChatRepository.add(1);
-        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findById(id);
+        long id = jdbcTgChatRepository.add(1L);
+        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findByTgId(1L);
         assert chatEntity.isPresent();
-        assert chatEntity.get().tgChatId().equals(1L);
+        assert chatEntity.get().id().equals(id);
     }
 
     @Test
     @Rollback
     @Transactional
     void findById_shouldReturnEmptyOptionalIfChatNotExist() {
-        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findById(1);
+        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findByTgId(1);
         assert chatEntity.isEmpty();
     }
 }
