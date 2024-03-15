@@ -1,11 +1,10 @@
 package edu.java.scrapper.repository;
 
-import edu.java.repository.dto.UrlDTO;
-import edu.java.repository.dto.UrlInputDTO;
+import edu.java.repository.entity.UrlEntity;
+import edu.java.repository.entity.UrlInput;
 import edu.java.repository.jdbc.JdbcUrlRepository;
 import edu.java.scrapper.IntegrationTest;
-import java.net.URISyntaxException;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +21,20 @@ public class JdbcUrlRepositoryTest extends IntegrationTest {
     @Transactional
     @Rollback
     void add_shouldCorrectlyAddChat() {
-        jdbcUrlRepository.add(new UrlInputDTO("url", ZonedDateTime.now(), ZonedDateTime.now()));
-        List<UrlDTO> urlDTOList = jdbcUrlRepository.findAll();
-        assert urlDTOList.size() == 1;
-        assert urlDTOList.getFirst().url().equals("url");
+        jdbcUrlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()));
+        List<UrlEntity> urlEntityList = jdbcUrlRepository.findAll();
+        assert urlEntityList.size() == 1;
+        assert urlEntityList.getFirst().url().equals("url");
     }
 
     @Test
     @Transactional
     @Rollback
     void remove_shouldCorrectlyRemoveChat() {
-        jdbcUrlRepository.add(new UrlInputDTO("url", ZonedDateTime.now(), ZonedDateTime.now()));
+        jdbcUrlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()));
         jdbcUrlRepository.remove("url");
-        List<UrlDTO> urlDTOList = jdbcUrlRepository.findAll();
-        assert urlDTOList.isEmpty();
+        List<UrlEntity> urlEntityList = jdbcUrlRepository.findAll();
+        assert urlEntityList.isEmpty();
     }
 
     @Test
@@ -47,17 +46,17 @@ public class JdbcUrlRepositoryTest extends IntegrationTest {
     @Test
     @Transactional
     void findAll_shouldCorrectlyFindAllChats() {
-        jdbcUrlRepository.add(new UrlInputDTO("url1", ZonedDateTime.now(), ZonedDateTime.now()));
-        jdbcUrlRepository.add(new UrlInputDTO("url2", ZonedDateTime.now(), ZonedDateTime.now()));
-        List<UrlDTO> urlDTOList = jdbcUrlRepository.findAll();
-        assert urlDTOList.size() == 2;
+        jdbcUrlRepository.add(new UrlInput("url1", OffsetDateTime.now(), OffsetDateTime.now()));
+        jdbcUrlRepository.add(new UrlInput("url2", OffsetDateTime.now(), OffsetDateTime.now()));
+        List<UrlEntity> urlEntityList = jdbcUrlRepository.findAll();
+        assert urlEntityList.size() == 2;
     }
 
     @Test
     @Transactional
     void add_shouldReturnSameKeyIfAddedSameChat() {
-        int key1 = jdbcUrlRepository.add(new UrlInputDTO("url", ZonedDateTime.now(), ZonedDateTime.now()));
-        int key2 = jdbcUrlRepository.add(new UrlInputDTO("url", ZonedDateTime.now(), ZonedDateTime.now()));
+        long key1 = jdbcUrlRepository.add(new UrlInput("url",  OffsetDateTime.now(), OffsetDateTime.now()));
+        long key2 = jdbcUrlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()));
         assert key1 == key2;
     }
 
@@ -65,7 +64,7 @@ public class JdbcUrlRepositoryTest extends IntegrationTest {
     @Test
     @Transactional
     void findAll_shouldThrowExceptionIfNoChats() {
-        List<UrlDTO> urlDTOList = jdbcUrlRepository.findAll();
-        assert urlDTOList.isEmpty();
+        List<UrlEntity> urlEntityList = jdbcUrlRepository.findAll();
+        assert urlEntityList.isEmpty();
     }
 }

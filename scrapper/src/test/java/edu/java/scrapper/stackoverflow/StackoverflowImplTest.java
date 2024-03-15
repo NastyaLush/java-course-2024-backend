@@ -4,8 +4,8 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import edu.java.stackoverflow.StackoverflowClientImpl;
-import edu.java.stackoverflow.dto.QuestionResponse;
+import edu.java.linkClients.stackoverflow.StackoverflowServiceImplSupportable;
+import edu.java.linkClients.stackoverflow.dto.QuestionResponse;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,7 +37,7 @@ public class StackoverflowImplTest {
                 .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
                         .withBody(response)));
 
-        StackoverflowClientImpl stackoverflowClient = new StackoverflowClientImpl(wireMockExtension.baseUrl());
+        StackoverflowServiceImplSupportable stackoverflowClient = new StackoverflowServiceImplSupportable(wireMockExtension.baseUrl());
 
         Mono<QuestionResponse> stackoverflowClientQuestions = stackoverflowClient.getQuestions(StackoverflowImplTest.questions);
         QuestionResponse repositoryResponse = new QuestionResponse(List.of(
@@ -65,7 +65,7 @@ public class StackoverflowImplTest {
                 .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
                         .withBody(response)));
 
-        StackoverflowClientImpl stackoverflowClient = new StackoverflowClientImpl(wireMockExtension.baseUrl());
+        StackoverflowServiceImplSupportable stackoverflowClient = new StackoverflowServiceImplSupportable(wireMockExtension.baseUrl());
 
         Mono<QuestionResponse> stackoverflowClientQuestions = stackoverflowClient.getQuestions(StackoverflowImplTest.questions);
         QuestionResponse repositoryResponse = new QuestionResponse(List.of());

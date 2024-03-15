@@ -6,17 +6,23 @@ import edu.java.model.LinkResponse;
 import edu.java.model.ListLinksResponse;
 import edu.java.model.RemoveLinkRequest;
 import edu.java.service.UrlService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
 @RestController
-@RequiredArgsConstructor
+
 public class LinksController implements LinksApi {
     private final UrlService urlService;
+
+    @Autowired
+    public LinksController(UrlService urlService) {
+        this.urlService = urlService;
+    }
+
     @Override
     public ResponseEntity<LinkResponse> linksDelete(Long tgChatId, RemoveLinkRequest removeLinkRequest) {
         log.info("links delete tgChatId {} removeLinkRequest {}", tgChatId, removeLinkRequest);
@@ -26,10 +32,9 @@ public class LinksController implements LinksApi {
 
     @Override
     public ResponseEntity<ListLinksResponse> linksGet(Long tgChatId) {
-
-        //todo
         log.info("links get tgChatId {}", tgChatId);
-        return LinksApi.super.linksGet(tgChatId);
+        ListLinksResponse listLinksResponse = urlService.listAll(tgChatId);
+        return new ResponseEntity<>(listLinksResponse, HttpStatus.OK);
     }
 
     @Override

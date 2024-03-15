@@ -10,16 +10,16 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.annotation.Validated;
 
-
 @Validated
 @ConfigurationProperties(prefix = "spring.datasource", ignoreUnknownFields = false)
 @EnableTransactionManagement
 public record DatabaseConfig(String url, String username, String password) {
 
     @Bean
-    public PlatformTransactionManager transactionManager(DataSource dataSource){
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
+
     @Bean
     JdbcClient jdbcClient(DataSource dataSource) {
         return JdbcClient.create(dataSource);
@@ -28,9 +28,9 @@ public record DatabaseConfig(String url, String username, String password) {
     @Bean
     DataSource dataSource() {
         return DataSourceBuilder.create()
-                .url(url)
-                .username(username)
-                .password(password)
-                .build();
+            .url(url)
+            .username(username)
+            .password(password)
+            .build();
     }
 }

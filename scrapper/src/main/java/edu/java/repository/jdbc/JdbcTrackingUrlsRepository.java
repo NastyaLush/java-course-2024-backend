@@ -1,9 +1,9 @@
 package edu.java.repository.jdbc;
 
-import edu.java.repository.dto.TrackingUrlsDeleteDTO;
+import edu.java.repository.entity.TrackingUrlsDelete;
+import edu.java.repository.entity.TrackingUrlsEntity;
+import edu.java.repository.entity.TrackingUrlsInput;
 import edu.java.repository.interf.TrackingUrlsRepository;
-import edu.java.repository.dto.TrackingUrlsDTO;
-import edu.java.repository.dto.TrackingUrlsInputDTO;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -22,41 +22,51 @@ public class JdbcTrackingUrlsRepository implements TrackingUrlsRepository {
     }
 
     @Override
-    public long add(TrackingUrlsInputDTO trackingUrlsDTO) {
+    public long add(TrackingUrlsInput trackingUrlsDTO) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int update = jdbcClient.sql("INSERT INTO tracking_urls (url_id, chat_id) VALUES (?, ?) Returning id")
-                .param(trackingUrlsDTO.urlId())
-                .param(trackingUrlsDTO.chatId())
-                .update(keyHolder);
-        if(update == 0) {
-            throw new RuntimeException("Failed to add tracking url");
+        int update = jdbcClient.sql(
+                "INSERT INTO tracking_urls (url_id, chat_id) on conflict(url_id, chat_id) do nothing "
+                    + "VALUES (?, ?) Returning id")
+            .param(trackingUrlsDTO.urlId())
+            .param(trackingUrlsDTO.chatId())
+            .update(keyHolder);
+        if (update == 0) {
+            throw new IllegalArgumentException("this url is already tracking");
         }
         return keyHolder.getKey().longValue();
     }
 
     @Override
-    public long remove(TrackingUrlsDeleteDTO trackingUrlsDTO) {
+    public long remove(TrackingUrlsDelete trackingUrlsDTO) {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int update = jdbcClient.sql("DELETE FROM tracking_urls join url on url.id = trackingUrlsDTO.url_id WHERE url.url = ? AND chat_id = ? Returning id")
-                .param(trackingUrlsDTO.url())
-                .param(trackingUrlsDTO.chatId())
-                .update(keyHolder);
-        if(update == 0) {
-            throw new RuntimeException("Failed to add tracking url");
+        int update = jdbcClient.sql("DELETE FROM tracking_urls where url_id=? and  chat_id = ? Returning id")
+            .param(trackingUrlsDTO.urlId())
+            .param(trackingUrlsDTO.chatId())
+            .update(keyHolder);
+        if (update == 0) {
+            throw new IllegalArgumentException("this url is not tracking");
         }
         return keyHolder.getKey().longValue();
     }
 
     @Override
-    public List<TrackingUrlsDTO> findAll() {
-        return jdbcClient.sql("SELECT * FROM tracking_urls").query(TrackingUrlsDTO.class)
-                .list();
+    public List<TrackingUrlsEntity> findAll() {
+        return jdbcClient.sql("SELECT * FROM tracking_urls").query(TrackingUrlsEntity.class)
+            .list();
     }
 
     @Override
-    public List<TrackingUrlsDTO> findByTgId(long tgId) {
-        return jdbcClient.sql("SELECT * FROM tracking_urls where chat_d = ?").param(tgId).query(TrackingUrlsDTO.class)
+    public List<TrackingUrlsEntity> findByTgId(long tgId) {
+        return jdbcClient.sql("SELECT * FROM tracking_urls where chat_id = ?").param(tgId)
+            .query(TrackingUrlsEntity.class)
+            .list();
+    }
+
+    @Override
+    public List<TrackingUrlsEntity> findByUrlId(long urlId) {
+        return jdbcClient.sql("SELECT * FROM tracking_urls where url_id = ?").param(urlId)
+            .query(TrackingUrlsEntity.class)
             .list();
     }
 }

@@ -6,8 +6,8 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.ScrapperApplication;
-import edu.java.github.GithubClientImpl;
-import edu.java.github.dto.RepositoryResponse;
+import edu.java.linkClients.github.GithubServiceImplSupportable;
+import edu.java.linkClients.github.dto.RepositoryResponse;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,7 +39,7 @@ public class GithubImplTest {
                 .withPathParam("repository", WireMock.equalTo(GITHUB_REPOSITORY))
                 .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
                         .withBody(response)));
-        GithubClientImpl githubClient = new GithubClientImpl(wireMockExtension.baseUrl());
+        GithubServiceImplSupportable githubClient = new GithubServiceImplSupportable(wireMockExtension.baseUrl());
 
         Mono<RepositoryResponse> githubRepository = githubClient.getGithubRepository(GITHUB_OWNER, GITHUB_REPOSITORY);
         RepositoryResponse repositoryResponse = new RepositoryResponse(755652574, "java-course-2024-backend", "NastyaLush/java-course-2024-backend", OffsetDateTime.parse("2024-02-20T11:11:08Z"), OffsetDateTime.parse("2024-02-10T19:32:19Z"), OffsetDateTime.parse("2024-02-10T20:01:13Z"));
@@ -55,7 +55,7 @@ public class GithubImplTest {
                 .withPathParam("repository", WireMock.equalTo(GITHUB_REPOSITORY))
                 .willReturn(WireMock.aResponse().withStatus(404).withHeader("Content-Type", "application/json")
                         .withBody(response)));
-        GithubClientImpl githubClient = new GithubClientImpl(wireMockExtension.baseUrl());
+        GithubServiceImplSupportable githubClient = new GithubServiceImplSupportable(wireMockExtension.baseUrl());
 
         Mono<RepositoryResponse> githubRepository = githubClient.getGithubRepository(GITHUB_OWNER, GITHUB_REPOSITORY);
 

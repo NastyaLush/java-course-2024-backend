@@ -1,11 +1,10 @@
 package edu.java.repository.jdbc;
 
-import edu.java.repository.dto.UrlDTO;
+import edu.java.exception.NotExistException;
+import edu.java.repository.entity.ChatEntity;
 import edu.java.repository.interf.TgChatRepository;
-import edu.java.repository.dto.ChatDTO;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -25,34 +24,39 @@ public class JdbcTgChatRepository implements TgChatRepository {
     @Override
     public long add(long tgChatId) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int update = jdbcClient.sql("INSERT INTO tg_chat (chat_id) VALUES (?) RETURNING id")
-                .param(tgChatId)
-                .update(keyHolder);
-        if(update == 0) {
-            throw new RuntimeException("Failed to add chat");
+        int update = jdbcClient.sql("INSERT INTO tg_chat (chat_id) VALUES (?) on conflict do nothing RETURNING id")
+            .param(tgChatId)
+            .update(keyHolder);
+        if (update == 0) {
+            throw new IllegalArgumentException("Chat already exists");
         }
         return keyHolder.getKey().longValue();
     }
 
     @Override
-    public void remove(long tgChatId) {
-        jdbcClient.sql("DELETE FROM tg_chat WHERE chat_id = ?")
-                .param(tgChatId)
-                .update();
+    public long remove(long tgChatId) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int update = jdbcClient.sql("DELETE FROM tg_chat WHERE chat_id = ?")
+            .param(tgChatId)
+            .update(keyHolder);
+        if (update == 0) {
+            throw new NotExistException("this chat is not exist");
+        }
+        return keyHolder.getKey().longValue();
     }
 
     @Override
-    public List<ChatDTO> findAll() {
-        return jdbcClient.sql("SELECT * FROM tg_chat").query(ChatDTO.class).list();
+    public List<ChatEntity> findAll() {
+        return jdbcClient.sql("SELECT * FROM tg_chat").query(ChatEntity.class).list();
     }
 
     @Override
-    public ChatDTO findById(long tgId) {
+    public Optional<ChatEntity> findById(long chatId) {
         return jdbcClient.sql("SELECT *  FROM tg_chat WHERE chat_id = ?")
-            .param(tgId)
-            .query((rs, rowNum) -> new ChatDTO(
-                rs.getInt("id"),
-                rs.getInt("chat_id")
-            )).single();
+            .param(chatId)
+            .query((rs, rowNum) -> new ChatEntity(
+                rs.getLong("id"),
+                rs.getLong("chat_id")
+            )).optional();
     }
 }

@@ -1,12 +1,13 @@
 package edu.java.repository.jdbc;
 
+import edu.java.repository.entity.UrlEntity;
+import edu.java.repository.entity.UrlInput;
 import edu.java.repository.interf.UrlRepository;
-import edu.java.repository.dto.UrlDTO;
-import edu.java.repository.dto.UrlInputDTO;
 import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,6 +16,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcUrlRepository implements UrlRepository {
+    public static final String ID_COLUMN = "id";
+    public static final String URL_COLUMN = "url";
+    public static final String LAST_UPDATE_COLUMN = "last_update";
+    public static final String LAST_CHECK_COLUMN = "last_check";
     private final JdbcClient jdbcClient;
 
     @Autowired
@@ -23,64 +28,102 @@ public class JdbcUrlRepository implements UrlRepository {
     }
 
     @Override
-    public long add(UrlInputDTO urlDTO) {
+    public long add(UrlInput urlDTO) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int update = jdbcClient.sql("INSERT INTO url (url, last_update, last_check) VALUES (?, ?, ?) ON CONFLICT (url) DO UPDATE SET last_update = EXCLUDED.last_update, last_check = EXCLUDED.last_check RETURNING id")
-                .param(urlDTO.url())
-                .param(Timestamp.from(urlDTO.lastUpdate().toInstant()))
-                .param(Timestamp.from(urlDTO.lastCheck().toInstant()))
-                .update(keyHolder);
-        if(update == 0) {
+        int update = jdbcClient.sql(
+                "INSERT INTO url (url, last_update, last_check) VALUES (?, ?, ?) "
+                        + "ON CONFLICT (url) "
+                        + "DO UPDATE SET last_update = EXCLUDED.last_update, "
+                        + "last_check = EXCLUDED.last_check RETURNING id")
+            .param(urlDTO.url())
+            .param(Timestamp.from(urlDTO.lastUpdate().toInstant()))
+            .param(Timestamp.from(urlDTO.lastCheck().toInstant()))
+            .update(keyHolder);
+        if (update == 0) {
             throw new RuntimeException("Failed to add url");
         }
         return keyHolder.getKey().longValue();
     }
 
+    @Override
+    public void update(Long id, OffsetDateTime lastCheck) {
+        int update = jdbcClient.sql("UPDATE url set last_check = ? where id = ?")
+            .param(lastCheck)
+            .param(id)
+            .update();
+        if (update == 0) {
+            throw new RuntimeException("Failed to update last check time");
+        }
+    }
+
+    @Override
+    public void update(Long id, OffsetDateTime lastCheck, OffsetDateTime lastUpdate) {
+        int update = jdbcClient.sql("UPDATE url set last_check = ? and last_update=? where id = ?")
+            .param(lastCheck)
+            .param(lastUpdate)
+            .param(id)
+            .update();
+        if (update == 0) {
+            throw new RuntimeException("Failed to update last check time and last update date");
+        }
+    }
 
     @Override
     public long remove(String url) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int update = jdbcClient.sql("DELETE FROM url WHERE url = ? RETURNING id")
-                .param(url)
-                .update(keyHolder);
-        if(update == 0) {
-            throw new RuntimeException("Failed to add url");
+        int update = jdbcClient.sql("DELETE FROM url WHERE url=? RETURNING id")
+            .param(url)
+            .update(keyHolder);
+        if (update == 0) {
+            throw new RuntimeException("Failed to remove url");
         }
         return keyHolder.getKey().longValue();
     }
 
     @Override
-    public List<UrlDTO> findAll() {
+    public List<UrlEntity> findAll() {
         return jdbcClient.sql("SELECT * FROM url")
-                .query((rs, rowNum) -> new UrlDTO(
-                        rs.getInt("id"),
-                        rs.getString("url"),
-                        ZonedDateTime.ofInstant(rs.getTimestamp("last_update").toInstant(), ZoneOffset.UTC),
-                        ZonedDateTime.ofInstant(rs.getTimestamp("last_check").toInstant(), ZoneOffset.UTC)
-                )).list();
+            .query((rs, rowNum) -> new UrlEntity(
+                rs.getLong(ID_COLUMN),
+                rs.getString(URL_COLUMN),
+                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
+                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
+            )).list();
     }
 
     @Override
-    public UrlDTO findById(long id) {
+    public UrlEntity findById(long id) {
         return jdbcClient.sql("SELECT * FROM url where id = ?")
             .param(id)
-            .query((rs, rowNum) -> new UrlDTO(
-                rs.getInt("id"),
-                rs.getString("url"),
-                ZonedDateTime.ofInstant(rs.getTimestamp("last_update").toInstant(), ZoneOffset.UTC),
-                ZonedDateTime.ofInstant(rs.getTimestamp("last_check").toInstant(), ZoneOffset.UTC)
+            .query((rs, rowNum) -> new UrlEntity(
+                rs.getLong(ID_COLUMN),
+                rs.getString(URL_COLUMN),
+                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
+                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
             )).single();
     }
 
     @Override
-    public List<UrlDTO> findNotCheckedForLongTime(ZonedDateTime max_last_check) {
-        return jdbcClient.sql("SELECT * FROM url where last_check <= ?")
-            .param(max_last_check)
-            .query((rs, rowNum) -> new UrlDTO(
-                rs.getInt("id"),
-                rs.getString("url"),
-                ZonedDateTime.ofInstant(rs.getTimestamp("last_update").toInstant(), ZoneOffset.UTC),
-                ZonedDateTime.ofInstant(rs.getTimestamp("last_check").toInstant(), ZoneOffset.UTC)
+    public Optional<UrlEntity> findByUrl(String url) {
+        return jdbcClient.sql("SELECT * FROM url where url=?")
+            .param(url)
+            .query((rs, rowNum) -> new UrlEntity(
+                rs.getLong(ID_COLUMN),
+                rs.getString(URL_COLUMN),
+                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
+                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
+            )).optional();
+    }
+
+    @Override
+    public List<UrlEntity> findNotCheckedForLongTime(OffsetDateTime maxLastCheck) {
+        return jdbcClient.sql("SELECT * FROM url WHERE last_check <= :maxLastCheck")
+            .param("maxLastCheck", maxLastCheck)
+            .query((rs, rowNum) -> new UrlEntity(
+                rs.getLong(ID_COLUMN),
+                rs.getString(URL_COLUMN),
+                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
+                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
             )).list();
     }
 

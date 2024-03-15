@@ -1,7 +1,7 @@
 package edu.java.scrapper.repository;
 
 import edu.java.repository.jdbc.JdbcTgChatRepository;
-import edu.java.repository.dto.ChatDTO;
+import edu.java.repository.entity.ChatEntity;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -24,9 +24,9 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     @Transactional
     void add_shouldCorrectlyAddChat() {
         jdbcTgChatRepository.add(1);
-        List<ChatDTO> chats = jdbcTgChatRepository.findAll();
+        List<ChatEntity> chats = jdbcTgChatRepository.findAll();
         assert chats.size() == 1;
-        assert chats.getFirst().chatId() == 1;
+        assert chats.getFirst().tgChatId() == 1;
     }
 
     @Test
@@ -35,7 +35,7 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     void remove_shouldCorrectlyRemoveChat() {
         jdbcTgChatRepository.add(1);
         jdbcTgChatRepository.remove(1);
-        List<ChatDTO> chats = jdbcTgChatRepository.findAll();
+        List<ChatEntity> chats = jdbcTgChatRepository.findAll();
         assert chats.isEmpty();
     }
 
@@ -58,16 +58,16 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     void findAll_shouldCorrectlyFindAllChats() {
         jdbcTgChatRepository.add(1);
         jdbcTgChatRepository.add(2);
-        List<ChatDTO> chats = jdbcTgChatRepository.findAll();
+        List<ChatEntity> chats = jdbcTgChatRepository.findAll();
         assert chats.size() == 2;
-        assert chats.getFirst().chatId() == 1;
-        assert chats.getLast().chatId() == 2;
+        assert chats.getFirst().tgChatId() == 1;
+        assert chats.getLast().tgChatId() == 2;
     }
 
     @Test
     @Transactional
     void findAll_shouldReturnEmptyListIfNoChats() {
-        List<ChatDTO> chats = jdbcTgChatRepository.findAll();
+        List<ChatEntity> chats = jdbcTgChatRepository.findAll();
         assert chats.isEmpty();
     }
 }

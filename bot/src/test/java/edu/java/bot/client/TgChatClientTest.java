@@ -1,10 +1,11 @@
-package edu.java.scrapper.client;
+package edu.java.bot.client;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.client.TgChatClient;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -26,7 +27,7 @@ public class TgChatClientTest {
                 .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
                         .withBody(" ")));
         TgChatClient tgChatClient = new TgChatClient(wireMockExtension.baseUrl()+"/mock");
-        assertDoesNotThrow(() -> tgChatClient.tgChatIdDelete(1L));
+        Assertions.assertDoesNotThrow(() -> tgChatClient.tgChatIdDelete(1L));
     }
     @Test
     public void tgChatIdDelete_shouldThrowErrorIf404() {
@@ -44,7 +45,7 @@ public class TgChatClientTest {
                 .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
                         .withBody(" ")));
         TgChatClient tgChatClient = new TgChatClient(wireMockExtension.baseUrl()+"/mock");
-        assertDoesNotThrow(() -> tgChatClient.tgChatIdPost(1L));
+        Assertions.assertDoesNotThrow(() -> tgChatClient.tgChatIdPost(1L));
     }
     @Test
     public void tgChatIdPost_shouldThrowErrorIf404() {

@@ -1,13 +1,15 @@
 package edu.java.repository.interf;
 
-import edu.java.repository.dto.ChatDTO;
+import edu.java.repository.entity.ChatEntity;
 import java.util.List;
+import java.util.Optional;
 
 public interface TgChatRepository {
     long add(long tgChatId);
 
-    void remove(long tgChatId);
+    long remove(long tgChatId);
 
-    List<ChatDTO> findAll();
-    ChatDTO findById(long tgId);
+    List<ChatEntity> findAll();
+
+    Optional<ChatEntity> findById(long chatId);
 }

@@ -131,7 +131,7 @@
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-common</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.3.0</version>
             <scope>compile</scope>
         </dependency>
@@ -141,6 +141,12 @@
             <version>0.2.1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -153,6 +159,57 @@
         </resources>
 
         <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator-version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-server</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/scrapper-api.json</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>edu.java.api</apiPackage>
+                            <modelPackage>edu.java.model</modelPackage>
+                            <packageName>edu.java.generated</packageName>
+                            <configOptions>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <interfaceOnly>true</interfaceOnly>
+                                <serializableModel>true</serializableModel>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>${openapi-generator-version}</version>
+            <executions>
+                <execution>
+                    <id>generate-client</id>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                    <configuration>
+                        <inputSpec>${project.basedir}/src/main/resources/openapi/bot-api.json</inputSpec>
+                        <generatorName>spring</generatorName>
+                        <apiPackage>edu.java.bot.api</apiPackage>
+                        <modelPackage>edu.java.bot.model</modelPackage>
+                        <packageName>edu.java.bot.generated</packageName>
+
+                        <configOptions>
+                            <useSpringBoot3>true</useSpringBoot3>
+                            <interfaceOnly>true</interfaceOnly>
+                            <serializableModel>true</serializableModel>
+                        </configOptions>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

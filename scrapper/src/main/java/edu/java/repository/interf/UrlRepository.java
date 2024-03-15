@@ -1,16 +1,25 @@
 package edu.java.repository.interf;
 
-import edu.java.repository.dto.UrlDTO;
-import edu.java.repository.dto.UrlInputDTO;
-import java.time.ZonedDateTime;
+import edu.java.repository.entity.UrlEntity;
+import edu.java.repository.entity.UrlInput;
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface UrlRepository {
-    long add(UrlInputDTO urlDTO);
+    long add(UrlInput urlDTO);
 
     long remove(String url);
 
-    List<UrlDTO> findAll();
-    UrlDTO findById(long id);
-    List<UrlDTO> findNotCheckedForLongTime(ZonedDateTime max_last_check);
+    List<UrlEntity> findAll();
+
+    void update(Long id, OffsetDateTime lastCheck, OffsetDateTime lastUpdate);
+
+    void update(Long id, OffsetDateTime lastCheck);
+
+    UrlEntity findById(long id);
+
+    Optional<UrlEntity> findByUrl(String url);
+
+    List<UrlEntity> findNotCheckedForLongTime(OffsetDateTime maxLastCheck);
 }

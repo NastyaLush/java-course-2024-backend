@@ -1,9 +1,11 @@
 package edu.java.service;
 
 import edu.java.model.LinkResponse;
-import edu.java.repository.dto.UrlDTO;
+import edu.java.model.ListLinksResponse;
+import edu.java.repository.entity.ChatEntity;
+import edu.java.repository.entity.UrlEntity;
 import java.net.URI;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface UrlService {
@@ -11,8 +13,14 @@ public interface UrlService {
 
     LinkResponse remove(long tgChatId, URI url);
 
-    List<UrlDTO> listAll(long tgChatId);
-    List<UrlDTO> findNotCheckedForLongTime(ZonedDateTime max_last_check);
+    void update(Long id, OffsetDateTime lastCheck);
 
+    void update(Long id, OffsetDateTime lastCheck, OffsetDateTime lastUpdate);
+
+    List<ChatEntity> getChats(Long urlId);
+
+    ListLinksResponse listAll(long tgChatId);
+
+    List<UrlEntity> findNotCheckedForLongTime(OffsetDateTime maxLastCheck);
 
 }

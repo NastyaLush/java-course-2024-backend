@@ -1,12 +1,13 @@
 package edu.java.scrapper.repository;
 
+import edu.java.repository.entity.TrackingUrlsDelete;
 import edu.java.repository.jdbc.JdbcTgChatRepository;
 import edu.java.repository.jdbc.JdbcTrackingUrlsRepository;
 import edu.java.repository.jdbc.JdbcUrlRepository;
-import edu.java.repository.dto.TrackingUrlsInputDTO;
-import edu.java.repository.dto.UrlInputDTO;
+import edu.java.repository.entity.TrackingUrlsInput;
+import edu.java.repository.entity.UrlInput;
 import edu.java.scrapper.IntegrationTest;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,9 +30,9 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
     @Transactional
     @Rollback
     void add_shouldCorrectlyAddTrackingUrl() {
-        int chatKey = jdbcTgChatRepository.add(1);
-        int key = jdbcUrlRepository.add(new UrlInputDTO("https://www.google.com", ZonedDateTime.now(), ZonedDateTime.now()));
-        jdbcTrackingUrlsRepository.add(new TrackingUrlsInputDTO(chatKey,key));
+        long chatKey = jdbcTgChatRepository.add(1);
+        long key = jdbcUrlRepository.add(new UrlInput("https://www.google.com",  OffsetDateTime.now(), OffsetDateTime.now()));
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey,key));
         assert jdbcTrackingUrlsRepository.findAll().size() == 1;
     }
 
@@ -39,10 +40,10 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
     @Transactional
     @Rollback
     void remove_shouldCorrectlyRemoveTrackingUrl() {
-        int chatKey = jdbcTgChatRepository.add(1);
-        int key = jdbcUrlRepository.add(new UrlInputDTO("https://www.google.com", ZonedDateTime.now(), ZonedDateTime.now()));
-        jdbcTrackingUrlsRepository.add(new TrackingUrlsInputDTO(chatKey,key));
-        jdbcTrackingUrlsRepository.remove(new TrackingUrlsInputDTO(chatKey,key));
+        long chatKey = jdbcTgChatRepository.add(1);
+        long key = jdbcUrlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey,key));
+        jdbcTrackingUrlsRepository.remove(new TrackingUrlsDelete(chatKey,key));
         assert jdbcTrackingUrlsRepository.findAll().isEmpty();
     }
 
@@ -50,11 +51,11 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
     @Transactional
     @Rollback
     void findAll_shouldCorrectlyFindAllTrackingUrls() {
-        int chatKey1 = jdbcTgChatRepository.add(1);
-        int chatKey2 =jdbcTgChatRepository.add(2);
-        int key = jdbcUrlRepository.add(new UrlInputDTO("https://www.google.com", ZonedDateTime.now(), ZonedDateTime.now()));
-        jdbcTrackingUrlsRepository.add(new TrackingUrlsInputDTO(chatKey1,key));
-        jdbcTrackingUrlsRepository.add(new TrackingUrlsInputDTO(chatKey2,key));
+        long chatKey1 = jdbcTgChatRepository.add(1);
+        long chatKey2 =jdbcTgChatRepository.add(2);
+        long key = jdbcUrlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey1,key));
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey2,key));
         assert jdbcTrackingUrlsRepository.findAll().size() == 2;
     }
 
@@ -62,16 +63,16 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
     @Transactional
     @Rollback
     void remove_shouldWorkCorrectlyIfRemovedTrackingUrlDoesNotExist() {
-        jdbcTrackingUrlsRepository.remove(new TrackingUrlsInputDTO(1,1));
+        jdbcTrackingUrlsRepository.remove(new TrackingUrlsDelete(1l,1l));
     }
 
     @Test
     @Transactional
     void add_shouldThrowExceptionIfAddedSameTrackingUrl() {
-        int chatKey = jdbcTgChatRepository.add(1);
-        int key = jdbcUrlRepository.add(new UrlInputDTO("https://www.google.com", ZonedDateTime.now(), ZonedDateTime.now()));
-        jdbcTrackingUrlsRepository.add(new TrackingUrlsInputDTO(chatKey,key));
-        assertThrows(DuplicateKeyException.class, () -> jdbcTrackingUrlsRepository.add(new TrackingUrlsInputDTO(chatKey,key)));
+        long chatKey = jdbcTgChatRepository.add(1);
+        long key = jdbcUrlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey,key));
+        assertThrows(DuplicateKeyException.class, () -> jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey,key)));
     }
 
     @Test
