@@ -104,8 +104,8 @@ public class JdbcUrlService implements UrlService {
         if (chatEntity.isEmpty()) {
             throw new NotExistException("this chat does not exists");
         }
-        List<UrlEntity> urlEntities = jdbcTrackingUrlsRepository.findByTgId(chatEntity.get().id()).stream()
-            .map(trackingUrlsDTO -> jdbcUrlRepository.findById(trackingUrlsDTO.urlId())).toList();
+        List<UrlEntity> urlEntities = jdbcTrackingUrlsRepository.findByChatId(chatEntity.get().id()).stream()
+            .map(trackingUrlsDTO -> jdbcUrlRepository.findById(trackingUrlsDTO.urlId()).get()).toList();
         return new ListLinksResponse().size(urlEntities.size())
             .links(urlEntities.stream().map(urlDTO -> new LinkResponse().id(urlDTO.id()).url(URI.create(urlDTO.url())))
                 .toList());

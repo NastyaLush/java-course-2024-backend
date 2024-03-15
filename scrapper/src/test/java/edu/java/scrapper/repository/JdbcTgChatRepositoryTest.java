@@ -1,18 +1,17 @@
 package edu.java.scrapper.repository;
 
-import edu.java.repository.jdbc.JdbcTgChatRepository;
+import edu.java.exception.NotExistException;
 import edu.java.repository.entity.ChatEntity;
+import edu.java.repository.jdbc.JdbcTgChatRepository;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 
 @SpringBootTest()
 public class JdbcTgChatRepositoryTest extends IntegrationTest {
@@ -40,20 +39,22 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void add_shouldThrowExceptionIfAddedSameChat() {
         jdbcTgChatRepository.add(1);
-        assertThrows(DuplicateKeyException.class, () -> jdbcTgChatRepository.add(1));
+        assertThrows(IllegalArgumentException.class, () -> jdbcTgChatRepository.add(1));
     }
 
-
     @Test
+    @Rollback
     @Transactional
-    void remove_shouldWorkCorrectlyIfRemovedChatDoesNotExist() {
-        jdbcTgChatRepository.remove(1);
+    void remove_shouldThrowExceptionIfRemovedChatDoesNotExist() {
+        assertThrows(NotExistException.class, () -> jdbcTgChatRepository.remove(1));
     }
 
     @Test
+    @Rollback
     @Transactional
     void findAll_shouldCorrectlyFindAllChats() {
         jdbcTgChatRepository.add(1);
@@ -65,9 +66,28 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void findAll_shouldReturnEmptyListIfNoChats() {
         List<ChatEntity> chats = jdbcTgChatRepository.findAll();
         assert chats.isEmpty();
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void findById_shouldCorrectlyFindChatById() {
+        long id = jdbcTgChatRepository.add(1);
+        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findById(id);
+        assert chatEntity.isPresent();
+        assert chatEntity.get().tgChatId().equals(1L);
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void findById_shouldReturnEmptyOptionalIfChatNotExist() {
+        Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findById(1);
+        assert chatEntity.isEmpty();
     }
 }

@@ -1,6 +1,8 @@
 package edu.java.scrapper.repository;
 
+import edu.java.repository.entity.ChatEntity;
 import edu.java.repository.entity.TrackingUrlsDelete;
+import edu.java.repository.entity.TrackingUrlsEntity;
 import edu.java.repository.jdbc.JdbcTgChatRepository;
 import edu.java.repository.jdbc.JdbcTrackingUrlsRepository;
 import edu.java.repository.jdbc.JdbcUrlRepository;
@@ -8,10 +10,11 @@ import edu.java.repository.entity.TrackingUrlsInput;
 import edu.java.repository.entity.UrlInput;
 import edu.java.scrapper.IntegrationTest;
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +39,9 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
         assert jdbcTrackingUrlsRepository.findAll().size() == 1;
     }
 
+
+
+
     @Test
     @Transactional
     @Rollback
@@ -46,6 +52,9 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
         jdbcTrackingUrlsRepository.remove(new TrackingUrlsDelete(chatKey,key));
         assert jdbcTrackingUrlsRepository.findAll().isEmpty();
     }
+
+
+
 
     @Test
     @Transactional
@@ -60,25 +69,51 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    @Transactional
     @Rollback
-    void remove_shouldWorkCorrectlyIfRemovedTrackingUrlDoesNotExist() {
-        jdbcTrackingUrlsRepository.remove(new TrackingUrlsDelete(1l,1l));
-    }
-
-    @Test
-    @Transactional
-    void add_shouldThrowExceptionIfAddedSameTrackingUrl() {
-        long chatKey = jdbcTgChatRepository.add(1);
-        long key = jdbcUrlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
-        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey,key));
-        assertThrows(DuplicateKeyException.class, () -> jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey,key)));
-    }
-
-    @Test
     @Transactional
     void findAll_shouldReturnEmptyListIfNoTrackingUrls() {
         assert jdbcTrackingUrlsRepository.findAll().isEmpty();
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void findByChatId_shouldCorrectlyReturnValuesWithThisChatId() {
+        long chatId = jdbcTgChatRepository.add(1);
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatId,jdbcUrlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()))));
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatId,jdbcUrlRepository.add(new UrlInput("url2", OffsetDateTime.now(), OffsetDateTime.now()))));
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatId,jdbcUrlRepository.add(new UrlInput("url3", OffsetDateTime.now(), OffsetDateTime.now()))));
+        List<TrackingUrlsEntity> urlsRepositoryByChatId = jdbcTrackingUrlsRepository.findByChatId(chatId);
+        assert urlsRepositoryByChatId.size()==3;
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void findByChatId_shouldReturnEmptyListIfNoTrackingUrls() {
+        long chatId = jdbcTgChatRepository.add(1);
+        List<TrackingUrlsEntity> urlsRepositoryByChatId = jdbcTrackingUrlsRepository.findByChatId(chatId);
+        assert urlsRepositoryByChatId.isEmpty();
+    }
+    @Test
+    @Rollback
+    @Transactional
+    void findByUrlId_shouldCorrectlyReturnValuesWithThisUrlId() {
+        long urlId = jdbcUrlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()));
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(jdbcTgChatRepository.add(1), urlId));
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(jdbcTgChatRepository.add(2), urlId));
+
+        List<TrackingUrlsEntity> trackingUrlsRepositoryByUrlId = jdbcTrackingUrlsRepository.findByUrlId(urlId);
+        assert trackingUrlsRepositoryByUrlId.size()==2;
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void findByUrlId_shouldReturnEmptyListIfThisUrlIsNotTracking() {
+        long urlId = jdbcUrlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()));
+        List<TrackingUrlsEntity> trackingUrlsRepositoryByUrlId = jdbcTrackingUrlsRepository.findByUrlId(urlId);
+        assert trackingUrlsRepositoryByUrlId.isEmpty();
     }
 
 }

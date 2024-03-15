@@ -1,5 +1,6 @@
 package edu.java.repository.jdbc;
 
+import edu.java.exception.NotExistException;
 import edu.java.repository.entity.UrlEntity;
 import edu.java.repository.entity.UrlInput;
 import edu.java.repository.interf.UrlRepository;
@@ -52,19 +53,19 @@ public class JdbcUrlRepository implements UrlRepository {
             .param(id)
             .update();
         if (update == 0) {
-            throw new RuntimeException("Failed to update last check time");
+            throw new IllegalArgumentException("url if this id is not exist");
         }
     }
 
     @Override
     public void update(Long id, OffsetDateTime lastCheck, OffsetDateTime lastUpdate) {
-        int update = jdbcClient.sql("UPDATE url set last_check = ? and last_update=? where id = ?")
+        int update = jdbcClient.sql("UPDATE url set last_check = ?, last_update=? where id = ?")
             .param(lastCheck)
             .param(lastUpdate)
             .param(id)
             .update();
         if (update == 0) {
-            throw new RuntimeException("Failed to update last check time and last update date");
+            throw new IllegalArgumentException("there is no url with this id");
         }
     }
 
@@ -75,7 +76,7 @@ public class JdbcUrlRepository implements UrlRepository {
             .param(url)
             .update(keyHolder);
         if (update == 0) {
-            throw new RuntimeException("Failed to remove url");
+            throw new NotExistException("this url is not exist");
         }
         return keyHolder.getKey().longValue();
     }
@@ -92,7 +93,7 @@ public class JdbcUrlRepository implements UrlRepository {
     }
 
     @Override
-    public UrlEntity findById(long id) {
+    public Optional<UrlEntity> findById(long id) {
         return jdbcClient.sql("SELECT * FROM url where id = ?")
             .param(id)
             .query((rs, rowNum) -> new UrlEntity(
@@ -100,7 +101,7 @@ public class JdbcUrlRepository implements UrlRepository {
                 rs.getString(URL_COLUMN),
                 OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
                 OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
-            )).single();
+            )).optional();
     }
 
     @Override

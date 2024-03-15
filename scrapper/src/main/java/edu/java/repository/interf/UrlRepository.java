@@ -17,7 +17,7 @@ public interface UrlRepository {
 
     void update(Long id, OffsetDateTime lastCheck);
 
-    UrlEntity findById(long id);
+    Optional<UrlEntity> findById(long id);
 
     Optional<UrlEntity> findByUrl(String url);
 

@@ -25,8 +25,10 @@ public class JdbcTrackingUrlsRepository implements TrackingUrlsRepository {
     public long add(TrackingUrlsInput trackingUrlsDTO) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int update = jdbcClient.sql(
-                "INSERT INTO tracking_urls (url_id, chat_id) on conflict(url_id, chat_id) do nothing "
-                    + "VALUES (?, ?) Returning id")
+                "INSERT INTO tracking_urls (url_id, chat_id) "
+                    + "VALUES (?, ?)"
+                    + "ON CONFLICT (url_id, chat_id) DO NOTHING "
+                    + "RETURNING id;")
             .param(trackingUrlsDTO.urlId())
             .param(trackingUrlsDTO.chatId())
             .update(keyHolder);
@@ -57,8 +59,8 @@ public class JdbcTrackingUrlsRepository implements TrackingUrlsRepository {
     }
 
     @Override
-    public List<TrackingUrlsEntity> findByTgId(long tgId) {
-        return jdbcClient.sql("SELECT * FROM tracking_urls where chat_id = ?").param(tgId)
+    public List<TrackingUrlsEntity> findByChatId(long chatId) {
+        return jdbcClient.sql("SELECT * FROM tracking_urls where chat_id = ?").param(chatId)
             .query(TrackingUrlsEntity.class)
             .list();
     }

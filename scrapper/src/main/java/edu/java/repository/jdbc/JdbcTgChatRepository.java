@@ -24,7 +24,7 @@ public class JdbcTgChatRepository implements TgChatRepository {
     @Override
     public long add(long tgChatId) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int update = jdbcClient.sql("INSERT INTO tg_chat (chat_id) VALUES (?) on conflict do nothing RETURNING id")
+        int update = jdbcClient.sql("INSERT INTO chat (tg_chat_id) VALUES (?) on conflict do nothing RETURNING id")
             .param(tgChatId)
             .update(keyHolder);
         if (update == 0) {
@@ -36,7 +36,7 @@ public class JdbcTgChatRepository implements TgChatRepository {
     @Override
     public long remove(long tgChatId) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int update = jdbcClient.sql("DELETE FROM tg_chat WHERE chat_id = ?")
+        int update = jdbcClient.sql("DELETE FROM chat WHERE tg_chat_id = ? returning id")
             .param(tgChatId)
             .update(keyHolder);
         if (update == 0) {
@@ -47,16 +47,16 @@ public class JdbcTgChatRepository implements TgChatRepository {
 
     @Override
     public List<ChatEntity> findAll() {
-        return jdbcClient.sql("SELECT * FROM tg_chat").query(ChatEntity.class).list();
+        return jdbcClient.sql("SELECT * FROM chat").query(ChatEntity.class).list();
     }
 
     @Override
     public Optional<ChatEntity> findById(long chatId) {
-        return jdbcClient.sql("SELECT *  FROM tg_chat WHERE chat_id = ?")
+        return jdbcClient.sql("SELECT *  FROM chat WHERE tg_chat_id = ?")
             .param(chatId)
             .query((rs, rowNum) -> new ChatEntity(
                 rs.getLong("id"),
-                rs.getLong("chat_id")
+                rs.getLong("tg_chat_id")
             )).optional();
     }
 }

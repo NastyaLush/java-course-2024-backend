@@ -12,7 +12,7 @@ public interface TrackingUrlsRepository {
 
     List<TrackingUrlsEntity> findAll();
 
-    List<TrackingUrlsEntity> findByTgId(long tgId);
+    List<TrackingUrlsEntity> findByChatId(long chatId);
 
     List<TrackingUrlsEntity> findByUrlId(long urlId);
 }

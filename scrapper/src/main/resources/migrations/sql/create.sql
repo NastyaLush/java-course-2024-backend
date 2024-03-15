@@ -9,16 +9,16 @@ create table if not exists url
     last_check  timestamp with time zone not null default now()
 );
 
-create table if not exists tg_chat
+create table if not exists chat
 (
     id      serial primary key,
-    chat_id int not null unique
+    tg_chat_id int not null unique
 );
 create table if not exists tracking_urls
 (
     id      serial primary key,
     url_id  int references url (id) on delete cascade,
-    chat_id int references tg_chat (id) on DELETE cascade
+    chat_id int references chat (id) on DELETE cascade
 
 );
 ALTER TABLE tracking_urls
