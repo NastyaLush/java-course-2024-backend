@@ -141,6 +141,11 @@
             <artifactId>postgresql</artifactId>
             <version>42.6.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+        </dependency>
+
 
     </dependencies>
 

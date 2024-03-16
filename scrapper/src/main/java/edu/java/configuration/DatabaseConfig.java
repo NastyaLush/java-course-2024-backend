@@ -27,10 +27,13 @@ public record DatabaseConfig(String url, String username, String password) {
 
     @Bean
     DataSource dataSource() {
+        System.out.println(username);
+        System.out.println(password);
         return DataSourceBuilder.create()
             .url(url)
             .username(username)
             .password(password)
             .build();
     }
+
 }

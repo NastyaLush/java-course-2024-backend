@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @WireMockTest
 public class StackoverflowImplTest {
@@ -28,6 +29,7 @@ public class StackoverflowImplTest {
 
     @Test
     public void getQuestions_shouldReturnListOfQuestions() throws IOException {
+        //todo
         String response = String.join("", Files.readAllLines(pathToCorrectExampleResponse));
         String questions = StackoverflowImplTest.questions.stream().map(Object::toString).collect(Collectors.joining("%3B"));
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}"))
@@ -39,7 +41,7 @@ public class StackoverflowImplTest {
 
         StackoverflowServiceImplSupportable stackoverflowClient = new StackoverflowServiceImplSupportable(wireMockExtension.baseUrl());
 
-        Mono<QuestionResponse> stackoverflowClientQuestions = stackoverflowClient.getQuestions(StackoverflowImplTest.questions);
+        QuestionResponse stackoverflowClientQuestions = stackoverflowClient.getQuestions(StackoverflowImplTest.questions);
         QuestionResponse repositoryResponse = new QuestionResponse(List.of(
                 new QuestionResponse.ItemResponse(78027826L,
                         "Worksheet_Change event executing on workbook open? Can I disable this behaviour?",
@@ -52,10 +54,12 @@ public class StackoverflowImplTest {
                         OffsetDateTime.parse("2021-08-13T00:24:02Z"), OffsetDateTime.parse("2012-01-23T08:06:40Z"),
                         OffsetDateTime.parse("2012-01-23T09:01:50Z"))));
 
-        StepVerifier.create(stackoverflowClientQuestions).expectNext(repositoryResponse).verifyComplete();
+        assertEquals(stackoverflowClientQuestions, repositoryResponse);
+//        StepVerifier.create(stackoverflowClientQuestions).expectNext(repositoryResponse).verifyComplete();
     }
     @Test
     public void getQuestions_shouldReturnEmptyListIfNoAnswerWithThisId() throws IOException {
+        //todo
         String response = String.join("", Files.readAllLines(pathToIncorrectExampleResponse));
         String questions = StackoverflowImplTest.questions.stream().map(Object::toString).collect(Collectors.joining("%3B"));
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}"))
@@ -67,9 +71,10 @@ public class StackoverflowImplTest {
 
         StackoverflowServiceImplSupportable stackoverflowClient = new StackoverflowServiceImplSupportable(wireMockExtension.baseUrl());
 
-        Mono<QuestionResponse> stackoverflowClientQuestions = stackoverflowClient.getQuestions(StackoverflowImplTest.questions);
+        QuestionResponse stackoverflowClientQuestions = stackoverflowClient.getQuestions(StackoverflowImplTest.questions);
         QuestionResponse repositoryResponse = new QuestionResponse(List.of());
 
-        StepVerifier.create(stackoverflowClientQuestions).expectNext(repositoryResponse).verifyComplete();
+        assertEquals(stackoverflowClientQuestions, repositoryResponse);
+//        StepVerifier.create(stackoverflowClientQuestions).expectNext(repositoryResponse).verifyComplete();
     }
 }

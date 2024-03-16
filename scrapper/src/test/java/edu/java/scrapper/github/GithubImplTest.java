@@ -18,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @WireMockTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {ScrapperApplication.class})
@@ -33,6 +35,7 @@ public class GithubImplTest {
 
     @Test
     public void getGithubRepository_shouldReturnRepositoryOfUser() throws IOException {
+        //todo
         String response = String.join("", Files.readAllLines(pathToCorrectExampleResponse));
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/repos/{owner}/{repository}"))
                 .withPathParam("owner", WireMock.equalTo(GITHUB_OWNER))
@@ -41,14 +44,16 @@ public class GithubImplTest {
                         .withBody(response)));
         GithubServiceImplSupportable githubClient = new GithubServiceImplSupportable(wireMockExtension.baseUrl());
 
-        Mono<RepositoryResponse> githubRepository = githubClient.getGithubRepository(GITHUB_OWNER, GITHUB_REPOSITORY);
+        RepositoryResponse githubRepository = githubClient.getGithubRepository(GITHUB_OWNER, GITHUB_REPOSITORY);
         RepositoryResponse repositoryResponse = new RepositoryResponse(755652574, "java-course-2024-backend", "NastyaLush/java-course-2024-backend", OffsetDateTime.parse("2024-02-20T11:11:08Z"), OffsetDateTime.parse("2024-02-10T19:32:19Z"), OffsetDateTime.parse("2024-02-10T20:01:13Z"));
 
-        StepVerifier.create(githubRepository).expectNext(repositoryResponse).verifyComplete();
+        assertEquals(githubRepository, repositoryResponse);
+//        StepVerifier.create(githubRepository).expectNext(repositoryResponse).verifyComplete();
     }
 
     @Test
     public void getGithubRepository_shouldThrowErrorIFRequestIncorrect() throws IOException {
+        //todo
         String response = String.join("", Files.readAllLines(pathToIncorrectExampleResponse));
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/repos/{owner}/{repository}"))
                 .withPathParam("owner", WireMock.equalTo(GITHUB_OWNER))
@@ -57,13 +62,14 @@ public class GithubImplTest {
                         .withBody(response)));
         GithubServiceImplSupportable githubClient = new GithubServiceImplSupportable(wireMockExtension.baseUrl());
 
-        Mono<RepositoryResponse> githubRepository = githubClient.getGithubRepository(GITHUB_OWNER, GITHUB_REPOSITORY);
+        assertThrows(WebClientResponseException.class, ()->githubClient.getGithubRepository(GITHUB_OWNER, GITHUB_REPOSITORY));
 
-        StepVerifier.create(githubRepository)
-                .expectErrorMatches(throwable -> throwable instanceof WebClientResponseException &&
-                        throwable.getMessage()
-                                .equals("404 Not Found from GET " + wireMockExtension.baseUrl() + "/repos/somebody/something")
-                ).verify();
+
+//        StepVerifier.create(githubRepository)
+//                .expectErrorMatches(throwable -> throwable instanceof WebClientResponseException &&
+//                        throwable.getMessage()
+//                                .equals("404 Not Found from GET " + wireMockExtension.baseUrl() + "/repos/somebody/something")
+//                ).verify();
     }
 
 }

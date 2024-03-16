@@ -3,6 +3,7 @@ package edu.java.service.jdbc;
 import edu.java.bot.api.UpdatesApi;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.configuration.ApplicationConfig;
+import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.linkClients.SupportableLinkService;
 import edu.java.repository.entity.ChatEntity;
 import edu.java.service.UrlService;
@@ -48,20 +49,21 @@ public class JdbcUrlUpdater implements UrlUpdater {
                 try {
                     URI uri = new URI(urlDTO.url());
 
-                    Optional<SupportableLinkService> linkService =
+                    Optional<SupportableLinkService> supportableLinkService =
                         supportableLinkServices.stream()
                             .filter(linkClient -> linkClient.getDomain().equals(uri.getAuthority()))
                             .findFirst();
-                    if (linkService.isEmpty()) {
+                    if (supportableLinkService.isEmpty()) {
                         throw new RuntimeException("this type of url is not supported");
                     }
-                    OffsetDateTime lastUpdateDate = linkService.get().getLastUpdateDate(uri.getPath());
-                    if (lastUpdateDate.isAfter(urlDTO.lastUpdate())) {
-                        urlService.update(urlDTO.id(), OffsetDateTime.now(), lastUpdateDate);
+                    Optional<LinkUpdateResponse> linkUpdateResponse =
+                        supportableLinkService.get().getLastUpdateDate(uri.getPath(), urlDTO.lastUpdate());
+                    if (linkUpdateResponse.isPresent()) {
+                        urlService.update(urlDTO.id(), OffsetDateTime.now(), linkUpdateResponse.get().lastUpdate());
 
                         LinkUpdate linkUpdate =
                             new LinkUpdate().id(urlDTO.id()).url(uri)
-                                .description("something changed")
+                                .description(linkUpdateResponse.get().description())
                                 .tgChatIds(urlService.getChats(urlDTO.id()).stream().map(
                                     ChatEntity::tgChatId).toList());
                         updatesApi.updatesPost(linkUpdate);

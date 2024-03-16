@@ -1,9 +1,12 @@
 package edu.java.linkClients;
 
+import edu.java.bot.model.LinkUpdate;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 public interface SupportableLinkService {
     String getDomain();
 
-    OffsetDateTime getLastUpdateDate(String pathOfUrl);
+    Optional<LinkUpdateResponse> getLastUpdateDate(String pathOfUrl, OffsetDateTime lastUpdate);
+
 }
