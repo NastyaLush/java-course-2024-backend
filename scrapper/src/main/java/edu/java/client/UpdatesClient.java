@@ -25,6 +25,6 @@ public class UpdatesClient implements UpdatesApi {
     @Override
     public ResponseEntity<Void> updatesPost(LinkUpdate linkUpdate) {
         return webClient.post().retrieve().toEntity(Void.class)
-            .onErrorResume(WebClientResponseException.class, Mono::error).block();
+                        .onErrorResume(WebClientResponseException.class, Mono::error).block();
     }
 }

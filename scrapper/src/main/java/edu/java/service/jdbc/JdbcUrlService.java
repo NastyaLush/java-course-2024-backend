@@ -48,7 +48,7 @@ public class JdbcUrlService implements UrlService {
     public LinkResponse add(long tgChatId, URI url) {
         Optional<SupportableLinkService> linkService =
             supportableLinkServices.stream().filter(linkClient -> linkClient.getDomain().equals(url.getAuthority()))
-                .findFirst();
+                                   .findFirst();
         if (linkService.isEmpty()) {
             throw new IllegalArgumentException("this url is not supported");
         }
@@ -95,7 +95,7 @@ public class JdbcUrlService implements UrlService {
     public List<ChatEntity> getChats(Long urlId) {
         return jdbcTrackingUrlsRepository.findByUrlId(urlId).stream()
                                          .map(trackingUrlsDTO -> jdbcTgChatRepository.findByTgId(
-                trackingUrlsDTO.chatId()).get()).toList();
+                                             trackingUrlsDTO.chatId()).get()).toList();
     }
 
     @Override
@@ -105,10 +105,14 @@ public class JdbcUrlService implements UrlService {
             throw new NotExistException("this chat does not exists");
         }
         List<UrlEntity> urlEntities = jdbcTrackingUrlsRepository.findByChatId(chatEntity.get().id()).stream()
-                                                                .map(trackingUrlsDTO -> jdbcUrlRepository.findById(trackingUrlsDTO.urlId()).get()).toList();
+                                                                .map(trackingUrlsDTO -> jdbcUrlRepository.findById(
+                                                                    trackingUrlsDTO.urlId()).get()).toList();
         return new ListLinksResponse().size(urlEntities.size())
-            .links(urlEntities.stream().map(urlDTO -> new LinkResponse().id(urlDTO.id()).url(URI.create(urlDTO.url())))
-                .toList());
+                                      .links(urlEntities
+                                          .stream()
+                                          .map(urlDTO -> new LinkResponse()
+                                              .id(urlDTO.id())
+                                              .url(URI.create(urlDTO.url()))).toList());
     }
 
     @Override

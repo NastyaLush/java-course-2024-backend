@@ -6,7 +6,6 @@ import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
 import edu.java.repository.entity.ChatEntity;
 import edu.java.repository.interf.TgChatRepository;
-
 import java.util.List;
 import java.util.Optional;
 import org.jooq.DSLContext;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class JooqTgChatRepository implements TgChatRepository {
-    private DSLContext dsl;
+    private final DSLContext dsl;
 
     @Autowired
     public JooqTgChatRepository(DSLContext dsl) {
@@ -34,7 +33,8 @@ public class JooqTgChatRepository implements TgChatRepository {
 
     @Override public long remove(long tgChatId) {
         ChatRecord chatRecord =
-            dsl.deleteFrom(Tables.CHAT).where(Tables.CHAT.TG_CHAT_ID.equal((int) tgChatId)).returning(Tables.CHAT.ID).fetchOne();
+            dsl.deleteFrom(Tables.CHAT).where(Tables.CHAT.TG_CHAT_ID.equal((int) tgChatId)).returning(Tables.CHAT.ID)
+               .fetchOne();
         if (chatRecord == null) {
             throw new NotExistException("this chat is not exist");
         }
@@ -46,10 +46,10 @@ public class JooqTgChatRepository implements TgChatRepository {
     }
 
     @Override public Optional<ChatEntity> findByTgId(long chatTgId) {
-        return dsl.selectFrom(Tables.CHAT).where(Tables.CHAT.TG_CHAT_ID.equal((int) chatTgId))  .fetchOptional()
-                  .map(record -> new ChatEntity(
-                          Long.valueOf(record.get(Tables.CHAT.ID)),
-                          Long.valueOf(record.get(Tables.CHAT.TG_CHAT_ID))
+        return dsl.selectFrom(Tables.CHAT).where(Tables.CHAT.TG_CHAT_ID.equal((int) chatTgId)).fetchOptional()
+                  .map(chatRecord -> new ChatEntity(
+                      Long.valueOf(chatRecord.get(Tables.CHAT.ID)),
+                      Long.valueOf(chatRecord.get(Tables.CHAT.TG_CHAT_ID))
                   ));
     }
 }

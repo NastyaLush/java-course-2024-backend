@@ -4,12 +4,12 @@ import edu.java.repository.jdbc.JdbcTgChatRepository;
 import edu.java.repository.jdbc.JdbcTrackingUrlsRepository;
 import edu.java.repository.jdbc.JdbcUrlRepository;
 import edu.java.scrapper.repository.repository.TrackingJdbcUrlRepositoryTest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class JdbcTrackingUrlsRepositoryTest extends TrackingJdbcUrlRepositoryTest {
+    @Autowired
 
     protected JdbcTrackingUrlsRepositoryTest(
         JdbcTrackingUrlsRepository trackingUrlsRepository,

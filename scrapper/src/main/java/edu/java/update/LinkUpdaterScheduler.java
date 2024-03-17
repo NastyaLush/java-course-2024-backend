@@ -1,6 +1,5 @@
 package edu.java.update;
 
-import edu.java.client.UpdatesClient;
 import edu.java.service.UrlUpdater;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

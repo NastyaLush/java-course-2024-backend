@@ -1,5 +1,5 @@
 app:
-  telegram-token: ${BOT_TOKEN}
+  telegram-token: "${BOT_TOKEN}"
 
 
 spring:

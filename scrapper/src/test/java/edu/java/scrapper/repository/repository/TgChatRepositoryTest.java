@@ -23,7 +23,7 @@ public abstract class TgChatRepositoryTest extends IntegrationTest {
     @Rollback
     @Transactional
     void add_shouldCorrectlyAddChat() {
-        tgChatRepository.add(1l);
+        tgChatRepository.add(1L);
         List<ChatEntity> chats = tgChatRepository.findAll();
         assert chats.size() == 1;
         assert chats.getFirst().tgChatId() == 1;

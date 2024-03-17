@@ -51,8 +51,8 @@ public class JdbcUrlUpdater implements UrlUpdater {
 
                     Optional<SupportableLinkService> supportableLinkService =
                         supportableLinkServices.stream()
-                            .filter(linkClient -> linkClient.getDomain().equals(uri.getAuthority()))
-                            .findFirst();
+                                               .filter(linkClient -> linkClient.getDomain().equals(uri.getAuthority()))
+                                               .findFirst();
                     if (supportableLinkService.isEmpty()) {
                         throw new RuntimeException("this type of url is not supported");
                     }
@@ -63,9 +63,9 @@ public class JdbcUrlUpdater implements UrlUpdater {
 
                         LinkUpdate linkUpdate =
                             new LinkUpdate().id(urlDTO.id()).url(uri)
-                                .description(linkUpdateResponse.get().description())
-                                .tgChatIds(urlService.getChats(urlDTO.id()).stream().map(
-                                    ChatEntity::tgChatId).toList());
+                                            .description(linkUpdateResponse.get().description())
+                                            .tgChatIds(urlService.getChats(urlDTO.id()).stream().map(
+                                                ChatEntity::tgChatId).toList());
                         updatesApi.updatesPost(linkUpdate);
                         counter.getAndIncrement();
                     } else {

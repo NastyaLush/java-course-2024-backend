@@ -134,8 +134,10 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
     @Rollback
     @Transactional
     void update_shouldThrowExceptionIfNoUrlWithThisId() {
-        assertThrows(IllegalArgumentException.class,
-            () -> urlRepository.update(1L, OffsetDateTime.now(), OffsetDateTime.now()));
+        assertThrows(
+            NotExistException.class,
+            () -> urlRepository.update(1L, OffsetDateTime.now(), OffsetDateTime.now())
+        );
     }
 
     @Test
@@ -159,7 +161,7 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
     @Rollback
     @Transactional
     void updateLastCheck_shouldThrowExceptionIfNoUrlWithThisId() {
-        assertThrows(IllegalArgumentException.class, () -> urlRepository.update(1L, OffsetDateTime.now()));
+        assertThrows(NotExistException.class, () -> urlRepository.update(1L, OffsetDateTime.now()));
     }
 
     @Test
@@ -175,9 +177,9 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
             urlRepository.findNotCheckedForLongTime(OffsetDateTime.now().minusSeconds(25));
 
         assert notCheckedForLongTime.size() == 2;
-        assert notCheckedForLongTime.stream().filter(urlEntity -> urlEntity.url().equals("url3") || urlEntity.url()
-                                                                                                             .equals(
-                                                                                                                 "url4"))
+        assert notCheckedForLongTime.stream()
+                                    .filter(urlEntity -> urlEntity.url().equals("url3")
+                                        || urlEntity.url().equals("url4"))
                                     .count() == 2;
     }
 

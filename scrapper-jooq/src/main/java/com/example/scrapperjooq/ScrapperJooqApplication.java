@@ -5,10 +5,8 @@ import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
 import org.jooq.meta.jaxb.Generate;
 import org.jooq.meta.jaxb.Generator;
-import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.Property;
 import org.jooq.meta.jaxb.Target;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
@@ -16,7 +14,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties
 public class ScrapperJooqApplication {
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         Database database = new Database()
             .withName("org.jooq.meta.extensions.liquibase.LiquibaseDatabase")
             .withProperties(
@@ -54,6 +52,6 @@ public class ScrapperJooqApplication {
             );
 
         GenerationTool.generate(configuration);
-	}
+    }
 
 }

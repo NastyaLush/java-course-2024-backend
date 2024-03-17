@@ -1,7 +1,6 @@
 package edu.java.linkClients.github.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.kafka.common.protocol.types.Field;
 import java.time.OffsetDateTime;
 
 public record PullRequestResponse(
@@ -9,12 +8,12 @@ public record PullRequestResponse(
     @JsonProperty("html_url") String url,
     @JsonProperty("title") String title,
     @JsonProperty("body") String body,
-    @JsonProperty("created_at")OffsetDateTime createdAt,
+    @JsonProperty("created_at") OffsetDateTime createdAt,
     @JsonProperty("user") UserResponse userResponse
 ) {
     public record UserResponse(
         @JsonProperty("login") String login,
         @JsonProperty("html_url") String url
-    ){
+    ) {
     }
 }

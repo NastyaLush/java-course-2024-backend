@@ -1,5 +1,7 @@
 package edu.java.repository.jdbc;
 
+import edu.java.exception.AlreadyExistException;
+import edu.java.exception.NotExistException;
 import edu.java.repository.entity.TrackingUrlsDelete;
 import edu.java.repository.entity.TrackingUrlsEntity;
 import edu.java.repository.entity.TrackingUrlsInput;
@@ -24,15 +26,15 @@ public class JdbcTrackingUrlsRepository implements edu.java.repository.interf.Tr
     public long add(TrackingUrlsInput trackingUrlsDTO) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int update = jdbcClient.sql(
-                "INSERT INTO tracking_urls (url_id, chat_id) "
-                    + "VALUES (?, ?)"
-                    + "ON CONFLICT (url_id, chat_id) DO NOTHING "
-                    + "RETURNING id;")
-            .param(trackingUrlsDTO.urlId())
-            .param(trackingUrlsDTO.chatId())
-            .update(keyHolder);
+                                   "INSERT INTO tracking_urls (url_id, chat_id) "
+                                       + "VALUES (?, ?)"
+                                       + "ON CONFLICT (url_id, chat_id) DO NOTHING "
+                                       + "RETURNING id;")
+                               .param(trackingUrlsDTO.urlId())
+                               .param(trackingUrlsDTO.chatId())
+                               .update(keyHolder);
         if (update == 0) {
-            throw new IllegalArgumentException("this url is already tracking");
+            throw new AlreadyExistException("this url is already tracking");
         }
         return keyHolder.getKey().longValue();
     }
@@ -42,11 +44,11 @@ public class JdbcTrackingUrlsRepository implements edu.java.repository.interf.Tr
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int update = jdbcClient.sql("DELETE FROM tracking_urls where url_id=? and  chat_id = ? Returning id")
-            .param(trackingUrlsDTO.urlId())
-            .param(trackingUrlsDTO.chatId())
-            .update(keyHolder);
+                               .param(trackingUrlsDTO.urlId())
+                               .param(trackingUrlsDTO.chatId())
+                               .update(keyHolder);
         if (update == 0) {
-            throw new IllegalArgumentException("this url is not tracking");
+            throw new NotExistException("this url is not tracking");
         }
         return keyHolder.getKey().longValue();
     }
@@ -54,20 +56,20 @@ public class JdbcTrackingUrlsRepository implements edu.java.repository.interf.Tr
     @Override
     public List<TrackingUrlsEntity> findAll() {
         return jdbcClient.sql("SELECT * FROM tracking_urls").query(TrackingUrlsEntity.class)
-            .list();
+                         .list();
     }
 
     @Override
     public List<TrackingUrlsEntity> findByChatId(long chatId) {
         return jdbcClient.sql("SELECT * FROM tracking_urls where chat_id = ?").param(chatId)
-            .query(TrackingUrlsEntity.class)
-            .list();
+                         .query(TrackingUrlsEntity.class)
+                         .list();
     }
 
     @Override
     public List<TrackingUrlsEntity> findByUrlId(long urlId) {
         return jdbcClient.sql("SELECT * FROM tracking_urls where url_id = ?").param(urlId)
-            .query(TrackingUrlsEntity.class)
-            .list();
+                         .query(TrackingUrlsEntity.class)
+                         .list();
     }
 }
