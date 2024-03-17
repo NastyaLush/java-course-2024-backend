@@ -1,9 +1,12 @@
 package edu.java.repository.jooq;
 
+import edu.java.domain.jooq.Tables;
+import edu.java.domain.jooq.tables.records.ChatRecord;
+import edu.java.exception.AlreadyExistException;
+import edu.java.exception.NotExistException;
 import edu.java.repository.entity.ChatEntity;
 import edu.java.repository.interf.TgChatRepository;
-import edu.java.scrapper.domain.jooq.Tables;
-import edu.java.scrapper.domain.jooq.tables.records.ChatRecord;
+
 import java.util.List;
 import java.util.Optional;
 import org.jooq.DSLContext;
@@ -24,13 +27,18 @@ public class JooqTgChatRepository implements TgChatRepository {
             dsl.insertInto(Tables.CHAT).columns(Tables.CHAT.TG_CHAT_ID).values((int) tgChatId).onConflictDoNothing()
                .returning(Tables.CHAT.ID).fetchOne();
         if (chatRecord == null) {
-            throw new IllegalArgumentException("Chat already exists");
+            throw new AlreadyExistException("Chat already exists");
         }
         return chatRecord.getId().longValue();
     }
 
     @Override public long remove(long tgChatId) {
-        return 0;
+        ChatRecord chatRecord =
+            dsl.deleteFrom(Tables.CHAT).where(Tables.CHAT.TG_CHAT_ID.equal((int) tgChatId)).returning(Tables.CHAT.ID).fetchOne();
+        if (chatRecord == null) {
+            throw new NotExistException("this chat is not exist");
+        }
+        return chatRecord.getId().longValue();
     }
 
     @Override public List<ChatEntity> findAll() {
@@ -38,6 +46,10 @@ public class JooqTgChatRepository implements TgChatRepository {
     }
 
     @Override public Optional<ChatEntity> findByTgId(long chatTgId) {
-        return Optional.empty();
+        return dsl.selectFrom(Tables.CHAT).where(Tables.CHAT.TG_CHAT_ID.equal((int) chatTgId))  .fetchOptional()
+                  .map(record -> new ChatEntity(
+                          Long.valueOf(record.get(Tables.CHAT.ID)),
+                          Long.valueOf(record.get(Tables.CHAT.TG_CHAT_ID))
+                  ));
     }
 }

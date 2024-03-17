@@ -94,7 +94,7 @@ public class JdbcUrlService implements UrlService {
     @Override
     public List<ChatEntity> getChats(Long urlId) {
         return jdbcTrackingUrlsRepository.findByUrlId(urlId).stream()
-            .map(trackingUrlsDTO -> jdbcTgChatRepository.findByTgId(
+                                         .map(trackingUrlsDTO -> jdbcTgChatRepository.findByTgId(
                 trackingUrlsDTO.chatId()).get()).toList();
     }
 
@@ -105,7 +105,7 @@ public class JdbcUrlService implements UrlService {
             throw new NotExistException("this chat does not exists");
         }
         List<UrlEntity> urlEntities = jdbcTrackingUrlsRepository.findByChatId(chatEntity.get().id()).stream()
-            .map(trackingUrlsDTO -> jdbcUrlRepository.findById(trackingUrlsDTO.urlId()).get()).toList();
+                                                                .map(trackingUrlsDTO -> jdbcUrlRepository.findById(trackingUrlsDTO.urlId()).get()).toList();
         return new ListLinksResponse().size(urlEntities.size())
             .links(urlEntities.stream().map(urlDTO -> new LinkResponse().id(urlDTO.id()).url(URI.create(urlDTO.url())))
                 .toList());

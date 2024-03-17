@@ -44,12 +44,15 @@
         <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
         <checkstyle.version>10.12.7</checkstyle.version>
         <openapi-generator-version>7.3.0</openapi-generator-version>
+
+        <org.jooq.version>3.17.6</org.jooq.version>
+
     </properties>
 
     <modules>
         <module>bot</module>
         <module>scrapper</module>
-<!--        <module>scrapper-jooq</module>-->
+        <module>scrapper-jooq</module>
     </modules>
 
     <dependencyManagement>

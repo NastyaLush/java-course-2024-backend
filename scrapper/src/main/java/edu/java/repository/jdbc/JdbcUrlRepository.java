@@ -3,7 +3,6 @@ package edu.java.repository.jdbc;
 import edu.java.exception.NotExistException;
 import edu.java.repository.entity.UrlEntity;
 import edu.java.repository.entity.UrlInput;
-import edu.java.repository.interf.UrlRepository;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -16,7 +15,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class JdbcUrlRepository implements UrlRepository {
+public class JdbcUrlRepository implements edu.java.repository.interf.UrlRepository {
     public static final String ID_COLUMN = "id";
     public static final String URL_COLUMN = "url";
     public static final String LAST_UPDATE_COLUMN = "last_update";
