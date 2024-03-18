@@ -30,11 +30,12 @@ public class JdbcUrlService implements UrlService {
     private final JdbcTgChatRepository jdbcTgChatRepository;
     private final List<SupportableLinkService> supportableLinkServices;
 
-    @Autowired public JdbcUrlService(
-        JdbcUrlRepository jdbcUrlRepository,
-        JdbcTrackingUrlsRepository jdbcTrackingUrlsRepository,
-        JdbcTgChatRepository jdbcTgChatRepository,
-        List<SupportableLinkService> supportableLinkServices
+    @Autowired
+    public JdbcUrlService(
+            JdbcUrlRepository jdbcUrlRepository,
+            JdbcTrackingUrlsRepository jdbcTrackingUrlsRepository,
+            JdbcTgChatRepository jdbcTgChatRepository,
+            List<SupportableLinkService> supportableLinkServices
     ) {
         this.jdbcUrlRepository = jdbcUrlRepository;
         this.jdbcTrackingUrlsRepository = jdbcTrackingUrlsRepository;
@@ -42,10 +43,14 @@ public class JdbcUrlService implements UrlService {
         this.supportableLinkServices = supportableLinkServices;
     }
 
-    @Override @Transactional public LinkResponse add(long tgChatId, URI url) {
+    @Override
+    @Transactional
+    public LinkResponse add(long tgChatId, URI url) {
         Optional<SupportableLinkService> linkService =
-            supportableLinkServices.stream().filter(linkClient -> linkClient.getDomain().equals(url.getAuthority()))
-                                   .findFirst();
+                supportableLinkServices.stream()
+                                       .filter(linkClient -> linkClient.getDomain()
+                                                                       .equals(url.getAuthority()))
+                                       .findFirst();
         if (linkService.isEmpty()) {
             throw new IllegalArgumentException("this url is not supported");
         }
@@ -54,11 +59,15 @@ public class JdbcUrlService implements UrlService {
         if (chatEntity.isEmpty()) {
             throw new NotExistException(THIS_CHAT_IS_NOT_EXISTS_ERROR);
         }
-        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatEntity.get().id(), urlId));
-        return new LinkResponse().id(urlId).url(url);
+        jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatEntity.get()
+                                                                       .id(), urlId));
+        return new LinkResponse().id(urlId)
+                                 .url(url);
     }
 
-    @Override @Transactional public LinkResponse remove(long tgChatId, URI url) {
+    @Override
+    @Transactional
+    public LinkResponse remove(long tgChatId, URI url) {
 
         Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findByTgId(tgChatId);
         if (chatEntity.isEmpty()) {
@@ -68,53 +77,70 @@ public class JdbcUrlService implements UrlService {
         if (urlEntity.isEmpty()) {
             throw new NotExistException("this url is not exists");
         }
-        jdbcTrackingUrlsRepository.remove(new TrackingUrlsDelete(chatEntity.get().id(), urlEntity.get().id()));
-        if (jdbcTrackingUrlsRepository.findByUrlId(urlEntity.get().id()).isEmpty()) {
+        jdbcTrackingUrlsRepository.remove(new TrackingUrlsDelete(chatEntity.get()
+                                                                           .id(), urlEntity.get()
+                                                                                           .id()));
+        if (jdbcTrackingUrlsRepository.findByUrlId(urlEntity.get()
+                                                            .id())
+                                      .isEmpty()) {
             jdbcUrlRepository.remove(url.toString());
         }
-        return new LinkResponse().id(urlEntity.get().id()).url(url);
+        return new LinkResponse().id(urlEntity.get()
+                                              .id())
+                                 .url(url);
     }
 
-    @Override public LinkResponse remove(URI url) {
+    @Override
+    public LinkResponse remove(URI url) {
         long id = jdbcUrlRepository.remove(url.toString());
-        return new LinkResponse().id(id).url(url);
+        return new LinkResponse().id(id)
+                                 .url(url);
     }
 
-    @Override public void update(Long id, OffsetDateTime lastCheck) {
+    @Override
+    public void update(Long id, OffsetDateTime lastCheck) {
         jdbcUrlRepository.update(id, lastCheck);
     }
 
-    @Override public void update(Long id, OffsetDateTime lastCheck, OffsetDateTime lastUpdate) {
+    @Override
+    public void update(Long id, OffsetDateTime lastCheck, OffsetDateTime lastUpdate) {
         jdbcUrlRepository.update(id, lastCheck, lastUpdate);
 
     }
 
-    @Override public List<ChatEntity> getChats(Long urlId) {
+    @Override
+    public List<ChatEntity> getChats(Long urlId) {
         return jdbcTrackingUrlsRepository.findByUrlId(urlId)
                                          .stream()
                                          .map(trackingUrlsDTO -> {
                                              Long chatTgId = trackingUrlsDTO.chatId();
-                                             return jdbcTgChatRepository.findByTgId(chatTgId).get();
+                                             return jdbcTgChatRepository.findByTgId(chatTgId)
+                                                                        .get();
                                          })
                                          .toList();
     }
 
-    @Override public ListLinksResponse listAll(long tgChatId) {
+    @Override
+    public ListLinksResponse listAll(long tgChatId) {
         Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findByTgId(tgChatId);
         if (chatEntity.isEmpty()) {
             throw new NotExistException("this chat does not exists");
         }
-        List<UrlEntity> urlEntities = jdbcTrackingUrlsRepository.findByChatId(chatEntity.get().id()).stream()
-                                                                .map(trackingUrlsDTO -> jdbcUrlRepository.findById(
-                                                                    trackingUrlsDTO.urlId()).get()).toList();
+        List<UrlEntity> urlEntities = jdbcTrackingUrlsRepository
+                .findByChatId(chatEntity.get().id())
+                .stream()
+                .map(trackingUrlsDTO -> jdbcUrlRepository.findById(trackingUrlsDTO.urlId()).get())
+                .toList();
         return new ListLinksResponse()
-            .size(urlEntities.size())
-            .links(urlEntities.stream()
-                              .map(urlDTO -> new LinkResponse().id(urlDTO.id()).url(URI.create(urlDTO.url())))
-                              .toList());
+                .size(urlEntities.size())
+                .links(urlEntities.stream()
+                                  .map(urlDTO -> new LinkResponse().id(urlDTO.id())
+                                                                   .url(URI.create(urlDTO.url())))
+                                  .toList());
     }
 
-    @Override public List<UrlEntity> findNotCheckedForLongTime(OffsetDateTime maxLastCheck) {
+    @Override
+    public List<UrlEntity> findNotCheckedForLongTime(OffsetDateTime maxLastCheck) {
         return jdbcUrlRepository.findNotCheckedForLongTime(maxLastCheck);
     }
 }

@@ -14,19 +14,24 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
     private final WebClient webClient;
 
     public GithubServiceImplSupportable(String baseURL) {
-        webClient = WebClient.builder().baseUrl(baseURL).build();
+        webClient = WebClient.builder()
+                             .baseUrl(baseURL)
+                             .build();
     }
 
     public GithubServiceImplSupportable() {
-        webClient = WebClient.builder().baseUrl(GITHUB_API_BASE_URL).build();
+        webClient = WebClient.builder()
+                             .baseUrl(GITHUB_API_BASE_URL)
+                             .build();
     }
 
     @Override
     public Mono<RepositoryResponse> getGithubRepository(@NotNull String owner, @NotNull String repo) {
         return webClient.get()
-            .uri("/repos/{owner}/{repo}", owner, repo)
-            .retrieve()
-            .bodyToMono(RepositoryResponse.class).onErrorResume(WebClientResponseException.class, Mono::error);
+                        .uri("/repos/{owner}/{repo}", owner, repo)
+                        .retrieve()
+                        .bodyToMono(RepositoryResponse.class)
+                        .onErrorResume(WebClientResponseException.class, Mono::error);
     }
 
     @Override
@@ -38,6 +43,7 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
     public OffsetDateTime getLastUpdateDate(String pathOfUrl) {
         String[] split = pathOfUrl.split("/");
         Mono<RepositoryResponse> githubRepository = getGithubRepository(split[0], split[1]);
-        return Objects.requireNonNull(githubRepository.block()).updatedAt();
+        return Objects.requireNonNull(githubRepository.block())
+                      .updatedAt();
     }
 }

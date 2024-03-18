@@ -1,7 +1,7 @@
 package edu.java.scrapper.repository;
 
-import edu.java.exception.NotExistException;
 import edu.java.entity.ChatEntity;
+import edu.java.exception.NotExistException;
 import edu.java.repository.jdbc.JdbcTgChatRepository;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
@@ -25,7 +25,8 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
         jdbcTgChatRepository.add(1);
         List<ChatEntity> chats = jdbcTgChatRepository.findAll();
         assert chats.size() == 1;
-        assert chats.getFirst().tgChatId() == 1;
+        assert chats.getFirst()
+                    .tgChatId() == 1;
     }
 
     @Test
@@ -61,8 +62,10 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
         jdbcTgChatRepository.add(2);
         List<ChatEntity> chats = jdbcTgChatRepository.findAll();
         assert chats.size() == 2;
-        assert chats.getFirst().tgChatId() == 1;
-        assert chats.getLast().tgChatId() == 2;
+        assert chats.getFirst()
+                    .tgChatId() == 1;
+        assert chats.getLast()
+                    .tgChatId() == 2;
     }
 
     @Test
@@ -80,7 +83,9 @@ public class JdbcTgChatRepositoryTest extends IntegrationTest {
         long id = jdbcTgChatRepository.add(1L);
         Optional<ChatEntity> chatEntity = jdbcTgChatRepository.findByTgId(1L);
         assert chatEntity.isPresent();
-        assert chatEntity.get().id().equals(id);
+        assert chatEntity.get()
+                         .id()
+                         .equals(id);
     }
 
     @Test

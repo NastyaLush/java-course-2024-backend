@@ -31,9 +31,10 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
     void add_shouldCorrectlyAddTrackingUrl() {
         long chatKey = jdbcTgChatRepository.add(1);
         long key =
-            jdbcUrlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
+                jdbcUrlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
         jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey, key));
-        assert jdbcTrackingUrlsRepository.findAll().size() == 1;
+        assert jdbcTrackingUrlsRepository.findAll()
+                                         .size() == 1;
     }
 
     @Test
@@ -42,10 +43,11 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
     void remove_shouldCorrectlyRemoveTrackingUrl() {
         long chatKey = jdbcTgChatRepository.add(1);
         long key =
-            jdbcUrlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
+                jdbcUrlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
         jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey, key));
         jdbcTrackingUrlsRepository.remove(new TrackingUrlsDelete(chatKey, key));
-        assert jdbcTrackingUrlsRepository.findAll().isEmpty();
+        assert jdbcTrackingUrlsRepository.findAll()
+                                         .isEmpty();
     }
 
     @Test
@@ -55,17 +57,19 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
         long chatKey1 = jdbcTgChatRepository.add(1);
         long chatKey2 = jdbcTgChatRepository.add(2);
         long key =
-            jdbcUrlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
+                jdbcUrlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
         jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey1, key));
         jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatKey2, key));
-        assert jdbcTrackingUrlsRepository.findAll().size() == 2;
+        assert jdbcTrackingUrlsRepository.findAll()
+                                         .size() == 2;
     }
 
     @Test
     @Rollback
     @Transactional
     void findAll_shouldReturnEmptyListIfNoTrackingUrls() {
-        assert jdbcTrackingUrlsRepository.findAll().isEmpty();
+        assert jdbcTrackingUrlsRepository.findAll()
+                                         .isEmpty();
     }
 
     @Test
@@ -74,11 +78,11 @@ public class JdbcTrackingUrlsRepositoryTest extends IntegrationTest {
     void findByChatId_shouldCorrectlyReturnValuesWithThisChatId() {
         long chatId = jdbcTgChatRepository.add(1);
         jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatId,
-            jdbcUrlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()))));
+                jdbcUrlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()))));
         jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatId,
-            jdbcUrlRepository.add(new UrlInput("url2", OffsetDateTime.now(), OffsetDateTime.now()))));
+                jdbcUrlRepository.add(new UrlInput("url2", OffsetDateTime.now(), OffsetDateTime.now()))));
         jdbcTrackingUrlsRepository.add(new TrackingUrlsInput(chatId,
-            jdbcUrlRepository.add(new UrlInput("url3", OffsetDateTime.now(), OffsetDateTime.now()))));
+                jdbcUrlRepository.add(new UrlInput("url3", OffsetDateTime.now(), OffsetDateTime.now()))));
         List<TrackingUrlsEntity> urlsRepositoryByChatId = jdbcTrackingUrlsRepository.findByChatId(chatId);
         assert urlsRepositoryByChatId.size() == 3;
     }
