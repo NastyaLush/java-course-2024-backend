@@ -7,10 +7,11 @@ import edu.java.repository.jdbc.JdbcUrlRepository;
 import edu.java.service.abstractImplementation.AbstractUrlService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 @Service
-
+@Primary
 public class JdbcUrlService extends AbstractUrlService {
 
     @Autowired
