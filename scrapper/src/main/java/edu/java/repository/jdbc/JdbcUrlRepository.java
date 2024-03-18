@@ -1,9 +1,9 @@
 package edu.java.repository.jdbc;
 
+import edu.java.entity.UrlEntity;
+import edu.java.entity.UrlInput;
 import edu.java.exception.NotExistException;
-import edu.java.repository.entity.UrlEntity;
-import edu.java.repository.entity.UrlInput;
-import edu.java.repository.interf.UrlRepository;
+import edu.java.repository.UrlRepository;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -32,14 +32,14 @@ public class JdbcUrlRepository implements UrlRepository {
     public long add(UrlInput urlDTO) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int update = jdbcClient.sql(
-                "INSERT INTO url (url, last_update, last_check) VALUES (?, ?, ?) "
-                        + "ON CONFLICT (url) "
-                        + "DO UPDATE SET last_update = EXCLUDED.last_update, "
-                        + "last_check = EXCLUDED.last_check RETURNING id")
-            .param(urlDTO.url())
-            .param(Timestamp.from(urlDTO.lastUpdate().toInstant()))
-            .param(Timestamp.from(urlDTO.lastCheck().toInstant()))
-            .update(keyHolder);
+                                   "INSERT INTO url (url, last_update, last_check) VALUES (?, ?, ?) "
+                                       + "ON CONFLICT (url) "
+                                       + "DO UPDATE SET last_update = EXCLUDED.last_update, "
+                                       + "last_check = EXCLUDED.last_check RETURNING id")
+                               .param(urlDTO.url())
+                               .param(Timestamp.from(urlDTO.lastUpdate().toInstant()))
+                               .param(Timestamp.from(urlDTO.lastCheck().toInstant()))
+                               .update(keyHolder);
         if (update == 0) {
             throw new RuntimeException("Failed to add url");
         }
@@ -49,9 +49,9 @@ public class JdbcUrlRepository implements UrlRepository {
     @Override
     public void update(Long id, OffsetDateTime lastCheck) {
         int update = jdbcClient.sql("UPDATE url set last_check = ? where id = ?")
-            .param(lastCheck)
-            .param(id)
-            .update();
+                               .param(lastCheck)
+                               .param(id)
+                               .update();
         if (update == 0) {
             throw new IllegalArgumentException("url if this id is not exist");
         }
@@ -60,10 +60,10 @@ public class JdbcUrlRepository implements UrlRepository {
     @Override
     public void update(Long id, OffsetDateTime lastCheck, OffsetDateTime lastUpdate) {
         int update = jdbcClient.sql("UPDATE url set last_check = ?, last_update=? where id = ?")
-            .param(lastCheck)
-            .param(lastUpdate)
-            .param(id)
-            .update();
+                               .param(lastCheck)
+                               .param(lastUpdate)
+                               .param(id)
+                               .update();
         if (update == 0) {
             throw new IllegalArgumentException("there is no url with this id");
         }
@@ -73,8 +73,8 @@ public class JdbcUrlRepository implements UrlRepository {
     public long remove(String url) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int update = jdbcClient.sql("DELETE FROM url WHERE url=? RETURNING id")
-            .param(url)
-            .update(keyHolder);
+                               .param(url)
+                               .update(keyHolder);
         if (update == 0) {
             throw new NotExistException("this url is not exist");
         }
@@ -84,48 +84,48 @@ public class JdbcUrlRepository implements UrlRepository {
     @Override
     public List<UrlEntity> findAll() {
         return jdbcClient.sql("SELECT * FROM url")
-            .query((rs, rowNum) -> new UrlEntity(
-                rs.getLong(ID_COLUMN),
-                rs.getString(URL_COLUMN),
-                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
-                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
-            )).list();
+                         .query((rs, rowNum) -> new UrlEntity(
+                             rs.getLong(ID_COLUMN),
+                             rs.getString(URL_COLUMN),
+                             OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
+                             OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
+                         )).list();
     }
 
     @Override
     public Optional<UrlEntity> findById(long id) {
         return jdbcClient.sql("SELECT * FROM url where id = ?")
-            .param(id)
-            .query((rs, rowNum) -> new UrlEntity(
-                rs.getLong(ID_COLUMN),
-                rs.getString(URL_COLUMN),
-                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
-                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
-            )).optional();
+                         .param(id)
+                         .query((rs, rowNum) -> new UrlEntity(
+                             rs.getLong(ID_COLUMN),
+                             rs.getString(URL_COLUMN),
+                             OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
+                             OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
+                         )).optional();
     }
 
     @Override
     public Optional<UrlEntity> findByUrl(String url) {
         return jdbcClient.sql("SELECT * FROM url where url=?")
-            .param(url)
-            .query((rs, rowNum) -> new UrlEntity(
-                rs.getLong(ID_COLUMN),
-                rs.getString(URL_COLUMN),
-                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
-                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
-            )).optional();
+                         .param(url)
+                         .query((rs, rowNum) -> new UrlEntity(
+                             rs.getLong(ID_COLUMN),
+                             rs.getString(URL_COLUMN),
+                             OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
+                             OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
+                         )).optional();
     }
 
     @Override
     public List<UrlEntity> findNotCheckedForLongTime(OffsetDateTime maxLastCheck) {
         return jdbcClient.sql("SELECT * FROM url WHERE last_check <= :maxLastCheck")
-            .param("maxLastCheck", maxLastCheck)
-            .query((rs, rowNum) -> new UrlEntity(
-                rs.getLong(ID_COLUMN),
-                rs.getString(URL_COLUMN),
-                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
-                OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
-            )).list();
+                         .param("maxLastCheck", maxLastCheck)
+                         .query((rs, rowNum) -> new UrlEntity(
+                             rs.getLong(ID_COLUMN),
+                             rs.getString(URL_COLUMN),
+                             OffsetDateTime.ofInstant(rs.getTimestamp(LAST_UPDATE_COLUMN).toInstant(), ZoneOffset.UTC),
+                             OffsetDateTime.ofInstant(rs.getTimestamp(LAST_CHECK_COLUMN).toInstant(), ZoneOffset.UTC)
+                         )).list();
     }
 
 }

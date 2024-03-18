@@ -1,9 +1,9 @@
 package edu.java.repository.jdbc;
 
-import edu.java.repository.entity.TrackingUrlsDelete;
-import edu.java.repository.entity.TrackingUrlsEntity;
-import edu.java.repository.entity.TrackingUrlsInput;
-import edu.java.repository.interf.TrackingUrlsRepository;
+import edu.java.entity.TrackingUrlsDelete;
+import edu.java.entity.TrackingUrlsEntity;
+import edu.java.entity.TrackingUrlsInput;
+import edu.java.repository.TrackingUrlsRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;

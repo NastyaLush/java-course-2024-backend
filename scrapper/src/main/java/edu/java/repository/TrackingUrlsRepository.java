@@ -1,8 +1,8 @@
-package edu.java.repository.interf;
+package edu.java.repository;
 
-import edu.java.repository.entity.TrackingUrlsDelete;
-import edu.java.repository.entity.TrackingUrlsEntity;
-import edu.java.repository.entity.TrackingUrlsInput;
+import edu.java.entity.TrackingUrlsDelete;
+import edu.java.entity.TrackingUrlsEntity;
+import edu.java.entity.TrackingUrlsInput;
 import java.util.List;
 
 public interface TrackingUrlsRepository {

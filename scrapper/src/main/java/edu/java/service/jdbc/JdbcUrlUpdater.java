@@ -3,8 +3,9 @@ package edu.java.service.jdbc;
 import edu.java.bot.api.UpdatesApi;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.configuration.ApplicationConfig;
+import edu.java.entity.ChatEntity;
+import edu.java.entity.UrlEntity;
 import edu.java.linkClients.SupportableLinkService;
-import edu.java.repository.entity.ChatEntity;
 import edu.java.service.UrlService;
 import edu.java.service.UrlUpdater;
 import java.net.URI;
@@ -12,7 +13,6 @@ import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,43 +39,61 @@ public class JdbcUrlUpdater implements UrlUpdater {
     }
 
     @Override
-    public int update() {
-        AtomicLong counter = new AtomicLong();
-        urlService.findNotCheckedForLongTime(OffsetDateTime.now().minus(
-            applicationConfig.scheduler().interval())).forEach(
-            urlDTO -> {
+    public void update() {
+
+        getNotCheckedForLingTimeUrls().forEach(
+            urlEntity -> {
 
                 try {
-                    URI uri = new URI(urlDTO.url());
+                    URI uri = new URI(urlEntity.url());
 
-                    Optional<SupportableLinkService> linkService =
-                        supportableLinkServices.stream()
-                            .filter(linkClient -> linkClient.getDomain().equals(uri.getAuthority()))
-                            .findFirst();
+                    Optional<SupportableLinkService> linkService = getLinkService(uri);
                     if (linkService.isEmpty()) {
-                        throw new RuntimeException("this type of url is not supported");
+                        log.warn("this type of url is not supported");
+                        throw new IllegalArgumentException("this type of url" + uri + " is not supported");
                     }
                     OffsetDateTime lastUpdateDate = linkService.get().getLastUpdateDate(uri.getPath());
-                    if (lastUpdateDate.isAfter(urlDTO.lastUpdate())) {
-                        urlService.update(urlDTO.id(), OffsetDateTime.now(), lastUpdateDate);
+                    update(lastUpdateDate, urlEntity, uri);
 
-                        LinkUpdate linkUpdate =
-                            new LinkUpdate().id(urlDTO.id()).url(uri)
-                                .description("something changed")
-                                .tgChatIds(urlService.getChats(urlDTO.id()).stream().map(
-                                    ChatEntity::tgChatId).toList());
-                        updatesApi.updatesPost(linkUpdate);
-                        counter.getAndIncrement();
-                    } else {
-                        urlService.update(urlDTO.id(), OffsetDateTime.now());
-                    }
+
                 } catch (URISyntaxException e) {
-                    throw new RuntimeException("impossible to parse uri");
+                    log.warn("impossible to parse uri");
+                } catch (IllegalArgumentException e) {
+                    log.warn(e.getMessage());
+                    urlService.remove(URI.create(urlEntity.url()));
+                    log.warn(urlEntity.url() + " was deleted");
                 }
 
             }
         );
         log.info("update method");
-        return counter.intValue();
+    }
+
+    private List<UrlEntity> getNotCheckedForLingTimeUrls() {
+        return urlService.findNotCheckedForLongTime(OffsetDateTime.now().minus(
+            applicationConfig.scheduler().interval()));
+    }
+
+    private Optional<SupportableLinkService> getLinkService(URI uri) {
+        return supportableLinkServices.stream()
+                                      .filter(linkClient -> linkClient.getDomain().equals(uri.getAuthority()))
+                                      .findFirst();
+
+    }
+
+    private void update(OffsetDateTime lastUpdateDate, UrlEntity urlEntity, URI uri) {
+        if (lastUpdateDate.isAfter(urlEntity.lastUpdate())) {
+            urlService.update(urlEntity.id(), OffsetDateTime.now(), lastUpdateDate);
+
+            List<Long> tgChatIdsWithThisUrl = urlService.getChats(urlEntity.id()).stream().map(
+                ChatEntity::tgChatId).toList();
+            LinkUpdate linkUpdate =
+                new LinkUpdate().id(urlEntity.id()).url(uri)
+                                .description("something changed")
+                                .tgChatIds(tgChatIdsWithThisUrl);
+            updatesApi.updatesPost(linkUpdate);
+        } else {
+            urlService.update(urlEntity.id(), OffsetDateTime.now());
+        }
     }
 }

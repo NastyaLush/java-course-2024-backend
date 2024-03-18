@@ -1,8 +1,8 @@
 package edu.java.repository.jdbc;
 
+import edu.java.entity.ChatEntity;
 import edu.java.exception.NotExistException;
-import edu.java.repository.entity.ChatEntity;
-import edu.java.repository.interf.TgChatRepository;
+import edu.java.repository.TgChatRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ public class JdbcTgChatRepository implements TgChatRepository {
     public long add(long tgChatId) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int update = jdbcClient.sql("INSERT INTO chat (tg_chat_id) VALUES (?) on conflict do nothing RETURNING id")
-            .param(tgChatId)
-            .update(keyHolder);
+                               .param(tgChatId)
+                               .update(keyHolder);
         if (update == 0) {
             throw new IllegalArgumentException("Chat already exists");
         }
@@ -37,8 +37,8 @@ public class JdbcTgChatRepository implements TgChatRepository {
     public long remove(long tgChatId) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int update = jdbcClient.sql("DELETE FROM chat WHERE tg_chat_id = ? returning id")
-            .param(tgChatId)
-            .update(keyHolder);
+                               .param(tgChatId)
+                               .update(keyHolder);
         if (update == 0) {
             throw new NotExistException("this chat is not exist");
         }
@@ -53,10 +53,10 @@ public class JdbcTgChatRepository implements TgChatRepository {
     @Override
     public Optional<ChatEntity> findByTgId(long chatTgId) {
         return jdbcClient.sql("SELECT *  FROM chat WHERE tg_chat_id = ?")
-            .param(chatTgId)
-            .query((rs, rowNum) -> new ChatEntity(
-                rs.getLong("id"),
-                rs.getLong("tg_chat_id")
-            )).optional();
+                         .param(chatTgId)
+                         .query((rs, rowNum) -> new ChatEntity(
+                             rs.getLong("id"),
+                             rs.getLong("tg_chat_id")
+                         )).optional();
     }
 }
