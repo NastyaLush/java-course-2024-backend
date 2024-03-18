@@ -1,7 +1,7 @@
-package edu.java.repository.interf;
+package edu.java.repository;
 
-import edu.java.repository.entity.UrlEntity;
-import edu.java.repository.entity.UrlInput;
+import edu.java.entity.UrlEntity;
+import edu.java.entity.UrlInput;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;

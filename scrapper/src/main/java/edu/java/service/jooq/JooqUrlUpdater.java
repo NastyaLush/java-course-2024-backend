@@ -1,19 +1,18 @@
-package edu.java.service.jdbc;
+package edu.java.service.jooq;
 
 import edu.java.bot.api.UpdatesApi;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.linkClients.SupportableLinkService;
 import edu.java.service.abstractImplementation.AbstractUrlUpdater;
 import java.util.List;
-import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@Log4j2
-public class JdbcUrlUpdater extends AbstractUrlUpdater {
-
-    public JdbcUrlUpdater(
-        JdbcUrlService urlService,
+public class JooqUrlUpdater extends AbstractUrlUpdater {
+    @Autowired
+    public JooqUrlUpdater(
+        JooqUrlService urlService,
         ApplicationConfig applicationConfig,
         List<SupportableLinkService> supportableLinkServices,
         UpdatesApi updatesApi

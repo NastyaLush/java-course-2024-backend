@@ -1,8 +1,9 @@
 package edu.java.repository.jdbc;
 
+import edu.java.entity.ChatEntity;
 import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
-import edu.java.repository.entity.ChatEntity;
+import edu.java.repository.TgChatRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class JdbcTgChatRepository implements edu.java.repository.interf.TgChatRepository {
+public class JdbcTgChatRepository implements TgChatRepository {
 
     private final JdbcClient jdbcClient;
 

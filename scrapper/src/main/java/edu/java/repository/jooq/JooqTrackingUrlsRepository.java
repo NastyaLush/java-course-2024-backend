@@ -2,12 +2,12 @@ package edu.java.repository.jooq;
 
 import edu.java.domain.jooq.Tables;
 import edu.java.domain.jooq.tables.records.TrackingUrlsRecord;
+import edu.java.entity.TrackingUrlsDelete;
+import edu.java.entity.TrackingUrlsEntity;
+import edu.java.entity.TrackingUrlsInput;
 import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
-import edu.java.repository.entity.TrackingUrlsDelete;
-import edu.java.repository.entity.TrackingUrlsEntity;
-import edu.java.repository.entity.TrackingUrlsInput;
-import edu.java.repository.interf.TrackingUrlsRepository;
+import edu.java.repository.TrackingUrlsRepository;
 import java.util.List;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;

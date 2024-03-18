@@ -1,23 +1,21 @@
-package edu.java.service.jdbc;
+package edu.java.service.jooq;
 
 import edu.java.linkClients.SupportableLinkService;
-import edu.java.repository.jdbc.JdbcTgChatRepository;
-import edu.java.repository.jdbc.JdbcTrackingUrlsRepository;
-import edu.java.repository.jdbc.JdbcUrlRepository;
+import edu.java.repository.jooq.JooqTgChatRepository;
+import edu.java.repository.jooq.JooqTrackingUrlsRepository;
+import edu.java.repository.jooq.JooqUrlRepository;
 import edu.java.service.abstractImplementation.AbstractUrlService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-
-public class JdbcUrlService extends AbstractUrlService {
-
+public class JooqUrlService extends AbstractUrlService {
     @Autowired
-    public JdbcUrlService(
-        JdbcUrlRepository urlRepository,
-        JdbcTrackingUrlsRepository trackingUrlsRepository,
-        JdbcTgChatRepository tgChatRepository,
+    public JooqUrlService(
+        JooqUrlRepository urlRepository,
+        JooqTrackingUrlsRepository trackingUrlsRepository,
+        JooqTgChatRepository tgChatRepository,
         List<SupportableLinkService> supportableLinkServices
     ) {
         super(urlRepository, trackingUrlsRepository, tgChatRepository, supportableLinkServices);

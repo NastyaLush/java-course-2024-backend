@@ -1,12 +1,13 @@
 package edu.java.scrapper.repository.repository;
 
-import edu.java.repository.entity.TrackingUrlsDelete;
-import edu.java.repository.entity.TrackingUrlsEntity;
-import edu.java.repository.entity.TrackingUrlsInput;
-import edu.java.repository.entity.UrlInput;
-import edu.java.repository.interf.TgChatRepository;
-import edu.java.repository.interf.TrackingUrlsRepository;
-import edu.java.repository.interf.UrlRepository;
+
+import edu.java.entity.TrackingUrlsDelete;
+import edu.java.entity.TrackingUrlsEntity;
+import edu.java.entity.TrackingUrlsInput;
+import edu.java.entity.UrlInput;
+import edu.java.repository.TgChatRepository;
+import edu.java.repository.TrackingUrlsRepository;
+import edu.java.repository.UrlRepository;
 import edu.java.scrapper.IntegrationTest;
 import java.time.OffsetDateTime;
 import java.util.List;

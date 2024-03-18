@@ -2,11 +2,11 @@ package edu.java.repository.jooq;
 
 import edu.java.domain.jooq.Tables;
 import edu.java.domain.jooq.tables.records.UrlRecord;
+import edu.java.entity.UrlEntity;
+import edu.java.entity.UrlInput;
 import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
-import edu.java.repository.entity.UrlEntity;
-import edu.java.repository.entity.UrlInput;
-import edu.java.repository.interf.UrlRepository;
+import edu.java.repository.UrlRepository;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;

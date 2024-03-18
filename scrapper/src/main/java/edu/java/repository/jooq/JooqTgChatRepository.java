@@ -2,10 +2,10 @@ package edu.java.repository.jooq;
 
 import edu.java.domain.jooq.Tables;
 import edu.java.domain.jooq.tables.records.ChatRecord;
+import edu.java.entity.ChatEntity;
 import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
-import edu.java.repository.entity.ChatEntity;
-import edu.java.repository.interf.TgChatRepository;
+import edu.java.repository.TgChatRepository;
 import java.util.List;
 import java.util.Optional;
 import org.jooq.DSLContext;

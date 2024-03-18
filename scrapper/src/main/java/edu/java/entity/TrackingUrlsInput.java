@@ -1,4 +1,4 @@
-package edu.java.repository.entity;
+package edu.java.entity;
 
 public record TrackingUrlsInput(Long chatId, Long urlId) {
 }

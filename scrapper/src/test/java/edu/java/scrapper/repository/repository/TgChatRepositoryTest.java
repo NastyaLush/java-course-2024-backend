@@ -1,9 +1,9 @@
 package edu.java.scrapper.repository.repository;
 
+import edu.java.entity.ChatEntity;
 import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
-import edu.java.repository.entity.ChatEntity;
-import edu.java.repository.interf.TgChatRepository;
+import edu.java.repository.TgChatRepository;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
 import java.util.Optional;

@@ -1,9 +1,10 @@
 package edu.java.scrapper.repository.repository;
 
+import edu.java.entity.UrlEntity;
+import edu.java.entity.UrlInput;
 import edu.java.exception.NotExistException;
-import edu.java.repository.entity.UrlEntity;
-import edu.java.repository.entity.UrlInput;
-import edu.java.repository.interf.UrlRepository;
+
+import edu.java.repository.UrlRepository;
 import edu.java.scrapper.IntegrationTest;
 import java.time.OffsetDateTime;
 import java.util.List;

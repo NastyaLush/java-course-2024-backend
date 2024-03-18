@@ -1,6 +1,6 @@
-package edu.java.repository.interf;
+package edu.java.repository;
 
-import edu.java.repository.entity.ChatEntity;
+import edu.java.entity.ChatEntity;
 import java.util.List;
 import java.util.Optional;
 
