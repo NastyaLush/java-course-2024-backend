@@ -62,7 +62,15 @@ public class JooqUrlRepository implements UrlRepository {
     @Override
     public List<UrlEntity> findAll() {
         return dsl.selectFrom(Tables.URL)
-                  .fetchInto(UrlEntity.class);
+                  .fetch()
+                  .map(urlRecord -> new UrlEntity(
+                          urlRecord.get(Tables.URL.ID),
+                          urlRecord.get(Tables.URL.URL_),
+                          OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_UPDATE)
+                                                            .toInstant(), ZoneOffset.UTC),
+                          OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_CHECK)
+                                                            .toInstant(), ZoneOffset.UTC)
+                  ));
     }
 
     @Override
@@ -71,7 +79,7 @@ public class JooqUrlRepository implements UrlRepository {
         UpdateResultStep<UrlRecord> returning = dsl.update(Tables.URL)
                                                    .set(Tables.URL.LAST_CHECK, lastCheck)
                                                    .set(Tables.URL.LAST_UPDATE, lastUpdate)
-                                                   .where(Tables.URL.ID.eq(Math.toIntExact(id)))
+                                                   .where(Tables.URL.ID.eq(id))
                                                    .returning();
 
         if (returning.fetchOptional()
@@ -85,7 +93,7 @@ public class JooqUrlRepository implements UrlRepository {
     public void update(Long id, OffsetDateTime lastCheck) {
         UpdateResultStep<UrlRecord> returning = dsl.update(Tables.URL)
                                                    .set(Tables.URL.LAST_CHECK, lastCheck)
-                                                   .where(Tables.URL.ID.eq(Math.toIntExact(id)))
+                                                   .where(Tables.URL.ID.eq(id))
                                                    .returning();
 
         if (returning.fetchOptional()
@@ -97,10 +105,10 @@ public class JooqUrlRepository implements UrlRepository {
     @Override
     public Optional<UrlEntity> findById(long id) {
         return dsl.selectFrom(Tables.URL)
-                  .where(Tables.URL.ID.eq(Math.toIntExact(id)))
+                  .where(Tables.URL.ID.eq(id))
                   .fetchOptional()
                   .map(urlRecord -> new UrlEntity(
-                          Long.valueOf(urlRecord.get(Tables.URL.ID)),
+                          urlRecord.get(Tables.URL.ID),
                           urlRecord.get(Tables.URL.URL_),
                           OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_UPDATE)
                                                             .toInstant(), ZoneOffset.UTC),
@@ -116,7 +124,7 @@ public class JooqUrlRepository implements UrlRepository {
                   .where(Tables.URL.URL_.equal(url))
                   .fetchOptional()
                   .map(urlRecord -> new UrlEntity(
-                          Long.valueOf(urlRecord.get(Tables.URL.ID)),
+                          urlRecord.get(Tables.URL.ID),
                           urlRecord.get(Tables.URL.URL_),
                           OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_UPDATE)
                                                             .toInstant(), ZoneOffset.UTC),
@@ -131,7 +139,7 @@ public class JooqUrlRepository implements UrlRepository {
                   .where(Tables.URL.LAST_CHECK.le(maxLastCheck))
                   .fetch()
                   .map(urlRecord -> new UrlEntity(
-                          Long.valueOf(urlRecord.get(Tables.URL.ID)),
+                          urlRecord.get(Tables.URL.ID),
                           urlRecord.get(Tables.URL.URL_),
                           OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_UPDATE)
                                                             .toInstant(), ZoneOffset.UTC),

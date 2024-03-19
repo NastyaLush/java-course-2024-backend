@@ -7,10 +7,11 @@ import edu.java.model.ListLinksResponse;
 import edu.java.model.RemoveLinkRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
-
+@Component
 public class LinksClient implements LinksApi {
     public static final String HEADER_NAME = "Tg-Chat-Id";
     private static final String DEFAULT_URL = "http://localhost:8080/links";

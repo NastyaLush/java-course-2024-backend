@@ -24,36 +24,33 @@ public class JooqTrackingUrlsRepository implements TrackingUrlsRepository {
     }
 
     @Override
-    public long add(TrackingUrlsInput trackingUrlsDTO) {
+    public void add(TrackingUrlsInput trackingUrlsDTO) {
 
         TrackingUrlsRecord trackingUrlsRecord =
                 dsl.insertInto(Tables.TRACKING_URLS)
                    .columns(Tables.TRACKING_URLS.URL_ID, Tables.TRACKING_URLS.CHAT_ID)
                    .values(
-                           Math.toIntExact(trackingUrlsDTO.urlId()), Math.toIntExact(trackingUrlsDTO.chatId())
+                           trackingUrlsDTO.urlId(), trackingUrlsDTO.chatId()
                    )
                    .onConflictDoNothing()
-                   .returning(Tables.TRACKING_URLS.ID)
+                   .returning()
                    .fetchOne();
         if (trackingUrlsRecord == null) {
             throw new AlreadyExistException("this url is already tracking");
         }
-        return trackingUrlsRecord.getId();
     }
 
     @Override
-    public long remove(TrackingUrlsDelete trackingUrlsDTO) {
+    public void remove(TrackingUrlsDelete trackingUrlsDTO) {
         TrackingUrlsRecord trackingUrlsRecord = dsl.deleteFrom(Tables.TRACKING_URLS)
-                                                   .where(Tables.TRACKING_URLS.URL_ID.equal(Math.toIntExact(
-                                                           trackingUrlsDTO.urlId())))
-                                                   .and(Tables.TRACKING_URLS.CHAT_ID.equal(Math.toIntExact(
-                                                           trackingUrlsDTO.chatId())))
-                                                   .returning(Tables.TRACKING_URLS.ID)
-                                                   .fetchOne();
+                                                   .where(Tables.TRACKING_URLS.URL_ID.equal(
+                                                           trackingUrlsDTO.urlId()))
+                                                   .and(Tables.TRACKING_URLS.CHAT_ID.equal(
+                                                           trackingUrlsDTO.chatId()))
+                                                   .returning().fetchOne();
         if (trackingUrlsRecord == null) {
             throw new NotExistException("this url is not tracking");
         }
-        return trackingUrlsRecord.getId();
     }
 
     @Override
@@ -65,16 +62,16 @@ public class JooqTrackingUrlsRepository implements TrackingUrlsRepository {
     @Override
     public List<TrackingUrlsEntity> findByChatId(long chatId) {
         return dsl.selectFrom(Tables.TRACKING_URLS)
-                  .where(Tables.TRACKING_URLS.CHAT_ID.equal(Math.toIntExact(
-                          chatId)))
+                  .where(Tables.TRACKING_URLS.CHAT_ID.equal(
+                          chatId))
                   .fetchInto(TrackingUrlsEntity.class);
     }
 
     @Override
     public List<TrackingUrlsEntity> findByUrlId(long urlId) {
         return dsl.selectFrom(Tables.TRACKING_URLS)
-                  .where(Tables.TRACKING_URLS.URL_ID.equal(Math.toIntExact(
-                          urlId)))
+                  .where(Tables.TRACKING_URLS.URL_ID.equal(
+                          urlId))
                   .fetchInto(TrackingUrlsEntity.class);
     }
 }

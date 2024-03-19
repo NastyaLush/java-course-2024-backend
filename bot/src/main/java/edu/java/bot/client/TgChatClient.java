@@ -2,10 +2,11 @@ package edu.java.bot.client;
 
 import edu.java.api.TgChatApi;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
-
+@Component
 public class TgChatClient implements TgChatApi {
     private static final String DEFAULT_URL = "http://localhost:8080/tg-chat";
     public static final String ID = "/{id}";
