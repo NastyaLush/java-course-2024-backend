@@ -108,8 +108,8 @@ public class AbstractUrlService implements UrlService {
         List<UrlEntity> urlEntities = trackingUrlsRepository.findByChatId(chatEntity.get()
                                                                                     .getId())
                                                             .stream()
-                                                            .map(trackingUrlsDTO -> urlRepository.findById(
-                                                                                                         trackingUrlsDTO.urlId())
+                                                            .map(trackingUrlsDTO ->
+                                                                    urlRepository.findById(trackingUrlsDTO.urlId())
                                                                                                  .get())
                                                             .toList();
         return new ListLinksResponse().size(urlEntities.size())

@@ -75,11 +75,10 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
         String owner = split[1];
         String repo = split[2];
         RepositoryResponse githubRepository = getGithubRepository(owner, repo);
-        List<PullRequestResponse> pullRequestResponseMono = getListPullRequests(owner, repo).stream()
-                                                                                            .filter(
-                                                                                                    pullRequestResponse -> pullRequestResponse.createdAt()
-                                                                                                                                              .isAfter(lastUpdate))
-                                                                                            .toList();
+        List<PullRequestResponse> pullRequestResponseMono = getListPullRequests(owner, repo)
+                .stream()
+                .filter(pullRequestResponse -> pullRequestResponse.createdAt().isAfter(lastUpdate))
+                .toList();
         List<IssueResponse> listComments = getListComments(
                 owner,
                 repo

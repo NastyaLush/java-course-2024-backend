@@ -31,7 +31,9 @@ public class AbstractUrlUpdater implements UrlUpdater {
                 urlEntity -> {
 
                     try {
-                        LinkUpdateResponse linkUpdateResponse = linkManager.getLastUpdate(new URI(urlEntity.getUrl()), urlEntity.getLastUpdate());
+                        LinkUpdateResponse linkUpdateResponse = linkManager.getLastUpdate(
+                                new URI(urlEntity.getUrl()),
+                                urlEntity.getLastUpdate());
                         update(linkUpdateResponse, urlEntity);
 
                     } catch (URISyntaxException e) {

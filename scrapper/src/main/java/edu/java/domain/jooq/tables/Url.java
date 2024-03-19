@@ -202,7 +202,8 @@ public class Url extends TableImpl<UrlRecord> {
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function4<? super Integer, ? super String, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(
+            Function4<? super Integer, ? super String, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 

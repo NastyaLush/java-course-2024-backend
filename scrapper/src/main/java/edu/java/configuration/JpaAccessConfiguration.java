@@ -41,6 +41,9 @@ public class JpaAccessConfiguration {
             JpaUrlRepository jooqUrlRepository,
             JpaTgChatRepository jooqTgChatRepository
     ) {
-        return new JpaUrlUpdater((JpaUrlService) urlService(jooqUrlRepository, jooqTgChatRepository, linkManager), applicationConfig, updatesApi, linkManager);
+        return new JpaUrlUpdater((JpaUrlService) urlService(jooqUrlRepository, jooqTgChatRepository, linkManager),
+                applicationConfig,
+                updatesApi,
+                linkManager);
     }
 }

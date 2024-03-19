@@ -8,7 +8,8 @@ import edu.java.util.LinkManager;
 
 public class JdbcUrlService extends AbstractUrlService {
 
-    public JdbcUrlService(JdbcUrlRepository urlRepository, JdbcTrackingUrlsRepository trackingUrlsRepository, JdbcTgChatRepository tgChatRepository, LinkManager linkManager) {
+    public JdbcUrlService(JdbcUrlRepository urlRepository, JdbcTrackingUrlsRepository trackingUrlsRepository,
+                          JdbcTgChatRepository tgChatRepository, LinkManager linkManager) {
         super(urlRepository, trackingUrlsRepository, tgChatRepository, linkManager);
     }
 }

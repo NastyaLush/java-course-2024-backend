@@ -44,6 +44,15 @@ public class JooqAccessConfiguration {
             JooqTrackingUrlsRepository jooqTrackingUrlsRepository,
             JooqTgChatRepository jooqTgChatRepository
     ) {
-        return new JooqUrlUpdater((JooqUrlService) urlService(jooqUrlRepository, jooqTrackingUrlsRepository, jooqTgChatRepository, linkManager), applicationConfig, updatesApi, linkManager);
+        return new JooqUrlUpdater(
+                (JooqUrlService) urlService(
+                        jooqUrlRepository,
+                        jooqTrackingUrlsRepository,
+                        jooqTgChatRepository,
+                        linkManager
+                ),
+                applicationConfig,
+                updatesApi,
+                linkManager);
     }
 }

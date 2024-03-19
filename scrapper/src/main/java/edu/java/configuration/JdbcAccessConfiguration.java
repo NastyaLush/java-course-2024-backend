@@ -46,6 +46,14 @@ public class JdbcAccessConfiguration {
             JdbcTrackingUrlsRepository jdbcTrackingUrlsRepository,
             JdbcTgChatRepository jdbcTgChatRepository
     ) {
-        return new JdbcUrlUpdater((JdbcUrlService) urlService(jdbcUrlRepository, jdbcTrackingUrlsRepository, jdbcTgChatRepository, linkManager), applicationConfig, updatesApi, linkManager);
+        return new JdbcUrlUpdater((JdbcUrlService) urlService(
+                jdbcUrlRepository,
+                jdbcTrackingUrlsRepository,
+                jdbcTgChatRepository,
+                linkManager
+        ),
+        applicationConfig,
+        updatesApi,
+        linkManager);
     }
 }
