@@ -23,7 +23,8 @@ public class UpdatesClientTest {
     @Test
     public void updatesPost_shouldCorrectlyUpdatePost() {
         wireMockExtension.stubFor(WireMock.post("/mock")
-                                          .willReturn(WireMock.aResponse().withStatus(200)
+                                          .willReturn(WireMock.aResponse()
+                                                              .withStatus(200)
                                                               .withHeader("Content-Type", "application/json")
                                                               .withBody(" ")));
 
@@ -36,7 +37,8 @@ public class UpdatesClientTest {
     @Test
     public void updatesPost_shouldThrowExceptionOnError() {
         wireMockExtension.stubFor(WireMock.post("")
-                                          .willReturn(WireMock.aResponse().withStatus(400)));
+                                          .willReturn(WireMock.aResponse()
+                                                              .withStatus(400)));
 
         UpdatesClient updatesClient = new UpdatesClient(wireMockExtension.baseUrl());
 

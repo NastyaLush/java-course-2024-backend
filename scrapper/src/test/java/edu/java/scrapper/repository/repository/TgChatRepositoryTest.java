@@ -26,7 +26,8 @@ public abstract class TgChatRepositoryTest extends IntegrationTest {
         tgChatRepository.add(1L);
         List<ChatEntity> chats = tgChatRepository.findAll();
         assert chats.size() == 1;
-        assert chats.getFirst().tgChatId() == 1;
+        assert chats.getFirst()
+                    .getTgChatId() == 1;
     }
 
     @Test
@@ -62,8 +63,10 @@ public abstract class TgChatRepositoryTest extends IntegrationTest {
         tgChatRepository.add(2);
         List<ChatEntity> chats = tgChatRepository.findAll();
         assert chats.size() == 2;
-        assert chats.getFirst().tgChatId() == 1;
-        assert chats.getLast().tgChatId() == 2;
+        assert chats.getFirst()
+                    .getTgChatId() == 1;
+        assert chats.getLast()
+                    .getTgChatId() == 2;
     }
 
     @Test
@@ -81,7 +84,9 @@ public abstract class TgChatRepositoryTest extends IntegrationTest {
         long id = tgChatRepository.add(1L);
         Optional<ChatEntity> chatEntity = tgChatRepository.findByTgId(1L);
         assert chatEntity.isPresent();
-        assert chatEntity.get().id().equals(id);
+        assert chatEntity.get()
+                         .getId()
+                         .equals(id);
     }
 
     @Test

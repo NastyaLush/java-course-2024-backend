@@ -3,7 +3,6 @@ package edu.java.scrapper.repository.repository;
 import edu.java.entity.UrlEntity;
 import edu.java.entity.UrlInput;
 import edu.java.exception.NotExistException;
-
 import edu.java.repository.UrlRepository;
 import edu.java.scrapper.IntegrationTest;
 import java.time.OffsetDateTime;
@@ -29,7 +28,9 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
         urlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()));
         List<UrlEntity> urlEntityList = urlRepository.findAll();
         assert urlEntityList.size() == 1;
-        assert urlEntityList.getFirst().url().equals("url");
+        assert urlEntityList.getFirst()
+                            .getUrl()
+                            .equals("url");
     }
 
     @Test
@@ -83,7 +84,9 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
         long id = urlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()));
         Optional<UrlEntity> byId = urlRepository.findById(id);
         assert byId.isPresent();
-        assert byId.get().url().equals("url");
+        assert byId.get()
+                   .getUrl()
+                   .equals("url");
     }
 
     @Test
@@ -101,7 +104,9 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
         long id = urlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()));
         Optional<UrlEntity> byUrl = urlRepository.findByUrl("url");
         assert byUrl.isPresent();
-        assert byUrl.get().id().equals(id);
+        assert byUrl.get()
+                    .getId()
+                    .equals(id);
     }
 
     @Test
@@ -125,10 +130,20 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
         Optional<UrlEntity> after = urlRepository.findById(id);
 
         assert after.isPresent();
-        assert after.get().id().equals(id);
-        assert after.get().url().equals(url.url());
-        assert !after.get().lastCheck().isEqual(before.get().lastCheck());
-        assert !after.get().lastUpdate().isEqual(before.get().lastUpdate());
+        assert after.get()
+                    .getId()
+                    .equals(id);
+        assert after.get()
+                    .getUrl()
+                    .equals(url.url());
+        assert !after.get()
+                     .getLastCheck()
+                     .isEqual(before.get()
+                                    .getLastCheck());
+        assert !after.get()
+                     .getLastUpdate()
+                     .isEqual(before.get()
+                                    .getLastUpdate());
     }
 
     @Test
@@ -136,8 +151,8 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
     @Transactional
     void update_shouldThrowExceptionIfNoUrlWithThisId() {
         assertThrows(
-            NotExistException.class,
-            () -> urlRepository.update(1L, OffsetDateTime.now(), OffsetDateTime.now())
+                NotExistException.class,
+                () -> urlRepository.update(1L, OffsetDateTime.now(), OffsetDateTime.now())
         );
     }
 
@@ -152,10 +167,20 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
         urlRepository.update(id, lastCheck);
         Optional<UrlEntity> after = urlRepository.findById(id);
         assert after.isPresent();
-        assert after.get().id().equals(id);
-        assert after.get().url().equals(url.url());
-        assert !after.get().lastCheck().isEqual(before.get().lastCheck());
-        assert after.get().lastUpdate().isEqual(before.get().lastUpdate());
+        assert after.get()
+                    .getId()
+                    .equals(id);
+        assert after.get()
+                    .getUrl()
+                    .equals(url.url());
+        assert !after.get()
+                     .getLastCheck()
+                     .isEqual(before.get()
+                                    .getLastCheck());
+        assert after.get()
+                    .getLastUpdate()
+                    .isEqual(before.get()
+                                   .getLastUpdate());
     }
 
     @Test
@@ -169,18 +194,25 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
     @Rollback
     @Transactional
     void findNotCheckedForLongTime_shouldCorrectlyReturnNotUpdatedForLongTimeUrls() {
-        urlRepository.add(new UrlInput("url1", OffsetDateTime.now(), OffsetDateTime.now().minusSeconds(10)));
-        urlRepository.add(new UrlInput("url2", OffsetDateTime.now(), OffsetDateTime.now().minusSeconds(20)));
-        urlRepository.add(new UrlInput("url3", OffsetDateTime.now(), OffsetDateTime.now().minusSeconds(30)));
-        urlRepository.add(new UrlInput("url4", OffsetDateTime.now(), OffsetDateTime.now().minusSeconds(40)));
+        urlRepository.add(new UrlInput("url1", OffsetDateTime.now(), OffsetDateTime.now()
+                                                                                   .minusSeconds(10)));
+        urlRepository.add(new UrlInput("url2", OffsetDateTime.now(), OffsetDateTime.now()
+                                                                                   .minusSeconds(20)));
+        urlRepository.add(new UrlInput("url3", OffsetDateTime.now(), OffsetDateTime.now()
+                                                                                   .minusSeconds(30)));
+        urlRepository.add(new UrlInput("url4", OffsetDateTime.now(), OffsetDateTime.now()
+                                                                                   .minusSeconds(40)));
 
         List<UrlEntity> notCheckedForLongTime =
-            urlRepository.findNotCheckedForLongTime(OffsetDateTime.now().minusSeconds(25));
+                urlRepository.findNotCheckedForLongTime(OffsetDateTime.now()
+                                                                      .minusSeconds(25));
 
         assert notCheckedForLongTime.size() == 2;
         assert notCheckedForLongTime.stream()
-                                    .filter(urlEntity -> urlEntity.url().equals("url3")
-                                        || urlEntity.url().equals("url4"))
+                                    .filter(urlEntity -> urlEntity.getUrl()
+                                                                  .equals("url3")
+                                            || urlEntity.getUrl()
+                                                        .equals("url4"))
                                     .count() == 2;
     }
 
@@ -190,7 +222,8 @@ public abstract class UrlRepositoryTest extends IntegrationTest {
     void findNotCheckedForLongTime_shouldCorrectlyWorkWithEmptyUrls() {
 
         List<UrlEntity> notCheckedForLongTime =
-            urlRepository.findNotCheckedForLongTime(OffsetDateTime.now().minusSeconds(25));
+                urlRepository.findNotCheckedForLongTime(OffsetDateTime.now()
+                                                                      .minusSeconds(25));
 
         assert notCheckedForLongTime.isEmpty();
     }

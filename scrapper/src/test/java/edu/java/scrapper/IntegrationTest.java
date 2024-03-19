@@ -22,9 +22,9 @@ public abstract class IntegrationTest {
 
     static {
         POSTGRES = new PostgreSQLContainer<>("postgres:15")
-            .withDatabaseName("scrapper")
-            .withUsername("postgres")
-            .withPassword("postgres");
+                .withDatabaseName("scrapper")
+                .withUsername("postgres")
+                .withPassword("postgres");
         POSTGRES.start();
 
         try {
@@ -37,13 +37,13 @@ public abstract class IntegrationTest {
 
     private static void runMigrations(JdbcDatabaseContainer<?> container) throws LiquibaseException, SQLException {
         Liquibase liquibase = new liquibase.Liquibase(
-            "migrations/master.xml",
-            new ClassLoaderResourceAccessor(),
-            new JdbcConnection(DriverManager.getConnection(
-                container.getJdbcUrl(),
-                container.getUsername(),
-                container.getPassword()
-            ))
+                "migrations/master.xml",
+                new ClassLoaderResourceAccessor(),
+                new JdbcConnection(DriverManager.getConnection(
+                        container.getJdbcUrl(),
+                        container.getUsername(),
+                        container.getPassword()
+                ))
         );
         liquibase.update(new Contexts(), new LabelExpression());
     }

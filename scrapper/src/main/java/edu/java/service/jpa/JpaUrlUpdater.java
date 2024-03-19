@@ -1,4 +1,4 @@
-package edu.java.service.abstractImplementation;
+package edu.java.service.jpa;
 
 import edu.java.bot.api.UpdatesApi;
 import edu.java.bot.model.LinkUpdate;
@@ -6,7 +6,6 @@ import edu.java.configuration.ApplicationConfig;
 import edu.java.entity.ChatEntity;
 import edu.java.entity.UrlEntity;
 import edu.java.linkClients.LinkUpdateResponse;
-import edu.java.service.UrlService;
 import edu.java.service.UrlUpdater;
 import edu.java.util.LinkManager;
 import java.net.URI;
@@ -16,10 +15,11 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+
 @RequiredArgsConstructor
 @Log4j2
-public class AbstractUrlUpdater implements UrlUpdater {
-    private final UrlService urlService;
+public class JpaUrlUpdater implements UrlUpdater {
+    private final JpaUrlService urlService;
     private final ApplicationConfig applicationConfig;
     private final UpdatesApi updatesApi;
     private final LinkManager linkManager;

@@ -24,9 +24,9 @@ public abstract class TrackingJdbcUrlRepositoryTest extends IntegrationTest {
     private final UrlRepository urlRepository;
 
     protected TrackingJdbcUrlRepositoryTest(
-        TrackingUrlsRepository trackingUrlsRepository,
-        TgChatRepository tgChatRepository,
-        UrlRepository urlRepository
+            TrackingUrlsRepository trackingUrlsRepository,
+            TgChatRepository tgChatRepository,
+            UrlRepository urlRepository
     ) {
         this.trackingUrlsRepository = trackingUrlsRepository;
         this.tgChatRepository = tgChatRepository;
@@ -39,9 +39,10 @@ public abstract class TrackingJdbcUrlRepositoryTest extends IntegrationTest {
     void add_shouldCorrectlyAddTrackingUrl() {
         long chatKey = tgChatRepository.add(1);
         long key =
-            urlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
+                urlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
         trackingUrlsRepository.add(new TrackingUrlsInput(chatKey, key));
-        assert trackingUrlsRepository.findAll().size() == 1;
+        assert trackingUrlsRepository.findAll()
+                                     .size() == 1;
     }
 
     @Test
@@ -50,10 +51,11 @@ public abstract class TrackingJdbcUrlRepositoryTest extends IntegrationTest {
     void remove_shouldCorrectlyRemoveTrackingUrl() {
         long chatKey = tgChatRepository.add(1);
         long key =
-            urlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
+                urlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
         trackingUrlsRepository.add(new TrackingUrlsInput(chatKey, key));
         trackingUrlsRepository.remove(new TrackingUrlsDelete(chatKey, key));
-        assert trackingUrlsRepository.findAll().isEmpty();
+        assert trackingUrlsRepository.findAll()
+                                     .isEmpty();
     }
 
     @Test
@@ -63,17 +65,19 @@ public abstract class TrackingJdbcUrlRepositoryTest extends IntegrationTest {
         long chatKey1 = tgChatRepository.add(1);
         long chatKey2 = tgChatRepository.add(2);
         long key =
-            urlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
+                urlRepository.add(new UrlInput("https://www.google.com", OffsetDateTime.now(), OffsetDateTime.now()));
         trackingUrlsRepository.add(new TrackingUrlsInput(chatKey1, key));
         trackingUrlsRepository.add(new TrackingUrlsInput(chatKey2, key));
-        assert trackingUrlsRepository.findAll().size() == 2;
+        assert trackingUrlsRepository.findAll()
+                                     .size() == 2;
     }
 
     @Test
     @Rollback
     @Transactional
     void findAll_shouldReturnEmptyListIfNoTrackingUrls() {
-        assert trackingUrlsRepository.findAll().isEmpty();
+        assert trackingUrlsRepository.findAll()
+                                     .isEmpty();
     }
 
     @Test
@@ -82,16 +86,16 @@ public abstract class TrackingJdbcUrlRepositoryTest extends IntegrationTest {
     void findByChatId_shouldCorrectlyReturnValuesWithThisChatId() {
         long chatId = tgChatRepository.add(1);
         trackingUrlsRepository.add(new TrackingUrlsInput(
-            chatId,
-            urlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()))
+                chatId,
+                urlRepository.add(new UrlInput("url", OffsetDateTime.now(), OffsetDateTime.now()))
         ));
         trackingUrlsRepository.add(new TrackingUrlsInput(
-            chatId,
-            urlRepository.add(new UrlInput("url2", OffsetDateTime.now(), OffsetDateTime.now()))
+                chatId,
+                urlRepository.add(new UrlInput("url2", OffsetDateTime.now(), OffsetDateTime.now()))
         ));
         trackingUrlsRepository.add(new TrackingUrlsInput(
-            chatId,
-            urlRepository.add(new UrlInput("url3", OffsetDateTime.now(), OffsetDateTime.now()))
+                chatId,
+                urlRepository.add(new UrlInput("url3", OffsetDateTime.now(), OffsetDateTime.now()))
         ));
         List<TrackingUrlsEntity> urlsRepositoryByChatId = trackingUrlsRepository.findByChatId(chatId);
         assert urlsRepositoryByChatId.size() == 3;

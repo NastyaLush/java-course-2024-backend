@@ -28,13 +28,15 @@ public class JooqUrlRepository implements UrlRepository {
     @Override
     public long add(UrlInput urlDTO) {
         UrlRecord urlRecord =
-            dsl.insertInto(Tables.URL).columns(Tables.URL.URL_, Tables.URL.LAST_UPDATE, Tables.URL.LAST_CHECK)
-               .values(urlDTO.url(), urlDTO.lastUpdate(), urlDTO.lastCheck())
-               .onConflict(Tables.URL.URL_).doUpdate()
-               .set(Tables.URL.LAST_CHECK, urlDTO.lastCheck())
-               .set(Tables.URL.LAST_UPDATE, urlDTO.lastUpdate())
-               .returning(Tables.URL.ID)
-               .fetchOne();
+                dsl.insertInto(Tables.URL)
+                   .columns(Tables.URL.URL_, Tables.URL.LAST_UPDATE, Tables.URL.LAST_CHECK)
+                   .values(urlDTO.url(), urlDTO.lastUpdate(), urlDTO.lastCheck())
+                   .onConflict(Tables.URL.URL_)
+                   .doUpdate()
+                   .set(Tables.URL.LAST_CHECK, urlDTO.lastCheck())
+                   .set(Tables.URL.LAST_UPDATE, urlDTO.lastUpdate())
+                   .returning(Tables.URL.ID)
+                   .fetchOne();
 
         if (urlRecord == null) {
             throw new AlreadyExistException("url already exists");
@@ -47,7 +49,10 @@ public class JooqUrlRepository implements UrlRepository {
     public long remove(String url) {
 
         UrlRecord urlRecord =
-            dsl.deleteFrom(Tables.URL).where(Tables.URL.URL_.equal(url)).returning(Tables.URL.ID).fetchOne();
+                dsl.deleteFrom(Tables.URL)
+                   .where(Tables.URL.URL_.equal(url))
+                   .returning(Tables.URL.ID)
+                   .fetchOne();
         if (urlRecord == null) {
             throw new NotExistException("this url is not exist");
         }
@@ -56,7 +61,8 @@ public class JooqUrlRepository implements UrlRepository {
 
     @Override
     public List<UrlEntity> findAll() {
-        return dsl.selectFrom(Tables.URL).fetchInto(UrlEntity.class);
+        return dsl.selectFrom(Tables.URL)
+                  .fetchInto(UrlEntity.class);
     }
 
     @Override
@@ -68,7 +74,8 @@ public class JooqUrlRepository implements UrlRepository {
                                                    .where(Tables.URL.ID.eq(Math.toIntExact(id)))
                                                    .returning();
 
-        if (returning.fetchOptional().isEmpty()) {
+        if (returning.fetchOptional()
+                     .isEmpty()) {
             throw new NotExistException("URL with this id does not exist");
         }
 
@@ -81,7 +88,8 @@ public class JooqUrlRepository implements UrlRepository {
                                                    .where(Tables.URL.ID.eq(Math.toIntExact(id)))
                                                    .returning();
 
-        if (returning.fetchOptional().isEmpty()) {
+        if (returning.fetchOptional()
+                     .isEmpty()) {
             throw new NotExistException("there is no url with this id");
         }
     }
@@ -92,10 +100,12 @@ public class JooqUrlRepository implements UrlRepository {
                   .where(Tables.URL.ID.eq(Math.toIntExact(id)))
                   .fetchOptional()
                   .map(urlRecord -> new UrlEntity(
-                      Long.valueOf(urlRecord.get(Tables.URL.ID)),
-                      urlRecord.get(Tables.URL.URL_),
-                      OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_UPDATE).toInstant(), ZoneOffset.UTC),
-                      OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_CHECK).toInstant(), ZoneOffset.UTC)
+                          Long.valueOf(urlRecord.get(Tables.URL.ID)),
+                          urlRecord.get(Tables.URL.URL_),
+                          OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_UPDATE)
+                                                            .toInstant(), ZoneOffset.UTC),
+                          OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_CHECK)
+                                                            .toInstant(), ZoneOffset.UTC)
                   ));
 
     }
@@ -106,10 +116,12 @@ public class JooqUrlRepository implements UrlRepository {
                   .where(Tables.URL.URL_.equal(url))
                   .fetchOptional()
                   .map(urlRecord -> new UrlEntity(
-                      Long.valueOf(urlRecord.get(Tables.URL.ID)),
-                      urlRecord.get(Tables.URL.URL_),
-                      OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_UPDATE).toInstant(), ZoneOffset.UTC),
-                      OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_CHECK).toInstant(), ZoneOffset.UTC)
+                          Long.valueOf(urlRecord.get(Tables.URL.ID)),
+                          urlRecord.get(Tables.URL.URL_),
+                          OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_UPDATE)
+                                                            .toInstant(), ZoneOffset.UTC),
+                          OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_CHECK)
+                                                            .toInstant(), ZoneOffset.UTC)
                   ));
     }
 
@@ -119,10 +131,12 @@ public class JooqUrlRepository implements UrlRepository {
                   .where(Tables.URL.LAST_CHECK.le(maxLastCheck))
                   .fetch()
                   .map(urlRecord -> new UrlEntity(
-                      Long.valueOf(urlRecord.get(Tables.URL.ID)),
-                      urlRecord.get(Tables.URL.URL_),
-                      OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_UPDATE).toInstant(), ZoneOffset.UTC),
-                      OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_CHECK).toInstant(), ZoneOffset.UTC)
+                          Long.valueOf(urlRecord.get(Tables.URL.ID)),
+                          urlRecord.get(Tables.URL.URL_),
+                          OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_UPDATE)
+                                                            .toInstant(), ZoneOffset.UTC),
+                          OffsetDateTime.ofInstant(urlRecord.get(Tables.URL.LAST_CHECK)
+                                                            .toInstant(), ZoneOffset.UTC)
                   ));
     }
 }

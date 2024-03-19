@@ -15,16 +15,23 @@ public class UpdatesClient implements UpdatesApi {
     private final WebClient webClient;
 
     public UpdatesClient() {
-        this.webClient = WebClient.builder().baseUrl(DEFAULT_URL).build();
+        this.webClient = WebClient.builder()
+                                  .baseUrl(DEFAULT_URL)
+                                  .build();
     }
 
     public UpdatesClient(String baseUrl) {
-        this.webClient = WebClient.builder().baseUrl(baseUrl).build();
+        this.webClient = WebClient.builder()
+                                  .baseUrl(baseUrl)
+                                  .build();
     }
 
     @Override
     public ResponseEntity<Void> updatesPost(LinkUpdate linkUpdate) {
-        return webClient.post().retrieve().toEntity(Void.class)
-                        .onErrorResume(WebClientResponseException.class, Mono::error).block();
+        return webClient.post()
+                        .retrieve()
+                        .toEntity(Void.class)
+                        .onErrorResume(WebClientResponseException.class, Mono::error)
+                        .block();
     }
 }

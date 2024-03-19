@@ -31,7 +31,8 @@ public class JdbcTgChatRepository implements TgChatRepository {
         if (update == 0) {
             throw new AlreadyExistException("Chat already exists");
         }
-        return keyHolder.getKey().longValue();
+        return keyHolder.getKey()
+                        .longValue();
     }
 
     @Override
@@ -43,12 +44,15 @@ public class JdbcTgChatRepository implements TgChatRepository {
         if (update == 0) {
             throw new NotExistException("this chat is not exist");
         }
-        return keyHolder.getKey().longValue();
+        return keyHolder.getKey()
+                        .longValue();
     }
 
     @Override
     public List<ChatEntity> findAll() {
-        return jdbcClient.sql("SELECT * FROM chat").query(ChatEntity.class).list();
+        return jdbcClient.sql("SELECT * FROM chat")
+                         .query(ChatEntity.class)
+                         .list();
     }
 
     @Override
@@ -56,8 +60,9 @@ public class JdbcTgChatRepository implements TgChatRepository {
         return jdbcClient.sql("SELECT *  FROM chat WHERE tg_chat_id = ?")
                          .param(chatTgId)
                          .query((rs, rowNum) -> new ChatEntity(
-                             rs.getLong("id"),
-                             rs.getLong("tg_chat_id")
-                         )).optional();
+                                 rs.getLong("id"),
+                                 rs.getLong("tg_chat_id")
+                         ))
+                         .optional();
     }
 }
