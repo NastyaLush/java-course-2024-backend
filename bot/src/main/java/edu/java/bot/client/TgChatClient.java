@@ -2,7 +2,7 @@ package edu.java.bot.client;
 
 import edu.java.api.TgChatApi;
 import edu.java.bot.error.ErrorResponse;
-import edu.java.bot.exceptions.WebClientException;
+import edu.java.bot.exceptions.CustomWebClientException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class TgChatClient implements TgChatApi {
     }
 
     @Override
-    public ResponseEntity<Void> tgChatIdDelete(Long id) throws WebClientException {
+    public ResponseEntity<Void> tgChatIdDelete(Long id) throws CustomWebClientException {
         try {
             return webClient.delete()
                             .uri(uriBuilder -> uriBuilder.path(ID)
@@ -43,17 +43,17 @@ public class TgChatClient implements TgChatApi {
             ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
             log.warn(responseBodyAs);
             if (responseBodyAs != null) {
-                throw new WebClientException(responseBodyAs.message());
+                throw new CustomWebClientException(responseBodyAs.message());
             }
-            throw new WebClientException(ex.getMessage());
+            throw new CustomWebClientException(ex.getMessage());
         } catch (WebClientRequestException ex) {
             log.error(ex.getMessage());
-            throw new WebClientException(ex.getMessage());
+            throw new CustomWebClientException(ex.getMessage());
         }
     }
 
     @Override
-    public ResponseEntity<Void> tgChatIdPost(Long id) throws WebClientException {
+    public ResponseEntity<Void> tgChatIdPost(Long id) throws CustomWebClientException {
 
         try {
             return webClient.post()
@@ -66,12 +66,12 @@ public class TgChatClient implements TgChatApi {
             ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
             log.warn(responseBodyAs);
             if (responseBodyAs != null) {
-                throw new WebClientException(responseBodyAs.message());
+                throw new CustomWebClientException(responseBodyAs.message());
             }
-            throw new WebClientException(ex.getMessage());
+            throw new CustomWebClientException(ex.getMessage());
         } catch (WebClientRequestException ex) {
             log.error(ex.getMessage());
-            throw new WebClientException(ex.getMessage());
+            throw new CustomWebClientException(ex.getMessage());
         }
     }
 }

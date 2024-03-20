@@ -3,7 +3,7 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.LinksClient;
-import edu.java.bot.exceptions.WebClientException;
+import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.bot.print.Printer;
 import edu.java.model.ListLinksResponse;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class CommandList implements Command {
         ResponseEntity<ListLinksResponse> listLinksResponseResponseEntity;
         try {
             listLinksResponseResponseEntity = linksClient.linksGet(id);
-        } catch (WebClientException e) {
+        } catch (CustomWebClientException e) {
             return printer.getMessage(
                     id,
                     ERROR_MESSAGE + printer.makeBold(e.getMessage())

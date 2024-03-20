@@ -37,11 +37,8 @@ public class ChatEntity {
     }
 
     public void addUrl(UrlEntity urlEntity) {
-        //todo
-        if (urlEntity.getChats() == null) {
-            urlEntity.setChats(Set.of());
-        }
-            urlEntity.getChats().add(this);
+        urlEntity.getChats()
+                 .add(this);
 
         this.getUrls()
             .add(urlEntity);

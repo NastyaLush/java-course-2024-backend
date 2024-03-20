@@ -1,6 +1,6 @@
 package edu.java.linkClients.stackoverflow;
 
-import edu.java.exceptions.WebClientException;
+import edu.java.exceptions.CustomWebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.linkClients.stackoverflow.dto.AnswerResponse;
 import edu.java.linkClients.stackoverflow.dto.QuestionResponse;
@@ -11,13 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriBuilder;
-import reactor.core.publisher.Mono;
+
 @Log4j2
 public class StackoverflowServiceImplSupportable implements StackoverflowServiceSupportable {
     public static final String DOMAIN = "stackoverflow.com";
@@ -45,7 +43,7 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
     }
 
     @Override
-    public QuestionResponse getQuestions(@NotNull List<Integer> idList) throws WebClientException {
+    public QuestionResponse getQuestions(@NotNull List<Integer> idList) throws CustomWebClientException {
         String ids = idList.stream()
                            .map(String::valueOf)
                            .collect(Collectors.joining(";"));
@@ -55,23 +53,23 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
                             .retrieve()
                             .bodyToMono(QuestionResponse.class)
                             .block();
-        }catch (WebClientResponseException | WebClientRequestException ex) {
+        } catch (WebClientResponseException | WebClientRequestException ex) {
             log.warn(ex.getMessage());
-            throw new WebClientException();
+            throw new CustomWebClientException(ex.getMessage());
         }
     }
 
     @Override
-    public AnswerResponse getAnswers(Long id) throws WebClientException {
+    public AnswerResponse getAnswers(Long id) throws CustomWebClientException {
         try {
-        return webClient.get()
-                        .uri(uriBuilder -> createUri(uriBuilder, "/2.3/questions/{ids}/answers", String.valueOf(id)))
-                        .retrieve()
-                        .bodyToMono(AnswerResponse.class)
-                        .block();
-        }catch (WebClientResponseException | WebClientRequestException ex) {
+            return webClient.get()
+                            .uri(uriBuilder -> createUri(uriBuilder, "/2.3/questions/{ids}/answers", String.valueOf(id)))
+                            .retrieve()
+                            .bodyToMono(AnswerResponse.class)
+                            .block();
+        } catch (WebClientResponseException | WebClientRequestException ex) {
             log.warn(ex.getMessage());
-            throw new WebClientException();
+            throw new CustomWebClientException(ex.getMessage());
         }
     }
 
@@ -81,11 +79,12 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
     }
 
     @Override
-    public LinkUpdateResponse getLastUpdateDate(String pathOfUrl, OffsetDateTime lastUpdate) throws WebClientException {
+    public LinkUpdateResponse getLastUpdateDate(String pathOfUrl,
+                                                OffsetDateTime lastUpdate) throws CustomWebClientException {
         OffsetDateTime newLastUpdate = lastUpdate;
         StringBuilder descriptionBuilder = new StringBuilder();
         String[] split = pathOfUrl.split("/");
-        List<Integer> ids = Arrays.stream(split[2].split(";" ))
+        List<Integer> ids = Arrays.stream(split[2].split(";"))
                                   .map(Integer::parseInt)
                                   .toList();
         QuestionResponse questions = getQuestions(ids);

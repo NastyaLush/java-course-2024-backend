@@ -3,7 +3,7 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.LinksClient;
-import edu.java.bot.exceptions.WebClientException;
+import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.bot.print.Printer;
 import edu.java.bot.url.UrlService;
 import edu.java.model.AddLinkRequest;
@@ -63,7 +63,7 @@ public class CommandTrack implements Command {
         ResponseEntity<LinkResponse> linkResponseResponseEntity;
         try {
             linkResponseResponseEntity = linksClient.linksPost(chatId, new AddLinkRequest().link(URI.create(url)));
-        } catch (WebClientException e) {
+        } catch (CustomWebClientException e) {
             return printer.getMessage(
                     chatId,
                     FAILED_TO_TRACK_MESSAGE

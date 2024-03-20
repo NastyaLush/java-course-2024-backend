@@ -5,6 +5,7 @@ import edu.java.bot.model.LinkUpdate;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.entity.ChatEntity;
 import edu.java.entity.UrlEntity;
+import edu.java.exceptions.CustomWebClientException;
 import edu.java.exceptions.WebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.service.UrlService;
@@ -43,7 +44,7 @@ public class AbstractUrlUpdater implements UrlUpdater {
                         log.warn(e.getMessage());
                         urlService.remove(URI.create(urlEntity.getUrl()));
                         log.warn(urlEntity.getUrl() + " was deleted");
-                    } catch (WebClientException e){
+                    } catch (CustomWebClientException e) {
                         log.warn(e.getMessage());
                     }
 

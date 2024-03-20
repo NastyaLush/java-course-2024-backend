@@ -3,7 +3,7 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.TgChatClient;
-import edu.java.bot.exceptions.WebClientException;
+import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.bot.print.Printer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -37,7 +37,7 @@ public class CommandStart implements Command {
         ResponseEntity<Void> voidResponseEntity;
         try {
             voidResponseEntity = tgChatClient.tgChatIdPost(id);
-        } catch (WebClientException e) {
+        } catch (CustomWebClientException e) {
             log.error(e);
             return printer.getMessage(
                     id,

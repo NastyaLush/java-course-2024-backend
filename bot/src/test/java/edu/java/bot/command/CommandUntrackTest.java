@@ -3,7 +3,7 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.Util;
 import edu.java.bot.client.LinksClient;
-import edu.java.bot.exceptions.WebClientException;
+import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.bot.print.MarkDownPrinter;
 import edu.java.bot.print.Printer;
 import edu.java.bot.url.UrlService;
@@ -42,7 +42,7 @@ public class CommandUntrackTest {
 
     @Test
     @DisplayName("handle should receive url after untrack command called")
-    public void handle_shouldReceiveUrl() throws WebClientException {
+    public void handle_shouldReceiveUrl() throws CustomWebClientException {
         UrlService urlService = new UrlService();
         LinksClient linksClient = Mockito.mock(LinksClient.class);
         ResponseEntity<LinkResponse> linkResponseResponseEntity = Mockito.mock(ResponseEntity.class);
@@ -68,7 +68,7 @@ public class CommandUntrackTest {
 
     @Test
     @DisplayName("handle should print error if response status not 200")
-    public void handle_shouldPrintErrorIfResponseStatusNot200() throws WebClientException {
+    public void handle_shouldPrintErrorIfResponseStatusNot200() throws CustomWebClientException {
         UrlService urlService = new UrlService();
         LinksClient linksClient = Mockito.mock(LinksClient.class);
         ResponseEntity<LinkResponse> linkResponseResponseEntity = Mockito.mock(ResponseEntity.class);
@@ -94,13 +94,13 @@ public class CommandUntrackTest {
 
     @Test
     @DisplayName("handle should print error if response or request failed")
-    public void handle_shouldPrintErrorIfResponseOrRequestFailed() throws WebClientException {
+    public void handle_shouldPrintErrorIfResponseOrRequestFailed() throws CustomWebClientException {
         UrlService urlService = new UrlService();
         LinksClient linksClient = Mockito.mock(LinksClient.class);
 
         String errorMessage = "message";
         Mockito.when(linksClient.linksDelete(Mockito.any(), Mockito.any()))
-               .thenThrow(new WebClientException(errorMessage));
+               .thenThrow(new CustomWebClientException(errorMessage));
         Printer printer = new MarkDownPrinter();
         Update update = Util.mockUpdate(ID, EXAMPLE_URL);
         CommandUntrack commandUntrack = new CommandUntrack(urlService, linksClient);

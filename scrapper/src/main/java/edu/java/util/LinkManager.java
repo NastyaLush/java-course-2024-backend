@@ -1,6 +1,6 @@
 package edu.java.util;
 
-import edu.java.exceptions.WebClientException;
+import edu.java.exceptions.CustomWebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.linkClients.SupportableLinkService;
 import java.net.URI;
@@ -32,7 +32,7 @@ public class LinkManager {
         }
     }
 
-    public LinkUpdateResponse getLastUpdate(URI uri, OffsetDateTime lastUpdate) throws WebClientException {
+    public LinkUpdateResponse getLastUpdate(URI uri, OffsetDateTime lastUpdate) throws CustomWebClientException {
 
         Optional<SupportableLinkService> linkService = getLinkService(uri);
         if (linkService.isEmpty()) {

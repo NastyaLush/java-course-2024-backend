@@ -2,7 +2,7 @@ package edu.java.bot.client;
 
 import edu.java.api.LinksApi;
 import edu.java.bot.error.ErrorResponse;
-import edu.java.bot.exceptions.WebClientException;
+import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.model.AddLinkRequest;
 import edu.java.model.LinkResponse;
 import edu.java.model.ListLinksResponse;
@@ -38,7 +38,7 @@ public class LinksClient implements LinksApi {
 
     @Override
     public ResponseEntity<LinkResponse> linksDelete(Long tgChatId,
-                                                    RemoveLinkRequest removeLinkRequest) throws WebClientException {
+                                                    RemoveLinkRequest removeLinkRequest) throws CustomWebClientException {
         try {
 
             return webClient.method(HttpMethod.DELETE)
@@ -51,18 +51,18 @@ public class LinksClient implements LinksApi {
             ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
             log.warn(responseBodyAs);
             if (responseBodyAs != null) {
-                throw new WebClientException(responseBodyAs.message());
+                throw new CustomWebClientException(responseBodyAs.message());
             }
-            throw new WebClientException(ex.getMessage());
+            throw new CustomWebClientException(ex.getMessage());
         } catch (WebClientRequestException ex) {
             log.error(ex.getMessage());
-            throw new WebClientException(ex.getMessage());
+            throw new CustomWebClientException(ex.getMessage());
         }
 
     }
 
     @Override
-    public ResponseEntity<ListLinksResponse> linksGet(Long tgChatId) throws WebClientException {
+    public ResponseEntity<ListLinksResponse> linksGet(Long tgChatId) throws CustomWebClientException {
         try {
 
             return webClient.get()
@@ -74,19 +74,19 @@ public class LinksClient implements LinksApi {
             ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
             log.warn(responseBodyAs);
             if (responseBodyAs != null) {
-                throw new WebClientException(responseBodyAs.message());
+                throw new CustomWebClientException(responseBodyAs.message());
             }
-            throw new WebClientException(ex.getMessage());
+            throw new CustomWebClientException(ex.getMessage());
         } catch (WebClientRequestException ex) {
             log.error(ex.getMessage());
-            throw new WebClientException(ex.getMessage());
+            throw new CustomWebClientException(ex.getMessage());
         }
 
     }
 
     @Override
     public ResponseEntity<LinkResponse> linksPost(Long tgChatId,
-                                                  AddLinkRequest addLinkRequest) throws WebClientException {
+                                                  AddLinkRequest addLinkRequest) throws CustomWebClientException {
         try {
             return webClient.post()
                             .header(HEADER_NAME, String.valueOf(tgChatId))
@@ -98,12 +98,12 @@ public class LinksClient implements LinksApi {
             ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
             log.warn(responseBodyAs);
             if (responseBodyAs != null) {
-                throw new WebClientException(responseBodyAs.message());
+                throw new CustomWebClientException(responseBodyAs.message());
             }
-            throw new WebClientException(ex.getMessage());
+            throw new CustomWebClientException(ex.getMessage());
         } catch (WebClientRequestException ex) {
             log.error(ex.getMessage());
-            throw new WebClientException(ex.getMessage());
+            throw new CustomWebClientException(ex.getMessage());
         }
 
     }

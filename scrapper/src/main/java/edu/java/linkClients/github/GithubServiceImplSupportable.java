@@ -1,6 +1,6 @@
 package edu.java.linkClients.github;
 
-import edu.java.exceptions.WebClientException;
+import edu.java.exceptions.CustomWebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.linkClients.github.dto.IssueResponse;
 import edu.java.linkClients.github.dto.PullRequestResponse;
@@ -34,7 +34,8 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
     }
 
     @Override
-    public RepositoryResponse getGithubRepository(@NotNull String owner, @NotNull String repo) throws WebClientException {
+    public RepositoryResponse getGithubRepository(@NotNull String owner,
+                                                  @NotNull String repo) throws CustomWebClientException {
         try {
             return webClient.get()
                             .uri("/repos/{owner}/{repo}", owner, repo)
@@ -44,12 +45,13 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
                             .block();
         } catch (WebClientResponseException | WebClientRequestException ex) {
             log.warn(ex.getMessage());
-            throw new WebClientException();
+            throw new CustomWebClientException(ex.getMessage());
         }
     }
 
     @Override
-    public List<IssueResponse> getListComments(@NotNull String owner, @NotNull String repo) throws WebClientException {
+    public List<IssueResponse> getListComments(@NotNull String owner,
+                                               @NotNull String repo) throws CustomWebClientException {
         try {
             return webClient.get()
                             .uri("/repos/{owner}/{repo}/issues/comments", owner, repo)
@@ -60,12 +62,13 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
                             .block();
         } catch (WebClientResponseException | WebClientRequestException ex) {
             log.warn(ex.getMessage());
-            throw new WebClientException();
+            throw new CustomWebClientException(ex.getMessage());
         }
     }
 
     @Override
-    public List<PullRequestResponse> getListPullRequests(@NotNull String owner, @NotNull String repo) throws WebClientException {
+    public List<PullRequestResponse> getListPullRequests(@NotNull String owner,
+                                                         @NotNull String repo) throws CustomWebClientException {
         try {
             return webClient.get()
                             .uri("/repos/{owner}/{repo}/pulls", owner, repo)
@@ -76,7 +79,7 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
                             .block();
         } catch (WebClientResponseException | WebClientRequestException ex) {
             log.warn(ex.getMessage());
-            throw new WebClientException();
+            throw new CustomWebClientException(ex.getMessage());
         }
 
     }
@@ -88,7 +91,8 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
     //todo остальные не проверяются
 
     @Override
-    public LinkUpdateResponse getLastUpdateDate(String pathOfUrl, OffsetDateTime lastUpdate) throws WebClientException {
+    public LinkUpdateResponse getLastUpdateDate(String pathOfUrl,
+                                                OffsetDateTime lastUpdate) throws CustomWebClientException {
         OffsetDateTime newLastUpdate = lastUpdate;
         StringBuilder descriptionBuilder = new StringBuilder();
         String[] split = pathOfUrl.split("/");

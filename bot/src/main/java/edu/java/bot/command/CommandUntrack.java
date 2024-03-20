@@ -3,7 +3,7 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.LinksClient;
-import edu.java.bot.exceptions.WebClientException;
+import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.bot.print.Printer;
 import edu.java.bot.url.UrlService;
 import edu.java.model.LinkResponse;
@@ -62,7 +62,7 @@ public class CommandUntrack implements Command {
         ResponseEntity<LinkResponse> linkResponseResponseEntity;
         try {
             linkResponseResponseEntity = linksClient.linksDelete(chatId, new RemoveLinkRequest().link(URI.create(url)));
-        } catch (WebClientException e) {
+        } catch (CustomWebClientException e) {
             return printer.getMessage(
                     chatId,
                     FAILED_TO_UNTRACK_MESSAGE

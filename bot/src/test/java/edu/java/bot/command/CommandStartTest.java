@@ -3,7 +3,7 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.Util;
 import edu.java.bot.client.TgChatClient;
-import edu.java.bot.exceptions.WebClientException;
+import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.bot.print.MarkDownPrinter;
 import edu.java.bot.print.Printer;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class CommandStartTest {
 
     @Test
     @DisplayName("handle should register user after start command called")
-    public void handle_shouldRegisterUser() throws WebClientException {
+    public void handle_shouldRegisterUser() throws CustomWebClientException {
         TgChatClient tgChatClient = Mockito.mock(TgChatClient.class);
         ResponseEntity<Void> voidResponseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(tgChatClient.tgChatIdPost(Mockito.any()))
@@ -46,7 +46,7 @@ public class CommandStartTest {
 
     @Test
     @DisplayName("handle should print error if response status not 200")
-    public void handle_shouldPrintErrorMessageIfResponseStatusNot200() throws WebClientException {
+    public void handle_shouldPrintErrorMessageIfResponseStatusNot200() throws CustomWebClientException {
         TgChatClient tgChatClient = Mockito.mock(TgChatClient.class);
         ResponseEntity<Void> voidResponseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(tgChatClient.tgChatIdPost(Mockito.any()))
@@ -72,11 +72,11 @@ public class CommandStartTest {
 
     @Test
     @DisplayName("handle should print error if request or response failed")
-    public void handle_shouldPrintErrorMessageIfRequestOrResponseFailed() throws WebClientException {
+    public void handle_shouldPrintErrorMessageIfRequestOrResponseFailed() throws CustomWebClientException {
         TgChatClient tgChatClient = Mockito.mock(TgChatClient.class);
         String errorMessage = "message";
         Mockito.when(tgChatClient.tgChatIdPost(Mockito.any()))
-               .thenThrow(new WebClientException(errorMessage));
+               .thenThrow(new CustomWebClientException(errorMessage));
 
         Printer printer = new MarkDownPrinter();
         CommandStart commandStart = new CommandStart(tgChatClient);

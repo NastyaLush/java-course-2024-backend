@@ -6,6 +6,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.client.UpdatesClient;
+import edu.java.exceptions.CustomWebClientException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -42,7 +43,7 @@ public class UpdatesClientTest {
 
         UpdatesClient updatesClient = new UpdatesClient(wireMockExtension.baseUrl());
 
-        assertThrows(WebClientResponseException.class, () -> updatesClient.updatesPost(new LinkUpdate()));
+        assertThrows(CustomWebClientException.class, () -> updatesClient.updatesPost(new LinkUpdate()));
 
     }
 
