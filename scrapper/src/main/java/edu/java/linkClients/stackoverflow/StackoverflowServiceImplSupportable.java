@@ -1,5 +1,6 @@
 package edu.java.linkClients.stackoverflow;
 
+import edu.java.exceptions.WebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.linkClients.stackoverflow.dto.AnswerResponse;
 import edu.java.linkClients.stackoverflow.dto.QuestionResponse;
@@ -9,11 +10,15 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
-
+@Log4j2
 public class StackoverflowServiceImplSupportable implements StackoverflowServiceSupportable {
     public static final String DOMAIN = "stackoverflow.com";
     private static final String STACKOVERFLOW_API_BASE_URL = "https://api.stackexchange.com";
@@ -40,27 +45,34 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
     }
 
     @Override
-    public QuestionResponse getQuestions(@NotNull List<Integer> idList) {
+    public QuestionResponse getQuestions(@NotNull List<Integer> idList) throws WebClientException {
         String ids = idList.stream()
                            .map(String::valueOf)
                            .collect(Collectors.joining(";"));
-
-        return webClient.get()
-                        .uri(uriBuilder -> createUri(uriBuilder, "/2.3/questions/{ids}", ids))
-                        .retrieve()
-                        .bodyToMono(QuestionResponse.class)
-                        .onErrorResume(WebClientResponseException.class, Mono::error)
-                        .block();
+        try {
+            return webClient.get()
+                            .uri(uriBuilder -> createUri(uriBuilder, "/2.3/questions/{ids}", ids))
+                            .retrieve()
+                            .bodyToMono(QuestionResponse.class)
+                            .block();
+        }catch (WebClientResponseException | WebClientRequestException ex) {
+            log.warn(ex.getMessage());
+            throw new WebClientException();
+        }
     }
 
-    public AnswerResponse getAnswers(Long id) {
+    @Override
+    public AnswerResponse getAnswers(Long id) throws WebClientException {
+        try {
         return webClient.get()
                         .uri(uriBuilder -> createUri(uriBuilder, "/2.3/questions/{ids}/answers", String.valueOf(id)))
                         .retrieve()
                         .bodyToMono(AnswerResponse.class)
-                        .onErrorResume(WebClientResponseException.class, Mono::error)
                         .block();
-
+        }catch (WebClientResponseException | WebClientRequestException ex) {
+            log.warn(ex.getMessage());
+            throw new WebClientException();
+        }
     }
 
     @Override
@@ -69,12 +81,12 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
     }
 
     @Override
-    public LinkUpdateResponse getLastUpdateDate(String pathOfUrl, OffsetDateTime lastUpdate) {
+    public LinkUpdateResponse getLastUpdateDate(String pathOfUrl, OffsetDateTime lastUpdate) throws WebClientException {
         OffsetDateTime newLastUpdate = lastUpdate;
         StringBuilder descriptionBuilder = new StringBuilder();
         String[] split = pathOfUrl.split("/");
-        List<Integer> ids = Arrays.stream(split[0].split(";"))
-                                  .map(Integer::getInteger)
+        List<Integer> ids = Arrays.stream(split[2].split(";" ))
+                                  .map(Integer::parseInt)
                                   .toList();
         QuestionResponse questions = getQuestions(ids);
         for (QuestionResponse.ItemResponse itemResponse : questions.items()) {

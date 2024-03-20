@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.exceptions.WebClientException;
 import edu.java.linkClients.stackoverflow.StackoverflowServiceImplSupportable;
 import edu.java.linkClients.stackoverflow.dto.AnswerResponse;
 import edu.java.linkClients.stackoverflow.dto.QuestionResponse;
@@ -33,7 +34,7 @@ public class StackoverflowImplTest {
                                                                   .build();
 
     @Test
-    public void getQuestions_shouldReturnListOfQuestions() throws IOException {
+    public void getQuestions_shouldReturnListOfQuestions() throws IOException, WebClientException {
         //todo
         String response = String.join("", Files.readAllLines(pathToCorrectQuestionExampleResponse));
         String questions =
@@ -76,7 +77,7 @@ public class StackoverflowImplTest {
     }
 
     @Test
-    public void getQuestions_shouldReturnEmptyListIfNoAnswerWithThisId() throws IOException {
+    public void getQuestions_shouldReturnEmptyListIfNoAnswerWithThisId() throws IOException, WebClientException {
         //todo
         String response = String.join("", Files.readAllLines(pathToIncorrectExampleResponse));
         String questions =
@@ -104,7 +105,7 @@ public class StackoverflowImplTest {
     }
 
     @Test
-    public void getAnswers_shouldReturnListOfAnswers() throws IOException {
+    public void getAnswers_shouldReturnListOfAnswers() throws IOException, WebClientException {
         String response = String.join("", Files.readAllLines(pathToCorrectQuestionExampleResponse));
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}/answers"))
                                           .withPathParam(
@@ -135,7 +136,7 @@ public class StackoverflowImplTest {
     }
 
     @Test
-    public void getAnswer_shouldReturnEmptyListIfNoAnswerWithThisId() throws IOException {
+    public void getAnswer_shouldReturnEmptyListIfNoAnswerWithThisId() throws IOException, WebClientException {
         String response = String.join("", Files.readAllLines(pathToIncorrectExampleResponse));
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}/answers"))
                                           .withPathParam(

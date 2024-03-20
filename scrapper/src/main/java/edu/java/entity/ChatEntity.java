@@ -27,8 +27,8 @@ public class ChatEntity {
     @Column(unique = true)
     private Long tgChatId;
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "tracking_urls", joinColumns = @JoinColumn(name = "url_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id"))
+    @JoinTable(name = "tracking_urls", joinColumns = @JoinColumn(name = "chat_id"),
+            inverseJoinColumns = @JoinColumn(name = "url_id"))
     private Set<UrlEntity> urls;
 
     public ChatEntity(Long id, Long tgChatId) {
@@ -39,8 +39,10 @@ public class ChatEntity {
     public void addUrl(UrlEntity urlEntity) {
         //todo
         if (urlEntity.getChats() == null) {
-            urlEntity.setChats(Set.of(this));
+            urlEntity.setChats(Set.of());
         }
+            urlEntity.getChats().add(this);
+
         this.getUrls()
             .add(urlEntity);
 

@@ -3,6 +3,7 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.LinksClient;
+import edu.java.bot.exceptions.WebClientException;
 import edu.java.bot.print.Printer;
 import edu.java.model.ListLinksResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CommandList implements Command {
+    public static final String ERROR_MESSAGE = "There is an error occurred\n";
+    public static final int HTTP_OK_CODE = 200;
     private final LinksClient linksClient;
 
 
@@ -32,8 +35,16 @@ public class CommandList implements Command {
         Long id = update.message()
                         .chat()
                         .id();
-        ResponseEntity<ListLinksResponse> listLinksResponseResponseEntity = linksClient.linksGet(id);
-        if (listLinksResponseResponseEntity.getStatusCode() == HttpStatusCode.valueOf(200)) {
+        ResponseEntity<ListLinksResponse> listLinksResponseResponseEntity;
+        try {
+            listLinksResponseResponseEntity = linksClient.linksGet(id);
+        } catch (WebClientException e) {
+            return printer.getMessage(
+                    id,
+                    ERROR_MESSAGE + printer.makeBold(e.getMessage())
+            );
+        }
+        if (listLinksResponseResponseEntity.getStatusCode() == HttpStatusCode.valueOf(HTTP_OK_CODE)) {
             listLinksResponseResponseEntity.getBody()
                                            .getLinks()
                                            .forEach(
@@ -47,7 +58,8 @@ public class CommandList implements Command {
         } else {
             return printer.getMessage(
                     id,
-                    "There is an error occurred " + listLinksResponseResponseEntity.getStatusCode()
+                    ERROR_MESSAGE + printer.makeBold(listLinksResponseResponseEntity.getStatusCode()
+                                                                                    .toString())
             );
         }
     }

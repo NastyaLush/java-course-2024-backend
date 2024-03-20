@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.ScrapperApplication;
+import edu.java.exceptions.WebClientException;
 import edu.java.linkClients.github.GithubServiceImplSupportable;
 import edu.java.linkClients.github.dto.IssueResponse;
 import edu.java.linkClients.github.dto.PullRequestResponse;
@@ -42,7 +43,7 @@ public class GithubImplTest {
                                                                   .build();
 
     @Test
-    public void getGithubRepository_shouldReturnRepositoryOfUser() throws IOException {
+    public void getGithubRepository_shouldReturnRepositoryOfUser() throws IOException, WebClientException {
         //todo
         String response = String.join("", Files.readAllLines(pathToCorrectRepositoryExampleResponse));
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/repos/{owner}/{repository}"))
@@ -88,7 +89,7 @@ public class GithubImplTest {
     }
 
     @Test
-    public void getListComments_shouldReturnListCommentsOfUser() throws IOException {
+    public void getListComments_shouldReturnListCommentsOfUser() throws IOException, WebClientException {
         String response = String.join("", Files.readAllLines(pathToCorrectCommentsExampleResponse));
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/repos/{owner}/{repo}/issues/comments"))
                                           .withPathParam("owner", WireMock.equalTo(GITHUB_OWNER))
@@ -166,7 +167,7 @@ public class GithubImplTest {
     }
 
     @Test
-    public void getPullRequests_shouldReturnListCommentsOfUser() throws IOException {
+    public void getPullRequests_shouldReturnListCommentsOfUser() throws IOException, WebClientException {
         String response = String.join("", Files.readAllLines(pathToCorrectPullRequestsExampleResponse));
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/repos/{owner}/{repo}/pulls"))
                                           .withPathParam("owner", WireMock.equalTo(GITHUB_OWNER))

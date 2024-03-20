@@ -1,7 +1,9 @@
 package edu.java.controller;
 
 import edu.java.exception.AlreadyExistException;
+import edu.java.exception.ErrorResponse;
 import edu.java.exception.NotExistException;
+import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.postgresql.util.PSQLException;
 import org.springdoc.api.ErrorMessage;
@@ -12,34 +14,40 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice
+@Log4j2
 public class ControllerExceptionHandler {
     @ExceptionHandler(value = {ResourceNotFoundException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ErrorMessage resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-        return new ErrorMessage(ex.getMessage());
+    public ErrorResponse resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+        log.debug("send resource not found exception");
+        return new ErrorResponse(ex.getMessage());
     }
 
     @ExceptionHandler(value = {AlreadyExistException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorMessage chatAlreadyRegisteredException(AlreadyExistException ex, WebRequest request) {
-        return new ErrorMessage(ex.getMessage());
+    public ErrorResponse chatAlreadyRegisteredException(AlreadyExistException ex, WebRequest request) {
+        log.debug("send already exist exception");
+        return new ErrorResponse(ex.getMessage());
     }
 
     @ExceptionHandler(value = {NotExistException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorMessage chatAlreadyRegisteredException(NotExistException ex, WebRequest request) {
-        return new ErrorMessage(ex.getMessage());
+    public ErrorResponse chatAlreadyRegisteredException(NotExistException ex, WebRequest request) {
+        log.debug("send not exist exception");
+        return new ErrorResponse(ex.getMessage());
     }
 
     @ExceptionHandler(value = {IllegalArgumentException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorMessage illegalArgumentException(IllegalArgumentException ex, WebRequest request) {
-        return new ErrorMessage(ex.getMessage());
+    public ErrorResponse illegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+        log.debug("send illegal argument exception");
+        return new ErrorResponse(ex.getMessage());
     }
 
     @ExceptionHandler(value = {PSQLException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorMessage psqlException(PSQLException ex, WebRequest request) {
-        return new ErrorMessage(ex.getMessage());
+    public ErrorResponse psqlException(PSQLException ex, WebRequest request) {
+        log.debug("send psql exception");
+        return new ErrorResponse(ex.getMessage());
     }
 }

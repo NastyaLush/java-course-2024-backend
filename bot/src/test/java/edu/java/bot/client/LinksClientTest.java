@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.bot.exceptions.WebClientException;
 import edu.java.model.AddLinkRequest;
 import edu.java.model.LinkResponse;
 import edu.java.model.ListLinksResponse;
@@ -54,7 +55,7 @@ public class LinksClientTest {
 
         LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
 
-        assertThrows(WebClientResponseException.class,() -> linksClient.linksPost(1L, addLinkRequest));
+        assertThrows(WebClientException.class,() -> linksClient.linksPost(1L, addLinkRequest));
 
     }
     @Test
@@ -83,7 +84,7 @@ public class LinksClientTest {
 
         LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
 
-        assertThrows(WebClientResponseException.class,() -> linksClient.linksDelete(1L, removeLinkRequest));
+        assertThrows(WebClientException.class,() -> linksClient.linksDelete(1L, removeLinkRequest));
     }
     @Test
     public void linksGet_shouldWorkCorrectlyIfSuccess() throws JsonProcessingException {
@@ -106,6 +107,6 @@ public class LinksClientTest {
 
         LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
 
-        assertThrows(WebClientResponseException.class,() -> linksClient.linksGet(1L));
+        assertThrows(WebClientException.class,() -> linksClient.linksGet(1L));
     }
 }

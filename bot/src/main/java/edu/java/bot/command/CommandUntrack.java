@@ -3,6 +3,7 @@ package edu.java.bot.command;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.LinksClient;
+import edu.java.bot.exceptions.WebClientException;
 import edu.java.bot.print.Printer;
 import edu.java.bot.url.UrlService;
 import edu.java.model.LinkResponse;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CommandUntrack implements Command {
+    public static final String FAILED_TO_UNTRACK_MESSAGE = "Failed to untrack ";
+    public static final String URL_MESSAGE = "url";
+    public static final int HTTP_OK_STATUS = 200;
     private final UrlService urlService;
     private final LinksClient linksClient;
 
@@ -46,22 +50,37 @@ public class CommandUntrack implements Command {
         }
 
         if (urlService.isUrl(message)) {
-            ResponseEntity<LinkResponse> linkResponseResponseEntity = linksClient.linksDelete(chatId, new RemoveLinkRequest().link(URI.create(message)));
-            if (linkResponseResponseEntity.getStatusCode() == HttpStatusCode.valueOf(200)) {
-                return printer.getMessage(
-                        chatId,
-                        "Url " + message + "successfully removed"
-                );
-            } else {
-                return printer.getMessage(
-                        chatId,
-                        "Failed to untrack " + message
-                );
-            }
+            return deleteUrl(printer, chatId, message);
         }
         return printer.getMessage(
                 chatId,
                 "It's not an url"
         );
+    }
+
+    private SendMessage deleteUrl(Printer printer, Long chatId, String url) {
+        ResponseEntity<LinkResponse> linkResponseResponseEntity;
+        try {
+            linkResponseResponseEntity = linksClient.linksDelete(chatId, new RemoveLinkRequest().link(URI.create(url)));
+        } catch (WebClientException e) {
+            return printer.getMessage(
+                    chatId,
+                    FAILED_TO_UNTRACK_MESSAGE
+                            + printer.makeURL(URL_MESSAGE, url)
+                            + "\nThere is an error occurred\n"
+                            + printer.makeBold(e.getMessage())
+            );
+        }
+        if (linkResponseResponseEntity.getStatusCode() == HttpStatusCode.valueOf(HTTP_OK_STATUS)) {
+            return printer.getMessage(
+                    chatId,
+                    printer.makeURL(URL_MESSAGE, url) + " successfully removed"
+            );
+        } else {
+            return printer.getMessage(
+                    chatId,
+                    FAILED_TO_UNTRACK_MESSAGE + printer.makeURL(URL_MESSAGE, url)
+            );
+        }
     }
 }

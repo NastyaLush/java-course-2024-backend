@@ -2,17 +2,21 @@ package edu.java.bot.command;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.client.LinksClient;
 import edu.java.bot.client.TgChatClient;
+import edu.java.bot.exceptions.WebClientException;
 import edu.java.bot.print.Printer;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
+@Log4j2
 @RequiredArgsConstructor
 public class CommandStart implements Command {
+    public static final String ERROR_MESSAGE = "There is an error occurred\n";
+    public static final int HTTP_OK_STATUS = 200;
     private final TgChatClient tgChatClient;
 
     @Override
@@ -30,15 +34,25 @@ public class CommandStart implements Command {
         Long id = update.message()
                         .chat()
                         .id();
-        ResponseEntity<Void> voidResponseEntity = tgChatClient.tgChatIdPost(id);
-        if(voidResponseEntity.getStatusCode() == HttpStatusCode.valueOf(200)) {
+        ResponseEntity<Void> voidResponseEntity;
+        try {
+            voidResponseEntity = tgChatClient.tgChatIdPost(id);
+        } catch (WebClientException e) {
+            log.error(e);
             return printer.getMessage(
                     id,
-                    "welcome to our bot and congratulations, you were successfully registered");
-        } else{
+                    ERROR_MESSAGE + printer.makeBold(e.getMessage())
+            );
+        }
+        if (voidResponseEntity.getStatusCode() == HttpStatusCode.valueOf(HTTP_OK_STATUS)) {
             return printer.getMessage(
                     id,
-                    "There is an error occurred " + voidResponseEntity.getStatusCode()
+                    "Welcome to our bot and congratulations, you were successfully registered");
+        } else {
+            return printer.getMessage(
+                    id,
+                    ERROR_MESSAGE + printer.makeBold(voidResponseEntity.getStatusCode()
+                                                                       .toString())
             );
         }
     }

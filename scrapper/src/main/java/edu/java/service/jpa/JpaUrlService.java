@@ -11,6 +11,7 @@ import edu.java.service.UrlService;
 import edu.java.util.LinkManager;
 import java.net.URI;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +34,14 @@ public class JpaUrlService implements UrlService {
         UrlEntity urlEntity = jpaUrlRepository.findByUrl(url.toString())
                                               .orElse(new UrlEntity().setUrl(url.toString())
                                                                      .setLastCheck(OffsetDateTime.now())
-                                                                     .setLastUpdate(OffsetDateTime.now()));
+                                                                     .setLastUpdate(OffsetDateTime.now())
+                                                                     .setChats(new HashSet<>()));
         ChatEntity chatEntity = jpaTgChatRepository.findByTgChatId(tgChatId)
                                                    .orElseThrow(() -> new NotExistException(CHAT_IS_NOT_EXISTS_ERROR));
         chatEntity.addUrl(urlEntity);
 
         UrlEntity save = jpaUrlRepository.save(urlEntity);
-        jpaTgChatRepository.save(chatEntity);
+        ChatEntity chatEntity1 = jpaTgChatRepository.save(chatEntity);
 
         return new LinkResponse().id(save.getId())
                                  .url(url);
@@ -53,6 +55,9 @@ public class JpaUrlService implements UrlService {
         ChatEntity chatEntity = jpaTgChatRepository.findByTgChatId(tgChatId)
                                                    .orElseThrow(() -> new NotExistException(CHAT_IS_NOT_EXISTS_ERROR));
         chatEntity.removeUrl(urlEntity);
+        if(urlEntity.getChats().isEmpty()){
+            jpaUrlRepository.delete(urlEntity);
+        }
         return new LinkResponse().url(url)
                                  .id(urlEntity.getId());
     }

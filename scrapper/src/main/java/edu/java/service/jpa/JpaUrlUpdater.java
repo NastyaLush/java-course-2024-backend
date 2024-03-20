@@ -5,6 +5,7 @@ import edu.java.bot.model.LinkUpdate;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.entity.ChatEntity;
 import edu.java.entity.UrlEntity;
+import edu.java.exceptions.WebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.service.UrlUpdater;
 import edu.java.util.LinkManager;
@@ -42,6 +43,8 @@ public class JpaUrlUpdater implements UrlUpdater {
                         log.warn(e.getMessage());
                         urlService.remove(URI.create(urlEntity.getUrl()));
                         log.warn(urlEntity.getUrl() + " was deleted");
+                    } catch (WebClientException e) {
+                        log.warn(e.getMessage());
                     }
 
                 }
@@ -58,7 +61,7 @@ public class JpaUrlUpdater implements UrlUpdater {
 
 
     private void update(LinkUpdateResponse linkUpdateResponse, UrlEntity urlEntity) {
-
+        //todo
         if (linkManager.shouldUpdate(urlEntity.getLastUpdate(), linkUpdateResponse.lastUpdate())) {
             urlService.update(urlEntity.getId(), OffsetDateTime.now(), linkUpdateResponse.lastUpdate());
 
@@ -69,7 +72,7 @@ public class JpaUrlUpdater implements UrlUpdater {
                                     .tgChatIds(urlService.getChats(urlEntity.getId())
                                                          .stream()
                                                          .map(
-                                                                 ChatEntity::getId)
+                                                                 ChatEntity::getTgChatId)
                                                          .toList());
             updatesApi.updatesPost(linkUpdate);
         } else {

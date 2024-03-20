@@ -1,5 +1,6 @@
 package edu.java.linkClients.github;
 
+import edu.java.exceptions.WebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.linkClients.github.dto.IssueResponse;
 import edu.java.linkClients.github.dto.PullRequestResponse;
@@ -7,11 +8,14 @@ import edu.java.linkClients.github.dto.RepositoryResponse;
 import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.List;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Log4j2
 public class GithubServiceImplSupportable implements GithubServiceSupportable {
     public static final String DOMAIN = "github.com";
     private static final String GITHUB_API_BASE_URL = "https://api.github.com";
@@ -30,35 +34,50 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
     }
 
     @Override
-    public RepositoryResponse getGithubRepository(@NotNull String owner, @NotNull String repo) {
-        return webClient.get()
-                        .uri("/repos/{owner}/{repo}", owner, repo)
-                        .retrieve()
-                        .bodyToMono(RepositoryResponse.class)
-                        .onErrorResume(WebClientResponseException.class, Mono::error)
-                        .block();
+    public RepositoryResponse getGithubRepository(@NotNull String owner, @NotNull String repo) throws WebClientException {
+        try {
+            return webClient.get()
+                            .uri("/repos/{owner}/{repo}", owner, repo)
+                            .retrieve()
+                            .bodyToMono(RepositoryResponse.class)
+                            .onErrorResume(WebClientResponseException.class, Mono::error)
+                            .block();
+        } catch (WebClientResponseException | WebClientRequestException ex) {
+            log.warn(ex.getMessage());
+            throw new WebClientException();
+        }
     }
 
     @Override
-    public List<IssueResponse> getListComments(@NotNull String owner, @NotNull String repo) {
-        return webClient.get()
-                        .uri("/repos/{owner}/{repo}/issues/comments", owner, repo)
-                        .retrieve()
-                        .bodyToFlux(IssueResponse.class)
-                        .onErrorResume(WebClientResponseException.class, Flux::error)
-                        .collectList()
-                        .block();
+    public List<IssueResponse> getListComments(@NotNull String owner, @NotNull String repo) throws WebClientException {
+        try {
+            return webClient.get()
+                            .uri("/repos/{owner}/{repo}/issues/comments", owner, repo)
+                            .retrieve()
+                            .bodyToFlux(IssueResponse.class)
+                            .onErrorResume(WebClientResponseException.class, Flux::error)
+                            .collectList()
+                            .block();
+        } catch (WebClientResponseException | WebClientRequestException ex) {
+            log.warn(ex.getMessage());
+            throw new WebClientException();
+        }
     }
 
     @Override
-    public List<PullRequestResponse> getListPullRequests(@NotNull String owner, @NotNull String repo) {
-        return webClient.get()
-                        .uri("/repos/{owner}/{repo}/pulls", owner, repo)
-                        .retrieve()
-                        .bodyToFlux(PullRequestResponse.class)
-                        .onErrorResume(WebClientResponseException.class, Flux::error)
-                        .collectList()
-                        .block();
+    public List<PullRequestResponse> getListPullRequests(@NotNull String owner, @NotNull String repo) throws WebClientException {
+        try {
+            return webClient.get()
+                            .uri("/repos/{owner}/{repo}/pulls", owner, repo)
+                            .retrieve()
+                            .bodyToFlux(PullRequestResponse.class)
+                            .onErrorResume(WebClientResponseException.class, Flux::error)
+                            .collectList()
+                            .block();
+        } catch (WebClientResponseException | WebClientRequestException ex) {
+            log.warn(ex.getMessage());
+            throw new WebClientException();
+        }
 
     }
 
@@ -66,9 +85,10 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
     public String getDomain() {
         return DOMAIN;
     }
+    //todo остальные не проверяются
 
     @Override
-    public LinkUpdateResponse getLastUpdateDate(String pathOfUrl, OffsetDateTime lastUpdate) {
+    public LinkUpdateResponse getLastUpdateDate(String pathOfUrl, OffsetDateTime lastUpdate) throws WebClientException {
         OffsetDateTime newLastUpdate = lastUpdate;
         StringBuilder descriptionBuilder = new StringBuilder();
         String[] split = pathOfUrl.split("/");
@@ -77,7 +97,8 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
         RepositoryResponse githubRepository = getGithubRepository(owner, repo);
         List<PullRequestResponse> pullRequestResponseMono = getListPullRequests(owner, repo)
                 .stream()
-                .filter(pullRequestResponse -> pullRequestResponse.createdAt().isAfter(lastUpdate))
+                .filter(pullRequestResponse -> pullRequestResponse.createdAt()
+                                                                  .isAfter(lastUpdate))
                 .toList();
         List<IssueResponse> listComments = getListComments(
                 owner,
@@ -129,6 +150,6 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
             }
         }
 
-        return new LinkUpdateResponse(lastUpdate, descriptionBuilder.toString());
+        return new LinkUpdateResponse(newLastUpdate, descriptionBuilder.toString());
     }
 }
