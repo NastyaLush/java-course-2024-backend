@@ -17,7 +17,6 @@ services:
       - postgresql
     command:
       - --changelog-file=master.xml
-      - --driver=org.postgresql.Driver
       - --url=jdbc:postgresql://postgresql:5432/scrapper
       - --username=postgres
       - --password=postgres
