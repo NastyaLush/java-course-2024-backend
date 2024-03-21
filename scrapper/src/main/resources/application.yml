@@ -12,7 +12,7 @@ spring:
   application:
     name: scrapper
   datasource:
-    url: "jdbc:postgresql://localhost:5432/scrapper"
+    url: "jdbc:postgresql://postgres:5432/scrapper"
 #    username: "${USERNAME}"
 #    password: "${PASSWORD}"
     username: "postgres"
