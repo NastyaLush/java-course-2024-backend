@@ -40,8 +40,8 @@ public class JpaUrlService implements UrlService {
                                                    .orElseThrow(() -> new NotExistException(CHAT_IS_NOT_EXISTS_ERROR));
         chatEntity.addUrl(urlEntity);
 
-        UrlEntity save = jpaUrlRepository.save(urlEntity);
-        ChatEntity chatEntity1 = jpaTgChatRepository.save(chatEntity);
+        UrlEntity save = jpaUrlRepository.saveAndFlush(urlEntity);
+        jpaTgChatRepository.saveAndFlush(chatEntity);
 
         return new LinkResponse().id(save.getId())
                                  .url(url);
@@ -92,6 +92,7 @@ public class JpaUrlService implements UrlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ChatEntity> getChats(Long urlId) {
         UrlEntity urlEntity = jpaUrlRepository.findById(Math.toIntExact(urlId))
                                               .orElseThrow(() -> new NotExistException(URL_IS_NOT_EXISTS_ERROR));
@@ -101,6 +102,7 @@ public class JpaUrlService implements UrlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListLinksResponse listAll(long tgChatId) {
         ChatEntity chatEntity = jpaTgChatRepository.findByTgChatId(tgChatId)
                                                    .orElseThrow(() -> new NotExistException(CHAT_IS_NOT_EXISTS_ERROR));
@@ -114,6 +116,7 @@ public class JpaUrlService implements UrlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UrlEntity> findNotCheckedForLongTime(OffsetDateTime maxLastCheck) {
         return jpaUrlRepository.findNotCheckedForLongTime(maxLastCheck);
     }

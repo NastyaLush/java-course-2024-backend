@@ -72,6 +72,7 @@ public class AbstractUrlService implements UrlService {
     }
 
     @Override
+    @Transactional
     public LinkResponse remove(URI url) {
         long id = urlRepository.remove(url.toString());
         return new LinkResponse().id(id)
@@ -79,17 +80,20 @@ public class AbstractUrlService implements UrlService {
     }
 
     @Override
+    @Transactional
     public void update(Long id, OffsetDateTime lastCheck) {
         urlRepository.update(id, lastCheck);
     }
 
     @Override
+    @Transactional
     public void update(Long id, OffsetDateTime lastCheck, OffsetDateTime lastUpdate) {
         urlRepository.update(id, lastCheck, lastUpdate);
 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ChatEntity> getChats(Long urlId) {
         return trackingUrlsRepository.findByUrlId(urlId)
                                      .stream()
@@ -100,6 +104,7 @@ public class AbstractUrlService implements UrlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListLinksResponse listAll(long tgChatId) {
         Optional<ChatEntity> chatEntity = tgChatRepository.findByTgId(tgChatId);
         if (chatEntity.isEmpty()) {
@@ -122,6 +127,7 @@ public class AbstractUrlService implements UrlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UrlEntity> findNotCheckedForLongTime(OffsetDateTime maxLastCheck) {
         return urlRepository.findNotCheckedForLongTime(maxLastCheck);
     }

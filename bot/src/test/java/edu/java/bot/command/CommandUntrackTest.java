@@ -42,7 +42,7 @@ public class CommandUntrackTest {
 
     @Test
     @DisplayName("handle should receive url after untrack command called")
-    public void handle_shouldReceiveUrl() throws CustomWebClientException {
+    public void handle_shouldReceiveUrl() {
         UrlService urlService = new UrlService();
         LinksClient linksClient = Mockito.mock(LinksClient.class);
         ResponseEntity<LinkResponse> linkResponseResponseEntity = Mockito.mock(ResponseEntity.class);
@@ -68,7 +68,7 @@ public class CommandUntrackTest {
 
     @Test
     @DisplayName("handle should print error if response status not 200")
-    public void handle_shouldPrintErrorIfResponseStatusNot200() throws CustomWebClientException {
+    public void handle_shouldPrintErrorIfResponseStatusNot200() {
         UrlService urlService = new UrlService();
         LinksClient linksClient = Mockito.mock(LinksClient.class);
         ResponseEntity<LinkResponse> linkResponseResponseEntity = Mockito.mock(ResponseEntity.class);
@@ -94,7 +94,7 @@ public class CommandUntrackTest {
 
     @Test
     @DisplayName("handle should print error if response or request failed")
-    public void handle_shouldPrintErrorIfResponseOrRequestFailed() throws CustomWebClientException {
+    public void handle_shouldPrintErrorIfResponseOrRequestFailed() {
         UrlService urlService = new UrlService();
         LinksClient linksClient = Mockito.mock(LinksClient.class);
 

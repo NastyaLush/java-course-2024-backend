@@ -31,7 +31,7 @@ public class TgChatClient implements TgChatApi {
     }
 
     @Override
-    public ResponseEntity<Void> tgChatIdDelete(Long id) throws CustomWebClientException {
+    public ResponseEntity<Void> tgChatIdDelete(Long id) {
         try {
             return webClient.delete()
                             .uri(uriBuilder -> uriBuilder.path(ID)
@@ -53,7 +53,7 @@ public class TgChatClient implements TgChatApi {
     }
 
     @Override
-    public ResponseEntity<Void> tgChatIdPost(Long id) throws CustomWebClientException {
+    public ResponseEntity<Void> tgChatIdPost(Long id) {
 
         try {
             return webClient.post()

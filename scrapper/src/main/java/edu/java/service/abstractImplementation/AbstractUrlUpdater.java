@@ -6,7 +6,6 @@ import edu.java.configuration.ApplicationConfig;
 import edu.java.entity.ChatEntity;
 import edu.java.entity.UrlEntity;
 import edu.java.exceptions.CustomWebClientException;
-import edu.java.exceptions.WebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.service.UrlService;
 import edu.java.service.UrlUpdater;
@@ -17,6 +16,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -27,6 +27,7 @@ public class AbstractUrlUpdater implements UrlUpdater {
     private final LinkManager linkManager;
 
     @Override
+    @Transactional
     public void update() {
 
         getNotCheckedForLingTimeUrls().forEach(

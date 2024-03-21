@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class JpaUrlUpdater implements UrlUpdater {
     private final LinkManager linkManager;
 
     @Override
+    @Transactional
     public void update() {
 
         getNotCheckedForLingTimeUrls().forEach(
@@ -60,7 +62,8 @@ public class JpaUrlUpdater implements UrlUpdater {
     }
 
 
-    private void update(LinkUpdateResponse linkUpdateResponse, UrlEntity urlEntity) throws CustomWebClientException {
+
+    protected void update(LinkUpdateResponse linkUpdateResponse, UrlEntity urlEntity)  {
         if (linkManager.shouldUpdate(urlEntity.getLastUpdate(), linkUpdateResponse.lastUpdate())) {
             urlService.update(urlEntity.getId(), OffsetDateTime.now(), linkUpdateResponse.lastUpdate());
 

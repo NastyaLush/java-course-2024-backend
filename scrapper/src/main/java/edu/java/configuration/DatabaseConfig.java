@@ -15,10 +15,10 @@ import org.springframework.validation.annotation.Validated;
 @EnableTransactionManagement
 public record DatabaseConfig(String url, String username, String password) {
 
-    @Bean
-    public PlatformTransactionManager transactionManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
+//    @Bean
+//    public PlatformTransactionManager transactionManager(DataSource dataSource) {
+//        return new DataSourceTransactionManager(dataSource);
+//    }
 
     @Bean
     JdbcClient jdbcClient(DataSource dataSource) {

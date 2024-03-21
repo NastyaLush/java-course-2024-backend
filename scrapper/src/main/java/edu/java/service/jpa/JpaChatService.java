@@ -5,22 +5,20 @@ import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
 import edu.java.repository.jpa.JpaTgChatRepository;
 import edu.java.service.TgChatService;
+import java.util.HashSet;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@RequiredArgsConstructor
 public class JpaChatService implements TgChatService {
     private final JpaTgChatRepository jpaTgChatRepository;
-
-
-    public JpaChatService(JpaTgChatRepository jpaTgChatRepository) {
-        this.jpaTgChatRepository = jpaTgChatRepository;
-    }
 
     @Override
     @Transactional
     public void register(long tgChatId) {
         if (!jpaTgChatRepository.existsByTgChatId(tgChatId)) {
-            jpaTgChatRepository.save(new ChatEntity().setTgChatId(tgChatId));
+            jpaTgChatRepository.saveAndFlush(new ChatEntity().setTgChatId(tgChatId)
+                                                             .setUrls(new HashSet<>()));
         } else {
             throw new AlreadyExistException("Chat already exists");
         }

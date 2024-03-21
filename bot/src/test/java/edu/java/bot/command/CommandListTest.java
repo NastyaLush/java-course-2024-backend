@@ -24,7 +24,7 @@ public class CommandListTest {
 
     @Test
     @DisplayName("handle print url list user after list command called")
-    public void handle_shouldRegisterUser() throws CustomWebClientException {
+    public void handle_shouldRegisterUser() {
         LinksClient linksClient = Mockito.mock(LinksClient.class);
         ResponseEntity<ListLinksResponse> listLinksResponseResponseEntity = Mockito.mock(ResponseEntity.class);
         ListLinksResponse listLinksResponse = Mockito.mock(ListLinksResponse.class);
@@ -56,7 +56,7 @@ public class CommandListTest {
 
     @Test
     @DisplayName("handle should print error if response status not 200")
-    public void handle_shouldPrintErrorMessageIfResponseStatusNot200() throws CustomWebClientException {
+    public void handle_shouldPrintErrorMessageIfResponseStatusNot200() {
         LinksClient linksClient = Mockito.mock(LinksClient.class);
         ResponseEntity<ListLinksResponse> listLinksResponseResponseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(linksClient.linksGet(Mockito.any()))
@@ -84,7 +84,7 @@ public class CommandListTest {
 
     @Test
     @DisplayName("handle should print error if request or response failed")
-    public void handle_shouldPrintErrorMessageIfRequestOrResponseFailed() throws CustomWebClientException {
+    public void handle_shouldPrintErrorMessageIfRequestOrResponseFailed() {
         LinksClient linksClient = Mockito.mock(LinksClient.class);
         String errorMessage = "message";
         Mockito.when(linksClient.linksGet(Mockito.any()))

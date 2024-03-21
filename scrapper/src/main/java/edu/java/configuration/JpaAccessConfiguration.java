@@ -17,11 +17,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jpa")
 public class JpaAccessConfiguration {
-    @Bean
+    @Bean("jpaChatService")
     public TgChatService tgChatService(
-            JpaTgChatRepository jooqTgChatRepository
+            JpaTgChatRepository jpaTgChatRepository
     ) {
-        return new JpaChatService(jooqTgChatRepository);
+        return new JpaChatService(jpaTgChatRepository);
     }
 
     @Bean

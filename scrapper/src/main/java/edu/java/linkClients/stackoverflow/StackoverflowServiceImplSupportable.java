@@ -43,7 +43,7 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
     }
 
     @Override
-    public QuestionResponse getQuestions(@NotNull List<Integer> idList) throws CustomWebClientException {
+    public QuestionResponse getQuestions(@NotNull List<Integer> idList) {
         String ids = idList.stream()
                            .map(String::valueOf)
                            .collect(Collectors.joining(";"));
@@ -60,7 +60,7 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
     }
 
     @Override
-    public AnswerResponse getAnswers(Long id) throws CustomWebClientException {
+    public AnswerResponse getAnswers(Long id) {
         try {
             return webClient.get()
                             .uri(uriBuilder -> createUri(uriBuilder, "/2.3/questions/{ids}/answers", String.valueOf(id)))
@@ -80,7 +80,7 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
 
     @Override
     public LinkUpdateResponse getLastUpdateDate(String pathOfUrl,
-                                                OffsetDateTime lastUpdate) throws CustomWebClientException {
+                                                OffsetDateTime lastUpdate) {
         OffsetDateTime newLastUpdate = lastUpdate;
         StringBuilder descriptionBuilder = new StringBuilder();
         String[] split = pathOfUrl.split("/");

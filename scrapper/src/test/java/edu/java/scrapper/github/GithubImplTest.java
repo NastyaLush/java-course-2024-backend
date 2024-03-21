@@ -18,7 +18,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -83,7 +82,7 @@ public class GithubImplTest {
         GithubServiceImplSupportable githubClient = new GithubServiceImplSupportable(wireMockExtension.baseUrl());
 
         assertThrows(
-                WebClientResponseException.class,
+                CustomWebClientException.class,
                 () -> githubClient.getGithubRepository(GITHUB_OWNER, GITHUB_REPOSITORY)
         );
     }
@@ -161,7 +160,7 @@ public class GithubImplTest {
         GithubServiceImplSupportable githubClient = new GithubServiceImplSupportable(wireMockExtension.baseUrl());
 
         assertThrows(
-                WebClientResponseException.class,
+                CustomWebClientException.class,
                 () -> githubClient.getListComments(GITHUB_OWNER, GITHUB_REPOSITORY)
         );
     }
@@ -214,7 +213,7 @@ public class GithubImplTest {
         GithubServiceImplSupportable githubClient = new GithubServiceImplSupportable(wireMockExtension.baseUrl());
 
         assertThrows(
-                WebClientResponseException.class,
+                CustomWebClientException.class,
                 () -> githubClient.getListPullRequests(GITHUB_OWNER, GITHUB_REPOSITORY)
         );
     }

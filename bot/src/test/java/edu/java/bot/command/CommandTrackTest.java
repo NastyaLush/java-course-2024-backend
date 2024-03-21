@@ -42,7 +42,7 @@ public class CommandTrackTest {
 
     @Test
     @DisplayName("handle should receive url after track command called")
-    public void handle_shouldReceiveUrl() throws CustomWebClientException {
+    public void handle_shouldReceiveUrl() {
         UrlService urlService = new UrlService();
         LinksClient linksClient = Mockito.mock(LinksClient.class);
         ResponseEntity<LinkResponse> linkResponseResponseEntity = Mockito.mock(ResponseEntity.class);
@@ -68,7 +68,7 @@ public class CommandTrackTest {
 
     @Test
     @DisplayName("handle should print error if response status not 200")
-    public void handle_shouldPrintErrorMessageIfResponseStatusNot200() throws CustomWebClientException {
+    public void handle_shouldPrintErrorMessageIfResponseStatusNot200() {
         UrlService urlService = new UrlService();
         LinksClient linksClient = Mockito.mock(LinksClient.class);
         ResponseEntity<LinkResponse> linkResponseResponseEntity = Mockito.mock(ResponseEntity.class);
@@ -94,7 +94,7 @@ public class CommandTrackTest {
 
     @Test
     @DisplayName("handle should print error if request or response failed")
-    public void handle_shouldPrintErrorMessageIfRequestOrResponseFailed() throws CustomWebClientException {
+    public void handle_shouldPrintErrorMessageIfRequestOrResponseFailed() {
         UrlService urlService = new UrlService();
         LinksClient linksClient = Mockito.mock(LinksClient.class);
         String errorMessage = "message";

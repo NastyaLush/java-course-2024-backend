@@ -21,7 +21,7 @@ public class CommandStartTest {
 
     @Test
     @DisplayName("handle should register user after start command called")
-    public void handle_shouldRegisterUser() throws CustomWebClientException {
+    public void handle_shouldRegisterUser() {
         TgChatClient tgChatClient = Mockito.mock(TgChatClient.class);
         ResponseEntity<Void> voidResponseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(tgChatClient.tgChatIdPost(Mockito.any()))
@@ -46,7 +46,7 @@ public class CommandStartTest {
 
     @Test
     @DisplayName("handle should print error if response status not 200")
-    public void handle_shouldPrintErrorMessageIfResponseStatusNot200() throws CustomWebClientException {
+    public void handle_shouldPrintErrorMessageIfResponseStatusNot200() {
         TgChatClient tgChatClient = Mockito.mock(TgChatClient.class);
         ResponseEntity<Void> voidResponseEntity = Mockito.mock(ResponseEntity.class);
         Mockito.when(tgChatClient.tgChatIdPost(Mockito.any()))
@@ -72,7 +72,7 @@ public class CommandStartTest {
 
     @Test
     @DisplayName("handle should print error if request or response failed")
-    public void handle_shouldPrintErrorMessageIfRequestOrResponseFailed() throws CustomWebClientException {
+    public void handle_shouldPrintErrorMessageIfRequestOrResponseFailed() {
         TgChatClient tgChatClient = Mockito.mock(TgChatClient.class);
         String errorMessage = "message";
         Mockito.when(tgChatClient.tgChatIdPost(Mockito.any()))

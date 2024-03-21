@@ -38,7 +38,7 @@ public class LinksClient implements LinksApi {
 
     @Override
     public ResponseEntity<LinkResponse> linksDelete(Long tgChatId,
-                                                    RemoveLinkRequest removeLinkRequest) throws CustomWebClientException {
+                                                    RemoveLinkRequest removeLinkRequest){
         try {
 
             return webClient.method(HttpMethod.DELETE)
@@ -62,7 +62,7 @@ public class LinksClient implements LinksApi {
     }
 
     @Override
-    public ResponseEntity<ListLinksResponse> linksGet(Long tgChatId) throws CustomWebClientException {
+    public ResponseEntity<ListLinksResponse> linksGet(Long tgChatId){
         try {
 
             return webClient.get()
@@ -86,7 +86,7 @@ public class LinksClient implements LinksApi {
 
     @Override
     public ResponseEntity<LinkResponse> linksPost(Long tgChatId,
-                                                  AddLinkRequest addLinkRequest) throws CustomWebClientException {
+                                                  AddLinkRequest addLinkRequest){
         try {
             return webClient.post()
                             .header(HEADER_NAME, String.valueOf(tgChatId))

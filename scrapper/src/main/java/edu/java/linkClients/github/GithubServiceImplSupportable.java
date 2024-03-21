@@ -35,7 +35,7 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
 
     @Override
     public RepositoryResponse getGithubRepository(@NotNull String owner,
-                                                  @NotNull String repo) throws CustomWebClientException {
+                                                  @NotNull String repo) {
         try {
             return webClient.get()
                             .uri("/repos/{owner}/{repo}", owner, repo)
@@ -51,7 +51,7 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
 
     @Override
     public List<IssueResponse> getListComments(@NotNull String owner,
-                                               @NotNull String repo) throws CustomWebClientException {
+                                               @NotNull String repo) {
         try {
             return webClient.get()
                             .uri("/repos/{owner}/{repo}/issues/comments", owner, repo)
@@ -68,7 +68,7 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
 
     @Override
     public List<PullRequestResponse> getListPullRequests(@NotNull String owner,
-                                                         @NotNull String repo) throws CustomWebClientException {
+                                                         @NotNull String repo) {
         try {
             return webClient.get()
                             .uri("/repos/{owner}/{repo}/pulls", owner, repo)
@@ -92,7 +92,7 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
 
     @Override
     public LinkUpdateResponse getLastUpdateDate(String pathOfUrl,
-                                                OffsetDateTime lastUpdate) throws CustomWebClientException {
+                                                OffsetDateTime lastUpdate) {
         OffsetDateTime newLastUpdate = lastUpdate;
         StringBuilder descriptionBuilder = new StringBuilder();
         String[] split = pathOfUrl.split("/");

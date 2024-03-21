@@ -32,7 +32,7 @@ public class LinkManager {
         }
     }
 
-    public LinkUpdateResponse getLastUpdate(URI uri, OffsetDateTime lastUpdate) throws CustomWebClientException {
+    public LinkUpdateResponse getLastUpdate(URI uri, OffsetDateTime lastUpdate) {
 
         Optional<SupportableLinkService> linkService = getLinkService(uri);
         if (linkService.isEmpty()) {

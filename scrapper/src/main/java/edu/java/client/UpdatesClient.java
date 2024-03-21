@@ -32,7 +32,7 @@ public class UpdatesClient implements UpdatesApi {
     }
 
     @Override
-    public ResponseEntity<Void> updatesPost(LinkUpdate linkUpdate) throws CustomWebClientException {
+    public ResponseEntity<Void> updatesPost(LinkUpdate linkUpdate) {
         try {
         return webClient.post()
                         .body(Mono.just(linkUpdate), LinkUpdate.class)
