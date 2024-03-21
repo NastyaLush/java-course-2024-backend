@@ -47,7 +47,8 @@ public class JooqTrackingUrlsRepository implements TrackingUrlsRepository {
                                                            trackingUrlsDTO.urlId()))
                                                    .and(Tables.TRACKING_URLS.CHAT_ID.equal(
                                                            trackingUrlsDTO.chatId()))
-                                                   .returning().fetchOne();
+                                                   .returning()
+                                                   .fetchOne();
         if (trackingUrlsRecord == null) {
             throw new NotExistException("this url is not tracking");
         }

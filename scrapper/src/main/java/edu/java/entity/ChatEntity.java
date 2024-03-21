@@ -1,8 +1,8 @@
 package edu.java.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Cascade;
 
 @Entity(name = "chat")
 @Getter
@@ -26,9 +27,12 @@ public class ChatEntity {
     private Long id;
     @Column(unique = true)
     private Long tgChatId;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {
+            CascadeType.MERGE
+    })
     @JoinTable(name = "tracking_urls", joinColumns = @JoinColumn(name = "chat_id"),
             inverseJoinColumns = @JoinColumn(name = "url_id"))
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Set<UrlEntity> urls;
 
     public ChatEntity(Long id, Long tgChatId) {

@@ -3,6 +3,7 @@ package edu.java.scrapper.service;
 import edu.java.ScrapperApplication;
 import edu.java.entity.ChatEntity;
 import edu.java.exception.AlreadyExistException;
+import edu.java.exception.NotExistException;
 import edu.java.repository.jpa.JpaTgChatRepository;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.service.TgChatService;
@@ -56,6 +57,6 @@ public class JpaChatServiceTest extends IntegrationTest {
     @Rollback
     @Test
     public void unregister_shouldThrowErrorIfUserNotExist() {
-        assertThrows(AlreadyExistException.class, ()->tgChatService.unregister(TG_CHAT_ID));
+        assertThrows(NotExistException.class, ()->tgChatService.unregister(TG_CHAT_ID));
     }
 }

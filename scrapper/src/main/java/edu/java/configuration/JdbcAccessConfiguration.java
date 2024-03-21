@@ -52,8 +52,8 @@ public class JdbcAccessConfiguration {
                 jdbcTgChatRepository,
                 linkManager
         ),
-        applicationConfig,
-        updatesApi,
-        linkManager);
+                applicationConfig,
+                updatesApi,
+                linkManager);
     }
 }

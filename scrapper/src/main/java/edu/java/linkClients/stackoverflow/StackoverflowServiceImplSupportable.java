@@ -63,7 +63,11 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
     public AnswerResponse getAnswers(Long id) {
         try {
             return webClient.get()
-                            .uri(uriBuilder -> createUri(uriBuilder, "/2.3/questions/{ids}/answers", String.valueOf(id)))
+                            .uri(uriBuilder -> createUri(
+                                    uriBuilder,
+                                    "/2.3/questions/{ids}/answers",
+                                    String.valueOf(id)
+                            ))
                             .retrieve()
                             .bodyToMono(AnswerResponse.class)
                             .block();

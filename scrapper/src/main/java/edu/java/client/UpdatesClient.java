@@ -34,12 +34,12 @@ public class UpdatesClient implements UpdatesApi {
     @Override
     public ResponseEntity<Void> updatesPost(LinkUpdate linkUpdate) {
         try {
-        return webClient.post()
-                        .body(Mono.just(linkUpdate), LinkUpdate.class)
-                        .retrieve()
-                        .toEntity(Void.class)
-                        .onErrorResume(WebClientResponseException.class, Mono::error)
-                        .block();
+            return webClient.post()
+                            .body(Mono.just(linkUpdate), LinkUpdate.class)
+                            .retrieve()
+                            .toEntity(Void.class)
+                            .onErrorResume(WebClientResponseException.class, Mono::error)
+                            .block();
         } catch (WebClientResponseException ex) {
             ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
             log.warn(responseBodyAs);

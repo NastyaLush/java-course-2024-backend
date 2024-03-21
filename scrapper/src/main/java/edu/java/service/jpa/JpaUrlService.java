@@ -55,7 +55,8 @@ public class JpaUrlService implements UrlService {
         ChatEntity chatEntity = jpaTgChatRepository.findByTgChatId(tgChatId)
                                                    .orElseThrow(() -> new NotExistException(CHAT_IS_NOT_EXISTS_ERROR));
         chatEntity.removeUrl(urlEntity);
-        if(urlEntity.getChats().isEmpty()){
+        if (urlEntity.getChats()
+                     .isEmpty()) {
             jpaUrlRepository.delete(urlEntity);
         }
         return new LinkResponse().url(url)
@@ -67,6 +68,9 @@ public class JpaUrlService implements UrlService {
     public LinkResponse remove(URI url) {
         UrlEntity urlEntity = jpaUrlRepository.findByUrl(url.toString())
                                               .orElseThrow(() -> new NotExistException(URL_IS_NOT_EXISTS_ERROR));
+        for (ChatEntity chatEntity : getChats(urlEntity.getId())) {
+            chatEntity.removeUrl(urlEntity);
+        }
         jpaUrlRepository.delete(urlEntity);
         return new LinkResponse().id(urlEntity.getId())
                                  .url(url);

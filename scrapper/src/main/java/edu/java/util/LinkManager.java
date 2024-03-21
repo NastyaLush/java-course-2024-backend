@@ -1,6 +1,5 @@
 package edu.java.util;
 
-import edu.java.exceptions.CustomWebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.linkClients.SupportableLinkService;
 import java.net.URI;

@@ -33,7 +33,6 @@ public class AbstractUrlService implements UrlService {
     @Override
     @Transactional
     public LinkResponse add(long tgChatId, URI url) {
-
         linkManager.validateURI(url);
         long urlId = urlRepository.add(new UrlInput(url.toString(), OffsetDateTime.now(), OffsetDateTime.now()));
         Optional<ChatEntity> chatEntity = tgChatRepository.findByTgId(tgChatId);
@@ -115,7 +114,7 @@ public class AbstractUrlService implements UrlService {
                                                             .stream()
                                                             .map(trackingUrlsDTO ->
                                                                     urlRepository.findById(trackingUrlsDTO.urlId())
-                                                                                                 .get())
+                                                                                 .get())
                                                             .toList();
         return new ListLinksResponse().size(urlEntities.size())
                                       .links(urlEntities
