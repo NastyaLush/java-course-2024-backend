@@ -1,5 +1,5 @@
 app:
-  database-access-type: jdbc
+  database-access-type: jpa
   scheduler:
     enable: true
     interval: 10s
@@ -7,8 +7,6 @@ app:
 
 
 spring:
-  main:
-    allow-bean-definition-overriding: true
   application:
     name: scrapper
   datasource:
@@ -17,16 +15,15 @@ spring:
 #    password: "${PASSWORD}"
     username: "postgres"
     password: "postgres"
-
+    driver-class-name: org.postgresql.Driver
   liquibase:
     enabled: false
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
+#    show-sql: true
 server:
   port: 8080
-
 logging:
   config: classpath:log4j2-plain.xml
 
