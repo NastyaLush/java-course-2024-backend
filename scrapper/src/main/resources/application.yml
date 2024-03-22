@@ -7,27 +7,30 @@ app:
 
 
 spring:
+
   application:
     name: scrapper
   datasource:
     url: "jdbc:postgresql://localhost:5432/scrapper"
-#    username: "${USERNAME}"
-#    password: "${PASSWORD}"
     username: "postgres"
     password: "postgres"
     driver-class-name: org.postgresql.Driver
+    continue-on-error: true
   liquibase:
     enabled: false
-#  jpa:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
 #    hibernate:
 #      ddl-auto: validate
-#    show-sql: true
+#    show-sql: false
+
 server:
   port: 8080
+
 logging:
   config: classpath:log4j2-plain.xml
 
 springdoc:
   swagger-ui:
     path: /swagger-ui
-
