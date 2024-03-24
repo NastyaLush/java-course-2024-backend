@@ -1,6 +1,7 @@
-package edu.java.configuration;
+package edu.java.configuration.database;
 
 import edu.java.bot.api.UpdatesApi;
+import edu.java.configuration.ApplicationConfig;
 import edu.java.repository.jpa.JpaTgChatRepository;
 import edu.java.repository.jpa.JpaUrlRepository;
 import edu.java.service.TgChatService;

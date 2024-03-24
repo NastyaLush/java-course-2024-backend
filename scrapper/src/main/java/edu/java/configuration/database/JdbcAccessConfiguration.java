@@ -1,6 +1,7 @@
-package edu.java.configuration;
+package edu.java.configuration.database;
 
 import edu.java.bot.api.UpdatesApi;
+import edu.java.configuration.ApplicationConfig;
 import edu.java.repository.jdbc.JdbcTgChatRepository;
 import edu.java.repository.jdbc.JdbcTrackingUrlsRepository;
 import edu.java.repository.jdbc.JdbcUrlRepository;

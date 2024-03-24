@@ -1,5 +1,6 @@
 package edu.java.linkClients.github;
 
+import edu.java.configuration.ApplicationConfig;
 import edu.java.exceptions.CustomWebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.linkClients.github.dto.IssueResponse;
@@ -14,23 +15,24 @@ import org.springframework.web.reactive.function.client.WebClientRequestExceptio
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
+import reactor.util.retry.RetryBackoffSpec;
 
 @Log4j2
 public class GithubServiceImplSupportable implements GithubServiceSupportable {
-    public static final String DOMAIN = "github.com";
-    private static final String GITHUB_API_BASE_URL = "https://api.github.com";
     private final WebClient webClient;
+    private final ApplicationConfig applicationConfig;
+    private final Retry retryBackoffSpec;
 
-    public GithubServiceImplSupportable(String baseURL) {
-        webClient = WebClient.builder()
-                             .baseUrl(baseURL)
-                             .build();
-    }
-
-    public GithubServiceImplSupportable() {
-        webClient = WebClient.builder()
-                             .baseUrl(GITHUB_API_BASE_URL)
-                             .build();
+    public GithubServiceImplSupportable(ApplicationConfig applicationConfig,
+                                               Retry retryBackoffSpec) {
+        this.webClient = WebClient.builder()
+                                  .baseUrl(applicationConfig.clientConfig()
+                                                            .github()
+                                                            .apiUrl())
+                                  .build();
+        this.applicationConfig = applicationConfig;
+        this.retryBackoffSpec = retryBackoffSpec;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
                             .uri("/repos/{owner}/{repo}", owner, repo)
                             .retrieve()
                             .bodyToMono(RepositoryResponse.class)
-                            .onErrorResume(WebClientResponseException.class, Mono::error)
+                            .retryWhen(retryBackoffSpec)
                             .block();
         } catch (WebClientResponseException | WebClientRequestException ex) {
             log.warn(ex.getMessage());
@@ -56,8 +58,11 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
             return webClient.get()
                             .uri("/repos/{owner}/{repo}/issues/comments", owner, repo)
                             .retrieve()
+                            .onStatus(httpStatusCode -> applicationConfig.retryConfig()
+                                                                         .retryPorts()
+                                                                         .contains(httpStatusCode.value()), clientResponse -> Mono.error(new CustomWebClientException("")))
                             .bodyToFlux(IssueResponse.class)
-                            .onErrorResume(WebClientResponseException.class, Flux::error)
+                            .retryWhen(retryBackoffSpec)
                             .collectList()
                             .block();
         } catch (WebClientResponseException | WebClientRequestException ex) {
@@ -73,8 +78,11 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
             return webClient.get()
                             .uri("/repos/{owner}/{repo}/pulls", owner, repo)
                             .retrieve()
+                            .onStatus(httpStatusCode -> applicationConfig.retryConfig()
+                                                                         .retryPorts()
+                                                                         .contains(httpStatusCode.value()), clientResponse -> Mono.error(new CustomWebClientException("")))
                             .bodyToFlux(PullRequestResponse.class)
-                            .onErrorResume(WebClientResponseException.class, Flux::error)
+                            .retryWhen(retryBackoffSpec)
                             .collectList()
                             .block();
         } catch (WebClientResponseException | WebClientRequestException ex) {
@@ -86,7 +94,7 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
 
     @Override
     public String getDomain() {
-        return DOMAIN;
+        return applicationConfig.clientConfig().github().domain();
     }
     //todo остальные не проверяются
 

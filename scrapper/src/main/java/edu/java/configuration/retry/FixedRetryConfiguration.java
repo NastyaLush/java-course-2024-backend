@@ -1,0 +1,41 @@
+package edu.java.configuration.retry;
+
+import edu.java.configuration.ApplicationConfig;
+import edu.java.exception.ErrorResponse;
+import edu.java.exceptions.CustomWebClientException;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.util.retry.Retry;
+import reactor.util.retry.RetryBackoffSpec;
+
+@Configuration
+@Log4j2
+@ConditionalOnProperty(prefix = "app", name = "retry-config.back-off-type", havingValue = "const")
+public class FixedRetryConfiguration {
+    @Autowired
+    ApplicationConfig applicationConfig;
+
+    @Bean
+    public Retry specifyBackOffRetry(ApplicationConfig applicationConfig) {
+        return Retry.fixedDelay(applicationConfig.retryConfig()
+                                                 .maxAttempts(), applicationConfig.retryConfig()
+                                                                                  .delay())
+                    .filter(throwable -> throwable instanceof WebClientResponseException && applicationConfig.retryConfig()
+                                                                                                             .retryPorts()
+                                                                                                             .contains(((WebClientResponseException) throwable).getStatusCode()
+                                                                                                                                                               .value()))
+                    .doBeforeRetry(retrySignal -> log.warn("do fixed retry after {}", retrySignal.failure()
+                                                                                                 .getLocalizedMessage()))
+                    .onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> {
+                        Throwable failure = retrySignal.failure();
+                        log.warn("retry failed {}", failure.getLocalizedMessage());
+                        throw new CustomWebClientException(((WebClientResponseException) failure).getResponseBodyAs(ErrorResponse.class).message());
+                    })
+                    .jitter(applicationConfig.retryConfig()
+                                             .jitter());
+    }
+}

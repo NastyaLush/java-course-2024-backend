@@ -1,6 +1,7 @@
 package edu.java.bot.client;
 
 import edu.java.api.LinksApi;
+import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.error.ErrorResponse;
 import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.model.AddLinkRequest;
@@ -15,26 +16,24 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 @Component
 @Log4j2
 public class LinksClient implements LinksApi {
     public static final String HEADER_NAME = "Tg-Chat-Id";
-    private static final String DEFAULT_URL = "http://localhost:8080/links";
+
+    private final Retry retryBackoffSpec;
 
     private final WebClient webClient;
 
-    public LinksClient() {
+    public LinksClient(Retry retryBackoffSpec, ApplicationConfig applicationConfig) {
+        this.retryBackoffSpec = retryBackoffSpec;
         this.webClient = WebClient.builder()
-                                  .baseUrl(DEFAULT_URL)
+                                  .baseUrl(applicationConfig.linkClientUrl())
                                   .build();
     }
 
-    public LinksClient(String baseUrl) {
-        this.webClient = WebClient.builder()
-                                  .baseUrl(baseUrl)
-                                  .build();
-    }
 
     @Override
     public ResponseEntity<LinkResponse> linksDelete(Long tgChatId,
@@ -46,6 +45,7 @@ public class LinksClient implements LinksApi {
                             .body(Mono.just(removeLinkRequest), RemoveLinkRequest.class)
                             .retrieve()
                             .toEntity(LinkResponse.class)
+                            .retryWhen(retryBackoffSpec)
                             .block();
         } catch (WebClientResponseException ex) {
             ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
@@ -69,6 +69,7 @@ public class LinksClient implements LinksApi {
                             .header(HEADER_NAME, String.valueOf(tgChatId))
                             .retrieve()
                             .toEntity(ListLinksResponse.class)
+                            .retryWhen(retryBackoffSpec)
                             .block();
         } catch (WebClientResponseException ex) {
             ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
@@ -93,6 +94,7 @@ public class LinksClient implements LinksApi {
                             .body(Mono.just(addLinkRequest), AddLinkRequest.class)
                             .retrieve()
                             .toEntity(LinkResponse.class)
+                            .retryWhen(retryBackoffSpec)
                             .block();
         } catch (WebClientResponseException ex) {
             ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);

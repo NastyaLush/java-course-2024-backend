@@ -1,5 +1,6 @@
 package edu.java.linkClients.stackoverflow;
 
+import edu.java.configuration.ApplicationConfig;
 import edu.java.exceptions.CustomWebClientException;
 import edu.java.linkClients.LinkUpdateResponse;
 import edu.java.linkClients.stackoverflow.dto.AnswerResponse;
@@ -15,23 +16,26 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriBuilder;
+import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
+import reactor.util.retry.RetryBackoffSpec;
+import reactor.util.retry.RetrySpec;
 
 @Log4j2
 public class StackoverflowServiceImplSupportable implements StackoverflowServiceSupportable {
-    public static final String DOMAIN = "stackoverflow.com";
-    private static final String STACKOVERFLOW_API_BASE_URL = "https://api.stackexchange.com";
     private final WebClient webClient;
+    private final ApplicationConfig applicationConfig;
+    private final Retry retryBackoffSpec;
 
-    public StackoverflowServiceImplSupportable() {
+    public StackoverflowServiceImplSupportable(ApplicationConfig applicationConfig,
+                                               Retry retryBackoffSpec) {
         this.webClient = WebClient.builder()
-                                  .baseUrl(STACKOVERFLOW_API_BASE_URL)
+                                  .baseUrl(applicationConfig.clientConfig()
+                                                            .stackOverflow()
+                                                            .apiUrl())
                                   .build();
-    }
-
-    public StackoverflowServiceImplSupportable(String baseUrl) {
-        this.webClient = WebClient.builder()
-                                  .baseUrl(baseUrl)
-                                  .build();
+        this.applicationConfig = applicationConfig;
+        this.retryBackoffSpec = retryBackoffSpec;
     }
 
     private URI createUri(UriBuilder uriBuilder, String url, String arg) {
@@ -52,6 +56,7 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
                             .uri(uriBuilder -> createUri(uriBuilder, "/2.3/questions/{ids}", ids))
                             .retrieve()
                             .bodyToMono(QuestionResponse.class)
+                            .retryWhen(retryBackoffSpec)
                             .block();
         } catch (WebClientResponseException | WebClientRequestException ex) {
             log.warn(ex.getMessage());
@@ -70,6 +75,7 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
                             ))
                             .retrieve()
                             .bodyToMono(AnswerResponse.class)
+                            .retryWhen(retryBackoffSpec)
                             .block();
         } catch (WebClientResponseException | WebClientRequestException ex) {
             log.warn(ex.getMessage());
@@ -79,7 +85,9 @@ public class StackoverflowServiceImplSupportable implements StackoverflowService
 
     @Override
     public String getDomain() {
-        return DOMAIN;
+        return applicationConfig.clientConfig()
+                                .stackOverflow()
+                                .domain();
     }
 
     @Override

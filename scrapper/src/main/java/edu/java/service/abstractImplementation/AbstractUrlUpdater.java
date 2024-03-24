@@ -46,7 +46,7 @@ public class AbstractUrlUpdater implements UrlUpdater {
                         urlService.remove(URI.create(urlEntity.getUrl()));
                         log.warn(urlEntity.getUrl() + " was deleted");
                     } catch (CustomWebClientException e) {
-                        log.warn(e.getMessage());
+                        log.warn("webclient error occured {}",e.getMessage());
                     }
 
                 }

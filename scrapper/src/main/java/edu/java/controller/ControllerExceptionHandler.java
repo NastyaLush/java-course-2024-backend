@@ -3,6 +3,7 @@ package edu.java.controller;
 import edu.java.exception.AlreadyExistException;
 import edu.java.exception.ErrorResponse;
 import edu.java.exception.NotExistException;
+import edu.java.exception.RateLimitingException;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.postgresql.util.PSQLException;
@@ -24,14 +25,14 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = {AlreadyExistException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorResponse chatAlreadyRegisteredException(AlreadyExistException ex, WebRequest request) {
+    public ErrorResponse alreadyExistException(AlreadyExistException ex, WebRequest request) {
         log.debug("send already exist exception");
         return new ErrorResponse(ex.getMessage());
     }
 
     @ExceptionHandler(value = {NotExistException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorResponse chatAlreadyRegisteredException(NotExistException ex, WebRequest request) {
+    public ErrorResponse notExistException(NotExistException ex, WebRequest request) {
         log.debug("send not exist exception");
         return new ErrorResponse(ex.getMessage());
     }
@@ -47,6 +48,12 @@ public class ControllerExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse psqlException(PSQLException ex, WebRequest request) {
         log.debug("send psql exception");
+        return new ErrorResponse(ex.getMessage());
+    }
+    @ExceptionHandler(value = {RateLimitingException.class})
+    @ResponseStatus(value = HttpStatus.TOO_MANY_REQUESTS)
+    public ErrorResponse psqlException(RateLimitingException ex, WebRequest request) {
+        log.debug("send rate limit exception");
         return new ErrorResponse(ex.getMessage());
     }
 }

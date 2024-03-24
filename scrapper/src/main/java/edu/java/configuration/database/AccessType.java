@@ -1,4 +1,4 @@
-package edu.java.configuration;
+package edu.java.configuration.database;
 
 
 public enum AccessType {

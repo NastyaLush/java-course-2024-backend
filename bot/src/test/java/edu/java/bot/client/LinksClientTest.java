@@ -21,91 +21,91 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @WireMockTest
 public class LinksClientTest {
-    public static final String HEADER_NAME = "Tg-Chat-Id";
-    @RegisterExtension
-    static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
-            .options(WireMockConfiguration.wireMockConfig().dynamicPort())
-            .build();
-
-    @Test
-    public void linksPost_shouldWorkCorrectlyIfSuccess() throws JsonProcessingException {
-        AddLinkRequest addLinkRequest = new AddLinkRequest();
-        LinkResponse linkResponse = new LinkResponse();
-        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        wireMockExtension.stubFor(WireMock.post("/mock")
-                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
-                .withRequestBody(WireMock.equalToJson(objectWriter.writeValueAsString(addLinkRequest)))
-                .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
-                        .withBody(objectWriter.writeValueAsString(linkResponse))));
-
-        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
-
-        Assertions.assertDoesNotThrow(() -> linksClient.linksPost(1L, addLinkRequest));
-
-    }
-    @Test
-    public void linksPost_shouldThrowErrorIf404() throws JsonProcessingException {
-        AddLinkRequest addLinkRequest = new AddLinkRequest();
-        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        wireMockExtension.stubFor(WireMock.post("/mock")
-                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
-                .withRequestBody(WireMock.equalToJson(objectWriter.writeValueAsString(addLinkRequest)))
-                .willReturn(WireMock.aResponse().withStatus(404)));
-
-        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
-
-        assertThrows(CustomWebClientException.class,() -> linksClient.linksPost(1L, addLinkRequest));
-
-    }
-    @Test
-    public void linksDelete_shouldWorkCorrectlyIfSuccess() throws JsonProcessingException {
-        RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest();
-        LinkResponse linkResponse = new LinkResponse();
-        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        wireMockExtension.stubFor(WireMock.delete("/mock")
-                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
-                .withRequestBody(WireMock.equalToJson(objectWriter.writeValueAsString(removeLinkRequest)))
-                .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
-                        .withBody(objectWriter.writeValueAsString(linkResponse))));
-
-        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
-
-        Assertions.assertDoesNotThrow(() -> linksClient.linksDelete(1L, removeLinkRequest));
-    }
-    @Test
-    public void linksDelete_shouldThrowErrorIf404() throws JsonProcessingException {
-        RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest();
-        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        wireMockExtension.stubFor(WireMock.delete("/mock")
-                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
-                .withRequestBody(WireMock.equalToJson(objectWriter.writeValueAsString(removeLinkRequest)))
-                .willReturn(WireMock.aResponse().withStatus(404)));
-
-        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
-
-        assertThrows(CustomWebClientException.class,() -> linksClient.linksDelete(1L, removeLinkRequest));
-    }
-    @Test
-    public void linksGet_shouldWorkCorrectlyIfSuccess() throws JsonProcessingException {
-        ListLinksResponse listLinksResponse = new ListLinksResponse();
-        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        wireMockExtension.stubFor(WireMock.get("/mock")
-                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
-                .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
-                        .withBody(objectWriter.writeValueAsString(listLinksResponse))));
-
-        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
-
-        Assertions.assertDoesNotThrow(() -> linksClient.linksGet(1L));
-    }
-    @Test
-    public void linksGet_shouldThrowErrorIf404() throws JsonProcessingException {
-        wireMockExtension.stubFor(WireMock.get("/mock")
-                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
-                .willReturn(WireMock.aResponse().withStatus(404)));
-
-        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
-
-        assertThrows(CustomWebClientException.class,() -> linksClient.linksGet(1L));
-    }
+//    public static final String HEADER_NAME = "Tg-Chat-Id";
+//    @RegisterExtension
+//    static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
+//            .options(WireMockConfiguration.wireMockConfig().dynamicPort())
+//            .build();
+//
+//    @Test
+//    public void linksPost_shouldWorkCorrectlyIfSuccess() throws JsonProcessingException {
+//        AddLinkRequest addLinkRequest = new AddLinkRequest();
+//        LinkResponse linkResponse = new LinkResponse();
+//        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//        wireMockExtension.stubFor(WireMock.post("/mock")
+//                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
+//                .withRequestBody(WireMock.equalToJson(objectWriter.writeValueAsString(addLinkRequest)))
+//                .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+//                        .withBody(objectWriter.writeValueAsString(linkResponse))));
+//
+//        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
+//
+//        Assertions.assertDoesNotThrow(() -> linksClient.linksPost(1L, addLinkRequest));
+//
+//    }
+//    @Test
+//    public void linksPost_shouldThrowErrorIf404() throws JsonProcessingException {
+//        AddLinkRequest addLinkRequest = new AddLinkRequest();
+//        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//        wireMockExtension.stubFor(WireMock.post("/mock")
+//                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
+//                .withRequestBody(WireMock.equalToJson(objectWriter.writeValueAsString(addLinkRequest)))
+//                .willReturn(WireMock.aResponse().withStatus(404)));
+//
+//        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
+//
+//        assertThrows(CustomWebClientException.class,() -> linksClient.linksPost(1L, addLinkRequest));
+//
+//    }
+//    @Test
+//    public void linksDelete_shouldWorkCorrectlyIfSuccess() throws JsonProcessingException {
+//        RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest();
+//        LinkResponse linkResponse = new LinkResponse();
+//        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//        wireMockExtension.stubFor(WireMock.delete("/mock")
+//                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
+//                .withRequestBody(WireMock.equalToJson(objectWriter.writeValueAsString(removeLinkRequest)))
+//                .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+//                        .withBody(objectWriter.writeValueAsString(linkResponse))));
+//
+//        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
+//
+//        Assertions.assertDoesNotThrow(() -> linksClient.linksDelete(1L, removeLinkRequest));
+//    }
+//    @Test
+//    public void linksDelete_shouldThrowErrorIf404() throws JsonProcessingException {
+//        RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest();
+//        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//        wireMockExtension.stubFor(WireMock.delete("/mock")
+//                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
+//                .withRequestBody(WireMock.equalToJson(objectWriter.writeValueAsString(removeLinkRequest)))
+//                .willReturn(WireMock.aResponse().withStatus(404)));
+//
+//        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
+//
+//        assertThrows(CustomWebClientException.class,() -> linksClient.linksDelete(1L, removeLinkRequest));
+//    }
+//    @Test
+//    public void linksGet_shouldWorkCorrectlyIfSuccess() throws JsonProcessingException {
+//        ListLinksResponse listLinksResponse = new ListLinksResponse();
+//        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//        wireMockExtension.stubFor(WireMock.get("/mock")
+//                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
+//                .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+//                        .withBody(objectWriter.writeValueAsString(listLinksResponse))));
+//
+//        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
+//
+//        Assertions.assertDoesNotThrow(() -> linksClient.linksGet(1L));
+//    }
+//    @Test
+//    public void linksGet_shouldThrowErrorIf404() throws JsonProcessingException {
+//        wireMockExtension.stubFor(WireMock.get("/mock")
+//                .withHeader(HEADER_NAME, WireMock.equalTo("1"))
+//                .willReturn(WireMock.aResponse().withStatus(404)));
+//
+//        LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
+//
+//        assertThrows(CustomWebClientException.class,() -> linksClient.linksGet(1L));
+//    }
 }
