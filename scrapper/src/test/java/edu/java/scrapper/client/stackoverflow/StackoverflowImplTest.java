@@ -1,5 +1,6 @@
 package edu.java.scrapper.client.stackoverflow;
 
+import com.example.exceptions.CustomWebClientException;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
@@ -8,7 +9,6 @@ import edu.java.ScrapperApplication;
 import edu.java.client.linkClients.stackoverflow.StackoverflowServiceSupportable;
 import edu.java.client.linkClients.stackoverflow.dto.AnswerResponse;
 import edu.java.client.linkClients.stackoverflow.dto.QuestionResponse;
-import edu.java.exceptions.CustomWebClientException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

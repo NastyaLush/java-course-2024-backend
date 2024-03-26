@@ -1,5 +1,6 @@
 package edu.java.bot.client;
 
+import com.example.exceptions.CustomWebClientException;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
