@@ -1,9 +1,9 @@
 package edu.java.client.linkClients.stackoverflow;
 
-import com.example.exceptions.CustomWebClientException;
 import edu.java.client.linkClients.SupportableLinkService;
 import edu.java.client.linkClients.stackoverflow.dto.AnswerResponse;
 import edu.java.client.linkClients.stackoverflow.dto.QuestionResponse;
+import edu.java.exception.CustomWebClientException;
 import java.util.List;
 
 public interface StackoverflowServiceSupportable extends SupportableLinkService {

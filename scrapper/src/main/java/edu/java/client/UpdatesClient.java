@@ -1,9 +1,9 @@
 package edu.java.client;
 
-import com.example.exceptions.CustomWebClientException;
 import edu.java.bot.api.UpdatesApi;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.configuration.ApplicationConfig;
+import edu.java.exception.CustomWebClientException;
 import edu.java.model.ApiErrorResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package edu.java.controller;
 
-import com.example.exceptions.RateLimitingException;
 import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
+import edu.java.exception.RateLimitingException;
 import edu.java.model.ApiErrorResponse;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.common.errors.ResourceNotFoundException;

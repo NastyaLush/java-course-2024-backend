@@ -1,7 +1,8 @@
 package edu.java.bot.controller;
 
-import com.example.exceptions.RateLimitingException;
+
 import com.pengrad.telegrambot.TelegramException;
+import edu.java.bot.exceptions.RateLimitingException;
 import edu.java.bot.model.ApiErrorResponse;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.common.errors.ResourceNotFoundException;

@@ -1,6 +1,6 @@
 package edu.java.client.linkClients;
 
-import com.example.exceptions.CustomWebClientException;
+import edu.java.exception.CustomWebClientException;
 import java.time.OffsetDateTime;
 
 public interface SupportableLinkService {

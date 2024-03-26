@@ -1,10 +1,10 @@
 package edu.java.client.linkClients.stackoverflow;
 
-import com.example.exceptions.CustomWebClientException;
 import edu.java.client.linkClients.LinkUpdateResponse;
 import edu.java.client.linkClients.stackoverflow.dto.AnswerResponse;
 import edu.java.client.linkClients.stackoverflow.dto.QuestionResponse;
 import edu.java.configuration.ApplicationConfig;
+import edu.java.exception.CustomWebClientException;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.time.OffsetDateTime;

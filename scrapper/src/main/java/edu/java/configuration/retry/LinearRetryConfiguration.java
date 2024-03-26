@@ -1,8 +1,8 @@
 package edu.java.configuration.retry;
 
 
-import com.example.exceptions.CustomWebClientException;
 import edu.java.configuration.ApplicationConfig;
+import edu.java.exception.CustomWebClientException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,6 @@
 package edu.java.limit;
 
-import com.example.exceptions.RateLimitingException;
+import edu.java.exception.RateLimitingException;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

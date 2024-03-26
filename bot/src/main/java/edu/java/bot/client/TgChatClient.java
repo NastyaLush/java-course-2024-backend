@@ -1,8 +1,8 @@
 package edu.java.bot.client;
 
-import com.example.exceptions.CustomWebClientException;
 import edu.java.api.TgChatApi;
 import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.bot.exceptions.CustomWebClientException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

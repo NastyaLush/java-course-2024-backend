@@ -1,9 +1,9 @@
 package edu.java.bot.client;
 
 
-import com.example.exceptions.CustomWebClientException;
 import edu.java.api.LinksApi;
 import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.model.AddLinkRequest;
 import edu.java.model.LinkResponse;
 import edu.java.model.ListLinksResponse;

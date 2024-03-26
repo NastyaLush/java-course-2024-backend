@@ -1,6 +1,6 @@
 package edu.java.scrapper.client.github;
 
-import com.example.exceptions.CustomWebClientException;
+import edu.java.exception.CustomWebClientException;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;

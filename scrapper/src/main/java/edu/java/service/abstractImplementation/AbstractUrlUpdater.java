@@ -1,12 +1,12 @@
 package edu.java.service.abstractImplementation;
 
-import com.example.exceptions.CustomWebClientException;
 import edu.java.bot.api.UpdatesApi;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.client.linkClients.LinkUpdateResponse;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.entity.ChatEntity;
 import edu.java.entity.UrlEntity;
+import edu.java.exception.CustomWebClientException;
 import edu.java.service.UrlService;
 import edu.java.service.UrlUpdater;
 import edu.java.util.LinkManager;
