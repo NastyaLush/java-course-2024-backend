@@ -1,4 +1,4 @@
-package edu.java.scrapper.client;
+package edu.java.bot.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,11 +7,11 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import edu.java.client.LinksClient;
 import edu.java.model.AddLinkRequest;
 import edu.java.model.LinkResponse;
 import edu.java.model.ListLinksResponse;
 import edu.java.model.RemoveLinkRequest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -40,7 +40,7 @@ public class LinksClientTest {
 
         LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
 
-        assertDoesNotThrow(() -> linksClient.linksPost(1L, addLinkRequest));
+        Assertions.assertDoesNotThrow(() -> linksClient.linksPost(1L, addLinkRequest));
 
     }
     @Test
@@ -70,7 +70,7 @@ public class LinksClientTest {
 
         LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
 
-        assertDoesNotThrow(() -> linksClient.linksDelete(1L, removeLinkRequest));
+        Assertions.assertDoesNotThrow(() -> linksClient.linksDelete(1L, removeLinkRequest));
     }
     @Test
     public void linksDelete_shouldThrowErrorIf404() throws JsonProcessingException {
@@ -96,7 +96,7 @@ public class LinksClientTest {
 
         LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
 
-        assertDoesNotThrow(() -> linksClient.linksGet(1L));
+        Assertions.assertDoesNotThrow(() -> linksClient.linksGet(1L));
     }
     @Test
     public void linksGet_shouldThrowErrorIf404() throws JsonProcessingException {

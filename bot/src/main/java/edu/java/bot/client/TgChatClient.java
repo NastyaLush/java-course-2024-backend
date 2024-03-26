@@ -1,4 +1,4 @@
-package edu.java.client;
+package edu.java.bot.client;
 
 import edu.java.api.TgChatApi;
 import org.springframework.http.ResponseEntity;

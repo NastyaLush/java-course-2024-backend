@@ -1,22 +1,22 @@
 package edu.java.configuration;
 
-import edu.java.github.GithubClient;
-import edu.java.github.GithubClientImpl;
-import edu.java.stackoverflow.StackoverflowClient;
-import edu.java.stackoverflow.StackoverflowClientImpl;
+import edu.java.linkClients.github.GithubServiceImplSupportable;
+import edu.java.linkClients.github.GithubServiceSupportable;
+import edu.java.linkClients.stackoverflow.StackoverflowServiceImplSupportable;
+import edu.java.linkClients.stackoverflow.StackoverflowServiceSupportable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ClientConfiguration {
     @Bean
-    public GithubClient githubClient() {
-        return new GithubClientImpl();
+    public GithubServiceSupportable githubClient() {
+        return new GithubServiceImplSupportable();
     }
 
     @Bean
-    public StackoverflowClient stackOverflowClient() {
-        return new StackoverflowClientImpl();
+    public StackoverflowServiceSupportable stackOverflowClient() {
+        return new StackoverflowServiceImplSupportable();
     }
 
 }

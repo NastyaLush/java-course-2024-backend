@@ -3,6 +3,7 @@ package edu.java.controller;
 import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.postgresql.util.PSQLException;
 import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,20 +20,26 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(value = {AlreadyExistException.class})
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "уже зарегестрирован")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage chatAlreadyRegisteredException(AlreadyExistException ex, WebRequest request) {
         return new ErrorMessage(ex.getMessage());
     }
 
     @ExceptionHandler(value = {NotExistException.class})
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "не существует")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage chatAlreadyRegisteredException(NotExistException ex, WebRequest request) {
         return new ErrorMessage(ex.getMessage());
     }
 
     @ExceptionHandler(value = {IllegalArgumentException.class})
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "невалидные аргументы")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage illegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+        return new ErrorMessage(ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {PSQLException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage psqlException(PSQLException ex, WebRequest request) {
         return new ErrorMessage(ex.getMessage());
     }
 }

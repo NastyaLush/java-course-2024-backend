@@ -1,4 +1,4 @@
-package edu.java.github.dto;
+package edu.java.linkClients.github.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
