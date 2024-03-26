@@ -1,9 +1,9 @@
 package edu.java.bot.client;
 
+
+import com.example.exceptions.CustomWebClientException;
 import edu.java.api.LinksApi;
 import edu.java.bot.configuration.ApplicationConfig;
-import edu.java.bot.error.ErrorResponse;
-import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.model.AddLinkRequest;
 import edu.java.model.LinkResponse;
 import edu.java.model.ListLinksResponse;
@@ -17,6 +17,7 @@ import org.springframework.web.reactive.function.client.WebClientRequestExceptio
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
+import static edu.java.bot.exceptions.ErrorManager.getErrorMessage;
 
 @Component
 @Log4j2
@@ -48,12 +49,7 @@ public class LinksClient implements LinksApi {
                             .retryWhen(retryBackoffSpec)
                             .block();
         } catch (WebClientResponseException ex) {
-            ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
-            log.warn(responseBodyAs);
-            if (responseBodyAs != null) {
-                throw new CustomWebClientException(responseBodyAs.message());
-            }
-            throw new CustomWebClientException(ex.getMessage());
+            throw new CustomWebClientException(getErrorMessage(ex));
         } catch (WebClientRequestException ex) {
             log.error(ex.getMessage());
             throw new CustomWebClientException(ex.getMessage());
@@ -72,18 +68,14 @@ public class LinksClient implements LinksApi {
                             .retryWhen(retryBackoffSpec)
                             .block();
         } catch (WebClientResponseException ex) {
-            ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
-            log.warn(responseBodyAs);
-            if (responseBodyAs != null) {
-                throw new CustomWebClientException(responseBodyAs.message());
-            }
-            throw new CustomWebClientException(ex.getMessage());
+            throw new CustomWebClientException(getErrorMessage(ex));
         } catch (WebClientRequestException ex) {
             log.error(ex.getMessage());
             throw new CustomWebClientException(ex.getMessage());
         }
 
     }
+
 
     @Override
     public ResponseEntity<LinkResponse> linksPost(Long tgChatId,
@@ -97,12 +89,7 @@ public class LinksClient implements LinksApi {
                             .retryWhen(retryBackoffSpec)
                             .block();
         } catch (WebClientResponseException ex) {
-            ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
-            log.warn(responseBodyAs);
-            if (responseBodyAs != null) {
-                throw new CustomWebClientException(responseBodyAs.message());
-            }
-            throw new CustomWebClientException(ex.getMessage());
+            throw new CustomWebClientException(getErrorMessage(ex));
         } catch (WebClientRequestException ex) {
             log.error(ex.getMessage());
             throw new CustomWebClientException(ex.getMessage());

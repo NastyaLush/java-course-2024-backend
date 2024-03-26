@@ -5,7 +5,7 @@ app:
     refill-limit: 20
     delay-refill: 20s
   retry-config:
-    back-off-type: const
+    back-off-type: fixed
     retry-ports:
       - 400
       - 500

@@ -14,8 +14,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class InterceptorRateLimitConfig implements WebMvcConfigurer {
     private final RateLimitInterceptor rateLimitInterceptor;
 
-
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(rateLimitInterceptor);

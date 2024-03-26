@@ -1,10 +1,10 @@
 package edu.java.client;
 
+import com.example.exceptions.CustomWebClientException;
 import edu.java.bot.api.UpdatesApi;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.configuration.ApplicationConfig;
-import edu.java.exception.ErrorResponse;
-import edu.java.exceptions.CustomWebClientException;
+import edu.java.model.ApiErrorResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,6 @@ import org.springframework.web.reactive.function.client.WebClientRequestExceptio
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
-import reactor.util.retry.RetryBackoffSpec;
 
 @Component
 @Log4j2
@@ -31,7 +30,6 @@ public class UpdatesClient implements UpdatesApi {
                                                             .updateUrl())
                                   .build();
         this.retryBackoffSpec = retryBackoffSpec;
-        ;
         this.applicationConfig = applicationConfig;
     }
 
@@ -41,15 +39,15 @@ public class UpdatesClient implements UpdatesApi {
             return webClient.post()
                             .body(Mono.just(linkUpdate), LinkUpdate.class)
                             .retrieve()
-
                             .toEntity(Void.class)
                             .retryWhen(retryBackoffSpec)
                             .block();
         } catch (WebClientResponseException ex) {
-            ErrorResponse responseBodyAs = ex.getResponseBodyAs(ErrorResponse.class);
+            log.warn(ex);
+            ApiErrorResponse responseBodyAs = ex.getResponseBodyAs(ApiErrorResponse.class);
             log.warn(responseBodyAs);
             if (responseBodyAs != null) {
-                throw new CustomWebClientException(responseBodyAs.message());
+                throw new CustomWebClientException(responseBodyAs.getExceptionMessage());
             }
             throw new CustomWebClientException(ex.getMessage());
         } catch (WebClientRequestException ex) {

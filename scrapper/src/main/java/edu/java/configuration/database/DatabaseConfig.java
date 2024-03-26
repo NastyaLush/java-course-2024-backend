@@ -19,6 +19,7 @@ public class DatabaseConfig {
     JdbcClient jdbcClient(DataSource dataSource) {
         return JdbcClient.create(dataSource);
     }
+
     @Bean
     public DefaultConfigurationCustomizer postgresJooqCustomizer() {
         return (DefaultConfiguration c) -> c.settings()

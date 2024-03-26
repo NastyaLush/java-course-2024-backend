@@ -29,6 +29,7 @@ public class UpdatesController implements UpdatesApi {
                   .forEach(id -> {
                       botListener.execute(printer.getMessage(id, message));
                   });
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok()
+                             .build();
     }
 }

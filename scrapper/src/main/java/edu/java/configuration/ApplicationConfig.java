@@ -28,7 +28,7 @@ public record ApplicationConfig(@NotNull @Bean Scheduler scheduler, @NotNull @Be
     public record ClientConfig(@NotNull String updateUrl, @NotNull StackOverflowConfig stackOverflow,
                                @NotNull GithubConfig github, @NotNull @Min(1) Integer limit,
                                @NotNull @Min(0) Integer refillLimit,
-                               @NotNull  Duration delayRefill) {
+                               @NotNull Duration delayRefill) {
         public record StackOverflowConfig(@NotNull String apiUrl, @NotNull String domain) {
 
         }

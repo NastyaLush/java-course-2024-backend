@@ -22,12 +22,18 @@ public class RateLimitServiceImpl implements RateLimitService {
 
     private Bucket newBucket(String s) {
         Bandwidth limit = Bandwidth.classic(applicationConfig.clientConfig()
-                                                             .limit(), Refill.greedy(applicationConfig.clientConfig()
-                                                                                                      .refillLimit(), applicationConfig.clientConfig()
-                                                                                                                                       .delayRefill()));
+                                                             .limit(),
+                Refill.greedy(applicationConfig.clientConfig()
+                                               .refillLimit(),
+                        applicationConfig.clientConfig()
+                                         .delayRefill()));
         return Bucket.builder()
                      .addLimit(limit)
                      .build();
+    }
+
+    public void clearBucket() {
+        bucketCache.clear();
     }
 
 }

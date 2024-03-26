@@ -12,13 +12,13 @@ import reactor.util.retry.Retry;
 
 @Log4j2
 public class LinearRetry extends Retry {
+    static final Consumer<RetrySignal> NO_OP_CONSUMER = (rs) -> {
+    };
     private final int maxRetries;
     private final Duration defaultBackoff;
     public Predicate<? super Throwable> errorFilter;
     public Consumer<RetrySignal> doBeforeRetry;
     public BiFunction<LinearRetry, RetrySignal, Throwable> retryExhaustedGenerator;
-    static final Consumer<Retry.RetrySignal> NO_OP_CONSUMER = (rs) -> {
-    };
 
     public LinearRetry(int maxRetries, Duration duration) {
         this.maxRetries = maxRetries;
@@ -30,14 +30,14 @@ public class LinearRetry extends Retry {
         return retrySignals.flatMap(this::getRetry);
     }
 
-    private Mono<Long> getRetry(Retry.RetrySignal rs) {
+    private Mono<Long> getRetry(RetrySignal rs) {
         log.info("do retry");
         RetrySignal copy = rs.copy();
         if (doBeforeRetry != NO_OP_CONSUMER) {
             try {
                 doBeforeRetry.accept(copy);
-            } catch (Throwable var10) {
-                return Mono.error(var10);
+            } catch (Throwable throwable) {
+                return Mono.error(throwable);
             }
         }
         if (!this.errorFilter.test(rs.failure())) {
