@@ -61,7 +61,6 @@ public class StackoverflowImplTest {
 
     @Test
     public void getQuestions_shouldReturnEmptyListIfNoAnswerWithThisId() throws IOException, CustomWebClientException {
-        //todo
         String response = String.join("", Files.readAllLines(pathToIncorrectExampleResponse));
         String questions =
                 StackoverflowImplTest.questions.stream()
@@ -187,7 +186,7 @@ public class StackoverflowImplTest {
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}/answers"))
                                           .withPathParam(
                                                   "ids",
-                                                  WireMock.equalTo(String.valueOf(StackoverflowImplTest.questions.get(0)))
+                                                  WireMock.equalTo(String.valueOf(StackoverflowImplTest.questions.getFirst()))
                                           )
                                           .withQueryParam("order", WireMock.equalTo("desc"))
                                           .withQueryParam("sort", WireMock.equalTo("activity"))
@@ -198,7 +197,7 @@ public class StackoverflowImplTest {
                                                               .withBody(response)));
 
         List<AnswerResponse.ItemResponse> items =
-                stackoverflowClient.getAnswers(Long.valueOf(StackoverflowImplTest.questions.get(0)))
+                stackoverflowClient.getAnswers(Long.valueOf(StackoverflowImplTest.questions.getFirst()))
                                    .items();
 
         List<AnswerResponse.ItemResponse> expectedItems = List.of();
@@ -212,7 +211,7 @@ public class StackoverflowImplTest {
             wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}/answers"))
                                               .withPathParam(
                                                       "ids",
-                                                      WireMock.equalTo(String.valueOf(StackoverflowImplTest.questions.get(0)))
+                                                      WireMock.equalTo(String.valueOf(StackoverflowImplTest.questions.getFirst()))
                                               )
                                               .withQueryParam("order", WireMock.equalTo("desc"))
                                               .withQueryParam("sort", WireMock.equalTo("activity"))
@@ -229,7 +228,7 @@ public class StackoverflowImplTest {
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}/answers"))
                                           .withPathParam(
                                                   "ids",
-                                                  WireMock.equalTo(String.valueOf(StackoverflowImplTest.questions.get(0)))
+                                                  WireMock.equalTo(String.valueOf(StackoverflowImplTest.questions.getFirst()))
                                           )
                                           .withQueryParam("order", WireMock.equalTo("desc"))
                                           .withQueryParam("sort", WireMock.equalTo("activity"))
@@ -242,7 +241,7 @@ public class StackoverflowImplTest {
                                                               .withBody(response)));
 
 
-        AnswerResponse answers = stackoverflowClient.getAnswers(Long.valueOf(StackoverflowImplTest.questions.get(0)));
+        AnswerResponse answers = stackoverflowClient.getAnswers(Long.valueOf(StackoverflowImplTest.questions.getFirst()));
         AnswerResponse expectedAnswerResponse = new AnswerResponse(List.of(
                 new AnswerResponse.ItemResponse(new AnswerResponse.ItemResponse.Owner(
                         "https://stackoverflow.com/users/23448800/am1234"), OffsetDateTime.parse("2024-02-20T13:43:25Z")),
@@ -261,7 +260,7 @@ public class StackoverflowImplTest {
             wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}/answers"))
                                               .withPathParam(
                                                       "ids",
-                                                      WireMock.equalTo(String.valueOf(StackoverflowImplTest.questions.get(0)))
+                                                      WireMock.equalTo(String.valueOf(StackoverflowImplTest.questions.getFirst()))
                                               )
                                               .withQueryParam("order", WireMock.equalTo("desc"))
                                               .withQueryParam("sort", WireMock.equalTo("activity"))
@@ -277,7 +276,7 @@ public class StackoverflowImplTest {
         wireMockExtension.stubFor(WireMock.get(WireMock.urlPathTemplate("/2.3/questions/{ids}/answers"))
                                           .withPathParam(
                                                   "ids",
-                                                  WireMock.equalTo(String.valueOf(StackoverflowImplTest.questions.get(0)))
+                                                  WireMock.equalTo(String.valueOf(StackoverflowImplTest.questions.getFirst()))
                                           )
                                           .withQueryParam("order", WireMock.equalTo("desc"))
                                           .withQueryParam("sort", WireMock.equalTo("activity"))
@@ -289,6 +288,6 @@ public class StackoverflowImplTest {
                                                               .withHeader("Content-Type", "application/json")
                                                               .withBody(response)));
 
-        assertThrows(CustomWebClientException.class, () -> stackoverflowClient.getAnswers(Long.valueOf(StackoverflowImplTest.questions.get(0))));
+        assertThrows(CustomWebClientException.class, () -> stackoverflowClient.getAnswers(Long.valueOf(StackoverflowImplTest.questions.getFirst())));
     }
 }

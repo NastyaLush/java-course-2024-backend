@@ -94,17 +94,22 @@ public class GithubServiceSupportableImpl implements GithubServiceSupportable {
     @Override
     public LinkUpdateResponse getLastUpdateDate(String pathOfUrl,
                                                 OffsetDateTime lastUpdate) {
+        String repositoryBeginning = "Repository ";
         OffsetDateTime newLastUpdate = lastUpdate;
         StringBuilder descriptionBuilder = new StringBuilder();
+
         String[] split = pathOfUrl.split("/");
         String owner = split[1];
         String repo = split[2];
+
         RepositoryResponse githubRepository = getGithubRepository(owner, repo);
+
         List<PullRequestResponse> pullRequestResponseMono = getListPullRequests(owner, repo)
                 .stream()
                 .filter(pullRequestResponse -> pullRequestResponse.createdAt()
                                                                   .isAfter(lastUpdate))
                 .toList();
+
         List<IssueResponse> listComments = getListComments(
                 owner,
                 repo
@@ -112,7 +117,8 @@ public class GithubServiceSupportableImpl implements GithubServiceSupportable {
          .filter(issueResponse -> issueResponse.createdAt()
                                                .isAfter(lastUpdate))
          .toList();
-        String repositoryBeginning = "Repository ";
+
+
         if (githubRepository.updatedAt()
                             .isAfter(lastUpdate)) {
             newLastUpdate = githubRepository.updatedAt();

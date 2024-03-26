@@ -1,6 +1,8 @@
 package edu.java.scrapper.service;
 
 import edu.java.ScrapperApplication;
+import edu.java.entity.ChatEntity;
+import edu.java.entity.UrlEntity;
 import edu.java.exception.NotExistException;
 import edu.java.model.LinkResponse;
 import edu.java.repository.jpa.JpaUrlRepository;
@@ -120,11 +122,8 @@ public class JpaUrlServiceTest extends IntegrationTest {
     @Test
     public void remove_shouldCorrectlyRemoveUrl() {
         tgChatService.register(TG_CHAT_ID);
-        System.out.println(urlService.listAll(TG_CHAT_ID));
         urlService.add(TG_CHAT_ID, CORRECT_UTL);
-        System.out.println(urlService.listAll(TG_CHAT_ID));
         urlService.remove(CORRECT_UTL);
-        System.out.println(urlService.listAll(TG_CHAT_ID));
         assertFalse(urlService.listAll(TG_CHAT_ID).getLinks()
                               .stream()
                               .map(LinkResponse::getUrl)
@@ -159,7 +158,7 @@ public class JpaUrlServiceTest extends IntegrationTest {
     public void update_shouldThrowExceptionIfUrlNotExist() {
         tgChatService.register(TG_CHAT_ID);
         OffsetDateTime lastCheck = OffsetDateTime.now();
-        assertThrows(NotExistException.class, () -> urlService.update(1l, lastCheck));
+        assertThrows(NotExistException.class, () -> urlService.update(1L, lastCheck));
     }
 
     @Transactional
@@ -188,7 +187,7 @@ public class JpaUrlServiceTest extends IntegrationTest {
         tgChatService.register(TG_CHAT_ID);
         OffsetDateTime lastCheck = OffsetDateTime.now();
         OffsetDateTime lastUpdate = OffsetDateTime.now();
-        assertThrows(NotExistException.class, () -> urlService.update(1l, lastCheck, lastUpdate));
+        assertThrows(NotExistException.class, () -> urlService.update(1L, lastCheck, lastUpdate));
     }
 
     @Transactional
@@ -202,7 +201,7 @@ public class JpaUrlServiceTest extends IntegrationTest {
         List<Long> expectedListTgChat = List.of(TG_CHAT_ID, TG_CHAT_ID_2);
         assertArrayEquals(urlService.getChats(linkResponse.getId())
                                     .stream()
-                                    .map(chatEntity -> chatEntity.getTgChatId()).sorted()
+                                    .map(ChatEntity::getTgChatId).sorted()
                                     .toArray(), expectedListTgChat.stream().sorted().toArray());
     }
 
@@ -212,7 +211,7 @@ public class JpaUrlServiceTest extends IntegrationTest {
     public void getChats_shouldThrowExceptionIfUrlNotExist() {
         tgChatService.register(TG_CHAT_ID);
         tgChatService.register(TG_CHAT_ID_2);
-        assertThrows(NotExistException.class, () -> urlService.getChats(1l));
+        assertThrows(NotExistException.class, () -> urlService.getChats(1L));
     }
 
     @Transactional
@@ -228,7 +227,7 @@ public class JpaUrlServiceTest extends IntegrationTest {
                                       .toArray(), urlService.listAll(TG_CHAT_ID)
                                                             .getLinks()
                                                             .stream()
-                                                            .map(linkResponse -> linkResponse.getUrl())
+                                                            .map(LinkResponse::getUrl)
                                                             .sorted()
                                                             .toArray()
         );
@@ -241,7 +240,7 @@ public class JpaUrlServiceTest extends IntegrationTest {
         assertThrows(NotExistException.class, () -> urlService.listAll(TG_CHAT_ID)
                                                               .getLinks()
                                                               .stream()
-                                                              .map(linkResponse -> linkResponse.getUrl())
+                                                              .map(LinkResponse::getUrl)
                                                               .toArray()
         );
     }
@@ -269,7 +268,7 @@ public class JpaUrlServiceTest extends IntegrationTest {
                 urlService.findNotCheckedForLongTime(OffsetDateTime.now()
                                                                    .minusDays(2))
                           .stream()
-                          .map(urlEntity -> urlEntity.getUrl())
+                          .map(UrlEntity::getUrl)
                           .toArray()
         );
     }
@@ -286,7 +285,7 @@ public class JpaUrlServiceTest extends IntegrationTest {
                 urlService.findNotCheckedForLongTime(OffsetDateTime.now()
                                                                    .minusDays(2))
                           .stream()
-                          .map(urlEntity -> urlEntity.getUrl())
+                          .map(UrlEntity::getUrl)
                           .toArray()
         );
     }
