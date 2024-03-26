@@ -7,9 +7,9 @@ import edu.java.bot.print.MarkDownPrinter;
 import edu.java.bot.print.Printer;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 public class CommandHelpTest {
     long ID = 1L;
@@ -22,13 +22,15 @@ public class CommandHelpTest {
         Printer printer = new MarkDownPrinter();
         Update update = Util.mockUpdate(ID, "");
 
-        Map<String, Object> expectedAnswer = printer.getMessage(ID, "Available commands:\n").getParameters();
+        Map<String, Object> expectedAnswer = printer.getMessage(ID, "Available commands:\n")
+                                                    .getParameters();
 
-        Map<String, Object> givenAnswer = commandHelp.handle(update, printer).getParameters();
+        Map<String, Object> givenAnswer = commandHelp.handle(update, printer)
+                                                     .getParameters();
 
         Assertions.assertEquals(
-            expectedAnswer,
-            givenAnswer
+                expectedAnswer,
+                givenAnswer
         );
     }
 
@@ -36,20 +38,22 @@ public class CommandHelpTest {
     @DisplayName("help command with available commands")
     public void handle_shouldWorkCorrectlyWithAvailableCommands() {
         List<Command> list = List.of(
-            createMockCommand("c1", "d1"),
-            createMockCommand("c2", "d2")
+                createMockCommand("c1", "d1"),
+                createMockCommand("c2", "d2")
         );
         CommandHelp commandHelp = new CommandHelp(list);
         Printer printer = new MarkDownPrinter();
         Update update = Util.mockUpdate(ID, "");
 
         Map<String, Object> expectedAnswer =
-            printer.getMessage(ID, "Available commands:\n*c1* : d1\n*c2* : d2\n").getParameters();
-        Map<String, Object> givenAnswer = commandHelp.handle(update, printer).getParameters();
+                printer.getMessage(ID, "Available commands:\n*c1* : d1\n*c2* : d2\n")
+                       .getParameters();
+        Map<String, Object> givenAnswer = commandHelp.handle(update, printer)
+                                                     .getParameters();
 
         Assertions.assertEquals(
-            expectedAnswer,
-            givenAnswer
+                expectedAnswer,
+                givenAnswer
         );
     }
 

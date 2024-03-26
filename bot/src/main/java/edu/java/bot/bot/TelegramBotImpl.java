@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
+@Profile("!test")
 public class TelegramBotImpl extends TelegramBot {
     @Autowired
     public TelegramBotImpl(ApplicationConfig applicationConfig, BotListener botListener, List<Command> commands) {
@@ -26,7 +28,8 @@ public class TelegramBotImpl extends TelegramBot {
     private void addCommandsMenu(List<Command> commands) {
 
         SetMyCommands setMyCommands = new SetMyCommands(
-                commands.stream().map(Command::toApiCommand)
+                commands.stream()
+                        .map(Command::toApiCommand)
                         .toArray(BotCommand[]::new)).languageCode("en");
 
         this.execute(setMyCommands, new Callback<SetMyCommands, BaseResponse>() {

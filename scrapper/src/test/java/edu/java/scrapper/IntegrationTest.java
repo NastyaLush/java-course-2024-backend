@@ -15,7 +15,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
@@ -25,13 +24,14 @@ public abstract class IntegrationTest {
 
     static {
         POSTGRES = new PostgreSQLContainer<>("postgres:15")
-            .withDatabaseName("scrapper")
-            .withUsername("postgres")
-            .withPassword("postgres");
+                .withDatabaseName("scrapper")
+                .withUsername("postgres")
+                .withPassword("postgres");
         POSTGRES.start();
 
         try {
             runMigrations(POSTGRES);
+            log.info("container started");
         } catch (LiquibaseException | SQLException e) {
             log.error("unable to run migrations, " + e);
             throw new RuntimeException(e);
@@ -39,7 +39,15 @@ public abstract class IntegrationTest {
     }
 
     private static void runMigrations(JdbcDatabaseContainer<?> container) throws LiquibaseException, SQLException {
-        Liquibase liquibase = new liquibase.Liquibase("migrations/master.xml", new ClassLoaderResourceAccessor(), new JdbcConnection(DriverManager.getConnection(container.getJdbcUrl(), container.getUsername(), container.getPassword())));
+        Liquibase liquibase = new liquibase.Liquibase(
+                "migrations/master.xml",
+                new ClassLoaderResourceAccessor(),
+                new JdbcConnection(DriverManager.getConnection(
+                        container.getJdbcUrl(),
+                        container.getUsername(),
+                        container.getPassword()
+                ))
+        );
         liquibase.update(new Contexts(), new LabelExpression());
     }
 
