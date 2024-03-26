@@ -1,6 +1,5 @@
 package edu.java.scrapper.client.stackoverflow;
 
-import edu.java.exception.CustomWebClientException;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
@@ -9,6 +8,8 @@ import edu.java.ScrapperApplication;
 import edu.java.client.linkClients.stackoverflow.StackoverflowServiceSupportable;
 import edu.java.client.linkClients.stackoverflow.dto.AnswerResponse;
 import edu.java.client.linkClients.stackoverflow.dto.QuestionResponse;
+import edu.java.exception.CustomWebClientException;
+import edu.java.scrapper.IntegrationTest;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @WireMockTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ScrapperApplication.class, properties = {"app.scheduler.enable=false"})
 @ContextConfiguration(initializers = StackoverflowImplTest.Initializer.class)
-public class StackoverflowImplTest {
+public class StackoverflowImplTest extends IntegrationTest {
     @Autowired
     StackoverflowServiceSupportable stackoverflowClient;
     private static final int COUNT_OF_ATTEMPTS = 4;
@@ -55,6 +56,10 @@ public class StackoverflowImplTest {
             TestPropertyValues.of("app.client-config.stackoverflow.api-url=" + wireMockExtension.baseUrl())
                               .applyTo(configurableApplicationContext);
             TestPropertyValues.of("app.retry-config.max-attempts=" + (COUNT_OF_ATTEMPTS + 1))
+                              .applyTo(configurableApplicationContext);
+            TestPropertyValues.of("spring.datasource.username=postgres")
+                              .applyTo(configurableApplicationContext);
+            TestPropertyValues.of("spring.datasource.password=postgres")
                               .applyTo(configurableApplicationContext);
         }
     }

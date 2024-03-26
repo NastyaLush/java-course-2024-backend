@@ -9,6 +9,7 @@ import edu.java.ScrapperApplication;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.client.UpdatesClient;
 
+import edu.java.scrapper.IntegrationTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @WireMockTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ScrapperApplication.class, properties = {"app.scheduler.enable=false"})
 @ContextConfiguration(initializers = UpdatesClientTest.Initializer.class)
-public class UpdatesClientTest {
+public class UpdatesClientTest extends IntegrationTest {
     private static final int COUNT_OF_ATTEMPTS = 4;
     @Autowired
     UpdatesClient updatesClient;

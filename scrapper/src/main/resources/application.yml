@@ -29,7 +29,6 @@ app:
 
 
 spring:
-
   application:
     name: scrapper
   datasource:
@@ -37,7 +36,6 @@ spring:
     username: "postgres"
     password: "postgres"
     driver-class-name: org.postgresql.Driver
-    continue-on-error: true
   liquibase:
     enabled: false
   jpa:

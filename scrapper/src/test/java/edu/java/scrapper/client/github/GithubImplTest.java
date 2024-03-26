@@ -10,6 +10,7 @@ import edu.java.client.linkClients.github.GithubServiceSupportable;
 import edu.java.client.linkClients.github.dto.IssueResponse;
 import edu.java.client.linkClients.github.dto.PullRequestResponse;
 import edu.java.client.linkClients.github.dto.RepositoryResponse;
+import edu.java.scrapper.IntegrationTest;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @WireMockTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ScrapperApplication.class, properties = {"app.scheduler.enable=false"})
 @ContextConfiguration(initializers = GithubImplTest.Initializer.class)
-public class GithubImplTest {
+public class GithubImplTest extends IntegrationTest {
     @Autowired
     GithubServiceSupportable githubClient;
     private static final int COUNT_OF_ATTEMPTS = 4;
