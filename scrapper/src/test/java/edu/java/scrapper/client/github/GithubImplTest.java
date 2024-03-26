@@ -38,13 +38,13 @@ public class GithubImplTest {
     private static final String GITHUB_OWNER = "somebody";
     private static final String GITHUB_REPOSITORY = "something";
     private static final Path pathToCorrectRepositoryExampleResponse =
-            Path.of("src/test/java/edu/java/scrapper/github/testData/correctRepositoryResponseExample.txt");
+            Path.of("src/test/java/edu/java/scrapper/client/github/testData/correctRepositoryResponseExample.txt");
     private static final Path pathToCorrectCommentsExampleResponse =
-            Path.of("src/test/java/edu/java/scrapper/github/testData/correctCommentsResponseExample.txt");
+            Path.of("src/test/java/edu/java/scrapper/client/github/testData/correctCommentsResponseExample.txt");
     private static final Path pathToCorrectPullRequestsExampleResponse =
-            Path.of("src/test/java/edu/java/scrapper/github/testData/correctPullRequestResponseExample.txt");
+            Path.of("src/test/java/edu/java/scrapper/client/github/testData/correctPullRequestResponseExample.txt");
     private static final Path pathToIncorrectExampleResponse =
-            Path.of("src/test/java/edu/java/scrapper/github/testData/incorrectResponseExample.txt");
+            Path.of("src/test/java/edu/java/scrapper/client/github/testData/incorrectResponseExample.txt");
 
     @RegisterExtension
     static WireMockExtension wireMockExtension = WireMockExtension.newInstance()

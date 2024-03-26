@@ -37,13 +37,13 @@ public class StackoverflowImplTest {
     private static final int COUNT_OF_ATTEMPTS = 4;
     private static final List<Integer> questions = List.of(78027826, 8968641);
     private static final Path pathToCorrectQuestionExampleResponse =
-            Path.of("src/test/java/edu/java/scrapper/stackoverflow/testData/correctResponseQuestionExample.txt");
+            Path.of("src/test/java/edu/java/scrapper/client/stackoverflow/testData/correctResponseQuestionExample.txt");
     private static final Path pathToCorrectAnswerExampleResponse =
-            Path.of("src/test/java/edu/java/scrapper/stackoverflow/testData/correctResponseQuestionExample.txt");
+            Path.of("src/test/java/edu/java/scrapper/client/stackoverflow/testData/correctResponseQuestionExample.txt");
     private static final Path pathToIncorrectExampleResponse =
-            Path.of("src/test/java/edu/java/scrapper/stackoverflow/testData/incorrectResponseExample.txt");
+            Path.of("src/test/java/edu/java/scrapper/client/stackoverflow/testData/incorrectResponseExample.txt");
     private static final Path pathToFailedExampleResponse =
-            Path.of("src/test/java/edu/java/scrapper/stackoverflow/testData/failedResponseExample.txt");
+            Path.of("src/test/java/edu/java/scrapper/client/stackoverflow/testData/failedResponseExample.txt");
     @RegisterExtension
     static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
                                                                   .options(WireMockConfiguration.wireMockConfig()
