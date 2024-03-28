@@ -17,5 +17,4 @@ public class DatabaseConfig {
         return JdbcClient.create(dataSource);
     }
 
-
 }
