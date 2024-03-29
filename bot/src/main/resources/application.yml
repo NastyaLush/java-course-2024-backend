@@ -16,9 +16,18 @@ app:
     jitter: 0.75
   link-client-url: "http://localhost:8080/links"
   tg-chat-client-url: "http://localhost:8080/tg-chat"
-
+  topic:
+    name: "topic"
+    partitions: 10
+    replicas: 1
+  dead-topic:
+    name: "topic_dlq"
+    partitions: 10
+    replicas: 1
 
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
   application:
     name: bot
   jackson:

@@ -15,7 +15,8 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(@NotNull @Bean Scheduler scheduler, @NotNull @Bean RetryConfig retryConfig,
-                                @NotNull @Bean ClientConfig clientConfig, @NotNull AccessType databaseAccessType) {
+                                @NotNull @Bean ClientConfig clientConfig, @NotNull AccessType databaseAccessType,
+                                @NotNull @Bean Topic topic, @NotNull Boolean useQueue) {
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
@@ -36,5 +37,9 @@ public record ApplicationConfig(@NotNull @Bean Scheduler scheduler, @NotNull @Be
         public record GithubConfig(@NotNull String apiUrl, @NotNull String domain) {
 
         }
+    }
+
+    public record Topic(@NotNull String name, @NotNull Integer partitions, @NotNull Integer replicas) {
+
     }
 }
