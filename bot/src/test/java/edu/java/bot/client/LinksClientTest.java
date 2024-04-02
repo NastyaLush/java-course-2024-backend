@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.model.AddLinkRequest;
 import edu.java.model.LinkResponse;
 import edu.java.model.ListLinksResponse;
@@ -14,7 +15,6 @@ import edu.java.model.RemoveLinkRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -54,7 +54,7 @@ public class LinksClientTest {
 
         LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
 
-        assertThrows(WebClientResponseException.class,() -> linksClient.linksPost(1L, addLinkRequest));
+        assertThrows(CustomWebClientException.class,() -> linksClient.linksPost(1L, addLinkRequest));
 
     }
     @Test
@@ -83,7 +83,7 @@ public class LinksClientTest {
 
         LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
 
-        assertThrows(WebClientResponseException.class,() -> linksClient.linksDelete(1L, removeLinkRequest));
+        assertThrows(CustomWebClientException.class,() -> linksClient.linksDelete(1L, removeLinkRequest));
     }
     @Test
     public void linksGet_shouldWorkCorrectlyIfSuccess() throws JsonProcessingException {
@@ -106,6 +106,6 @@ public class LinksClientTest {
 
         LinksClient linksClient = new LinksClient(wireMockExtension.baseUrl()+"/mock");
 
-        assertThrows(WebClientResponseException.class,() -> linksClient.linksGet(1L));
+        assertThrows(CustomWebClientException.class,() -> linksClient.linksGet(1L));
     }
 }

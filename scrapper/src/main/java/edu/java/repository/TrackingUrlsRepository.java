@@ -6,9 +6,9 @@ import edu.java.entity.TrackingUrlsInput;
 import java.util.List;
 
 public interface TrackingUrlsRepository {
-    long add(TrackingUrlsInput trackingUrlsDTO);
+    void add(TrackingUrlsInput trackingUrlsDTO);
 
-    long remove(TrackingUrlsDelete trackingUrlsDTO);
+    void remove(TrackingUrlsDelete trackingUrlsDTO);
 
     List<TrackingUrlsEntity> findAll();
 

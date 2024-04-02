@@ -4,10 +4,11 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.bot.exceptions.CustomWebClientException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @WireMockTest
@@ -33,7 +34,7 @@ public class TgChatClientTest {
             .withPathParam("ids", WireMock.equalTo("1"))
             .willReturn(WireMock.aResponse().withStatus(404)));
         TgChatClient tgChatClient = new TgChatClient(wireMockExtension.baseUrl() + "/mock");
-        assertThrows(WebClientResponseException.class, () -> tgChatClient.tgChatIdDelete(1L));
+        assertThrows(CustomWebClientException.class, () -> tgChatClient.tgChatIdDelete(1L));
     }
 
     @Test
@@ -52,6 +53,6 @@ public class TgChatClientTest {
             .withPathParam("ids", WireMock.equalTo("1"))
             .willReturn(WireMock.aResponse().withStatus(404)));
         TgChatClient tgChatClient = new TgChatClient(wireMockExtension.baseUrl() + "/mock");
-        assertThrows(WebClientResponseException.class, () -> tgChatClient.tgChatIdPost(1L));
+        assertThrows(CustomWebClientException.class, () -> tgChatClient.tgChatIdPost(1L));
     }
 }

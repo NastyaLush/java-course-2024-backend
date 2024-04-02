@@ -1,4 +1,5 @@
 app:
+  database-access-type: jpa
   scheduler:
     enable: true
     interval: 10s
@@ -6,16 +7,21 @@ app:
 
 
 spring:
-  main:
-    allow-bean-definition-overriding: true
+
   application:
     name: scrapper
   datasource:
     url: "jdbc:postgresql://localhost:5432/scrapper"
-    username: "${USERNAME}"
-    password: "${PASSWORD}"
+    username: "postgres"
+    password: "postgres"
+    driver-class-name: org.postgresql.Driver
+    continue-on-error: true
   liquibase:
     enabled: false
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+
 
 server:
   port: 8080
