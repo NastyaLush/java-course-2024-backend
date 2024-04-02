@@ -1,4 +1,4 @@
 package edu.java.entity;
 
-public record TrackingUrlsEntity(Long id, Long chatId, Long urlId) {
+public record TrackingUrlsEntity(Long chatId, Long urlId) {
 }

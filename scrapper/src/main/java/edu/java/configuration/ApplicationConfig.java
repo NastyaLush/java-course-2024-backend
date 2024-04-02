@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
-public record ApplicationConfig(@NotNull @Bean Scheduler scheduler) {
+public record ApplicationConfig(@NotNull @Bean Scheduler scheduler, AccessType databaseAccessType) {
     @Bean
     public DefaultConfigurationCustomizer postgresJooqCustomizer() {
         return (DefaultConfiguration c) -> c.settings()

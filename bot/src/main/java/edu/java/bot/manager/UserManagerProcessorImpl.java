@@ -16,7 +16,8 @@ public class UserManagerProcessorImpl implements UserMessageProcessor {
     private final Printer printer;
     private final Map<Long, String> chatCondition = new HashMap<>();
 
-    @Autowired public UserManagerProcessorImpl(Printer printer) {
+    @Autowired
+    public UserManagerProcessorImpl(Printer printer) {
         this.printer = printer;
     }
 
@@ -25,12 +26,17 @@ public class UserManagerProcessorImpl implements UserMessageProcessor {
         commandsMap.put(command.command(), command);
     }
 
-    @Override public SendMessage process(Update update) {
-        Long chatId = update.message().chat().id();
-        String message = update.message().text();
+    @Override
+    public SendMessage process(Update update) {
+        Long chatId = update.message()
+                            .chat()
+                            .id();
+        String message = update.message()
+                               .text();
         if (commandsMap.containsKey(message)) {
             chatCondition.put(chatId, message);
-            return commandsMap.get(message).handle(update, printer);
+            return commandsMap.get(message)
+                              .handle(update, printer);
         }
         Command prevCommand = commandsMap.get(chatCondition.get(chatId));
         if (prevCommand != null && prevCommand.isCallabackable()) {

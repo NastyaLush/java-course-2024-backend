@@ -6,9 +6,9 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.client.UpdatesClient;
+import edu.java.exceptions.CustomWebClientException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -23,9 +23,9 @@ public class UpdatesClientTest {
     @Test
     public void updatesPost_shouldCorrectlyUpdatePost() {
         wireMockExtension.stubFor(WireMock.post("/mock")
-                                          .willReturn(WireMock.aResponse().withStatus(200)
-                                                              .withHeader("Content-Type", "application/json")
-                                                              .withBody(" ")));
+                                          .willReturn(WireMock.aResponse()
+                                                              .withStatus(200)
+                                                              .withHeader("Content-Type", "application/json")));
 
         UpdatesClient updatesClient = new UpdatesClient(wireMockExtension.baseUrl() + "/mock");
 
@@ -35,12 +35,14 @@ public class UpdatesClientTest {
 
     @Test
     public void updatesPost_shouldThrowExceptionOnError() {
-        wireMockExtension.stubFor(WireMock.post("")
-                                          .willReturn(WireMock.aResponse().withStatus(400)));
+        wireMockExtension.stubFor(WireMock.post("/mock")
+                                          .willReturn(WireMock.aResponse()
+                                                              .withStatus(400)
+                                                              .withHeader("Content-Type", "application/json")));
 
-        UpdatesClient updatesClient = new UpdatesClient(wireMockExtension.baseUrl());
+        UpdatesClient updatesClient = new UpdatesClient(wireMockExtension.baseUrl() + "/mock");
 
-        assertThrows(WebClientResponseException.class, () -> updatesClient.updatesPost(new LinkUpdate()));
+        assertThrows(CustomWebClientException.class, () -> updatesClient.updatesPost(new LinkUpdate()));
 
     }
 

@@ -12,9 +12,9 @@ public class JdbcTrackingUrlsRepositoryTest extends TrackingJdbcUrlRepositoryTes
     @Autowired
 
     protected JdbcTrackingUrlsRepositoryTest(
-        JdbcTrackingUrlsRepository trackingUrlsRepository,
-        JdbcTgChatRepository jdbcTgChatRepository,
-        JdbcUrlRepository jdbcUrlRepository
+            JdbcTrackingUrlsRepository trackingUrlsRepository,
+            JdbcTgChatRepository jdbcTgChatRepository,
+            JdbcUrlRepository jdbcUrlRepository
     ) {
         super(trackingUrlsRepository, jdbcTgChatRepository, jdbcUrlRepository);
     }

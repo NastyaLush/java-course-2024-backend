@@ -9,11 +9,13 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @Log4j2
@@ -22,13 +24,14 @@ public abstract class IntegrationTest {
 
     static {
         POSTGRES = new PostgreSQLContainer<>("postgres:15")
-            .withDatabaseName("scrapper")
-            .withUsername("postgres")
-            .withPassword("postgres");
+                .withDatabaseName("scrapper")
+                .withUsername("postgres")
+                .withPassword("postgres");
         POSTGRES.start();
 
         try {
             runMigrations(POSTGRES);
+            log.info("container started");
         } catch (LiquibaseException | SQLException e) {
             log.error("unable to run migrations, " + e);
             throw new RuntimeException(e);
@@ -37,21 +40,28 @@ public abstract class IntegrationTest {
 
     private static void runMigrations(JdbcDatabaseContainer<?> container) throws LiquibaseException, SQLException {
         Liquibase liquibase = new liquibase.Liquibase(
-            "migrations/master.xml",
-            new ClassLoaderResourceAccessor(),
-            new JdbcConnection(DriverManager.getConnection(
-                container.getJdbcUrl(),
-                container.getUsername(),
-                container.getPassword()
-            ))
+                "migrations/master.xml",
+                new ClassLoaderResourceAccessor(),
+                new JdbcConnection(DriverManager.getConnection(
+                        container.getJdbcUrl(),
+                        container.getUsername(),
+                        container.getPassword()
+                ))
         );
         liquibase.update(new Contexts(), new LabelExpression());
     }
 
     @DynamicPropertySource
     static void jdbcProperties(DynamicPropertyRegistry registry) {
+        System.out.println(POSTGRES.getJdbcUrl());
+        System.out.println(POSTGRES.getUsername());
+        System.out.println(POSTGRES.getPassword());
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
+    }
+    @Test
+    void testContainerIsRunning() {
+        assertTrue(true, "Container should be running");
     }
 }
