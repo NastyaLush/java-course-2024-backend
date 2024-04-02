@@ -9,19 +9,16 @@ import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
 import edu.java.repository.TrackingUrlsRepository;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class JooqTrackingUrlsRepository implements TrackingUrlsRepository {
 
     private final DSLContext dsl;
-
-    @Autowired
-    public JooqTrackingUrlsRepository(DSLContext dsl) {
-        this.dsl = dsl;
-    }
 
     @Override
     public long add(TrackingUrlsInput trackingUrlsDTO) {

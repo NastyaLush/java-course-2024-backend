@@ -1,67 +1,25 @@
---liquibase formatted sql
-
---changeset create_tables:1
-create table if not exists url
+CREATE TABLE IF NOT EXISTS url
 (
-    id
-    serial
-    primary
-    key,
-    url
-    text
-    unique,
-    last_update
-    timestamp
-    with
-    time
-    zone
-    not
-    null,
-    last_check
-    timestamp
-    with
-    time
-    zone
-    not
-    null
-    default
-    now
-(
-)
-    );
-
-create table if not exists chat
-(
-    id
-    serial
-    primary
-    key,
-    tg_chat_id
-    int
-    not
-    null
-    unique
+    id          serial PRIMARY KEY,
+    url         text UNIQUE,
+    last_update timestamp WITH TIME ZONE NOT NULL,
+    last_check  timestamp WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
-create table if not exists tracking_urls
-(
-    id
-    serial
-    primary
-    key,
-    url_id
-    int
-    references
-    url
-(
-    id
-) on delete cascade,
-    chat_id int references chat
-(
-    id
-)
-  on DELETE cascade
 
-    );
-ALTER TABLE tracking_urls
-    ADD UNIQUE (url_id, chat_id);
 
+CREATE TABLE IF NOT EXISTS chat
+(
+    id         serial PRIMARY KEY,
+    tg_chat_id int NOT NULL UNIQUE
+);
+
+
+CREATE TABLE IF NOT EXISTS tracking_urls
+(
+    id      serial PRIMARY KEY,
+    url_id  int REFERENCES url (id) ON DELETE CASCADE,
+    chat_id int REFERENCES chat (id) ON DELETE CASCADE
+);
+
+
+ALTER TABLE tracking_urls ADD UNIQUE (url_id, chat_id);

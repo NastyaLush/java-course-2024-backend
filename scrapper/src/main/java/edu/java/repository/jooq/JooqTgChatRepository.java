@@ -8,18 +8,16 @@ import edu.java.exception.NotExistException;
 import edu.java.repository.TgChatRepository;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class JooqTgChatRepository implements TgChatRepository {
     private final DSLContext dsl;
 
-    @Autowired
-    public JooqTgChatRepository(DSLContext dsl) {
-        this.dsl = dsl;
-    }
 
     @Override public long add(long tgChatId) {
         ChatRecord chatRecord =
