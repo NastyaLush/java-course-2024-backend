@@ -92,6 +92,6 @@ public class GithubServiceImplSupportable implements GithubServiceSupportable {
         if (descriptionBuilder.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(new LinkUpdateResponse(newLastUpdate, descriptionBuilder.toString()));
+        return Optional.of(new LinkUpdateResponse(lastUpdate, descriptionBuilder.toString()));
     }
 }

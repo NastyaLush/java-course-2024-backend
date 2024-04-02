@@ -7,7 +7,6 @@ import edu.java.exception.AlreadyExistException;
 import edu.java.exception.NotExistException;
 import edu.java.repository.TrackingUrlsRepository;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,12 +14,14 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor
 public class JdbcTrackingUrlsRepository implements TrackingUrlsRepository {
 
     private final JdbcClient jdbcClient;
 
-
+    @Autowired
+    public JdbcTrackingUrlsRepository(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
+    }
 
     @Override
     public long add(TrackingUrlsInput trackingUrlsDTO) {

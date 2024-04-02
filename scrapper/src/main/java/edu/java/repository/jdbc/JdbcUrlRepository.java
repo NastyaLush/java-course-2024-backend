@@ -10,7 +10,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,7 +17,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor
 public class JdbcUrlRepository implements UrlRepository {
     public static final String ID_COLUMN = "id";
     public static final String URL_COLUMN = "url";
@@ -26,6 +24,10 @@ public class JdbcUrlRepository implements UrlRepository {
     public static final String LAST_CHECK_COLUMN = "last_check";
     private final JdbcClient jdbcClient;
 
+    @Autowired
+    public JdbcUrlRepository(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
+    }
 
     @Override
     public long add(UrlInput urlDTO) {

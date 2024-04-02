@@ -28,7 +28,7 @@ public class AbstractUrlUpdater implements UrlUpdater {
     @Override
     public void update() {
 
-        getNotCheckedForLongTimeUrls().forEach(
+        getNotCheckedForLingTimeUrls().forEach(
             urlEntity -> {
 
                 try {
@@ -56,7 +56,7 @@ public class AbstractUrlUpdater implements UrlUpdater {
         log.info("update method");
     }
 
-    private List<UrlEntity> getNotCheckedForLongTimeUrls() {
+    private List<UrlEntity> getNotCheckedForLingTimeUrls() {
         return urlService.findNotCheckedForLongTime(OffsetDateTime.now().minus(
             applicationConfig.scheduler().interval()));
     }

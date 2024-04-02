@@ -11,16 +11,19 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.UpdateResultStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor
 public class JooqUrlRepository implements UrlRepository {
     private final DSLContext dsl;
+
+    @Autowired
+    public JooqUrlRepository(DSLContext dsl) {
+        this.dsl = dsl;
+    }
 
     @Override
     public long add(UrlInput urlDTO) {
