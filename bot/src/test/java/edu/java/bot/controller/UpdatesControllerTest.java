@@ -6,6 +6,7 @@ import edu.java.bot.limit.RateLimitService;
 import edu.java.bot.limit.RateLimitServiceImpl;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.bot.print.Printer;
+import edu.java.bot.service.UpdatesService;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -21,13 +22,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = UpdatesController.class, properties = "app.client-config.limit=3")
-@Import(RateLimitServiceImpl.class)
+@Import({RateLimitServiceImpl.class, UpdatesService.class})
 public class UpdatesControllerTest {
     private static final int LIMIT = 3;
     private static final String REMOTE_ADDR_1 = "192.168.0.2";
     private static final String REMOTE_ADDR_2 = "192.168.0.1";
     @Autowired
     public RateLimitService rateLimitService;
+    @Autowired
+    UpdatesService updatesService;
     @MockBean
     BotListenerImpl botListener;
     @MockBean

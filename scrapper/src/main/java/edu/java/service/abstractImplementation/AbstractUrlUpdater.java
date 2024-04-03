@@ -1,12 +1,12 @@
 package edu.java.service.abstractImplementation;
 
-import edu.java.bot.api.UpdatesApi;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.client.linkClients.LinkUpdateResponse;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.entity.ChatEntity;
 import edu.java.entity.UrlEntity;
 import edu.java.exception.CustomWebClientException;
+import edu.java.service.SendMessageService;
 import edu.java.service.UrlService;
 import edu.java.service.UrlUpdater;
 import edu.java.util.LinkManager;
@@ -23,7 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AbstractUrlUpdater implements UrlUpdater {
     private final UrlService urlService;
     private final ApplicationConfig applicationConfig;
-    private final UpdatesApi updatesApi;
+    //    private final UpdatesApi updatesApi;
+    private final SendMessageService service;
     private final LinkManager linkManager;
 
     @Override
@@ -77,7 +78,7 @@ public class AbstractUrlUpdater implements UrlUpdater {
                                                          .map(
                                                                  ChatEntity::getId)
                                                          .toList());
-            updatesApi.updatesPost(linkUpdate);
+            service.send(linkUpdate);
         } else {
             urlService.update(urlEntity.getId(), OffsetDateTime.now());
         }

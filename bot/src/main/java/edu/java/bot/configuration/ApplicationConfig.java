@@ -15,7 +15,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(@NotEmpty String telegramToken, @NotNull ClientConfig clientConfig,
                                 @NotNull RetryConfig retryConfig, @NotNull String linkClientUrl,
-                                @NotNull String tgChatClientUrl) {
+                                @NotNull String tgChatClientUrl, @NotNull Topic topic, @NotNull Topic deadTopic) {
     public record ClientConfig(@NotNull @Min(1) Integer limit,
                                @NotNull @Min(0) Integer refillLimit,
                                @NotNull Duration delayRefill) {
@@ -26,4 +26,9 @@ public record ApplicationConfig(@NotEmpty String telegramToken, @NotNull ClientC
                               @NotNull Duration delay, @Positive int maxAttempts, @Min(0) @Max(1) Double jitter) {
 
     }
+
+    public record Topic(@NotNull String name, @NotNull Integer partitions, @NotNull Integer replicas) {
+
+    }
+
 }
