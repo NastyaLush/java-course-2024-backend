@@ -30,8 +30,10 @@ public class AbstractUrlUpdater implements UrlUpdater {
     @Transactional
     public void update() {
 
-        getNotCheckedForLingTimeUrls().forEach(
-                urlEntity -> {
+
+        getNotCheckedForLongTimeUrls().forEach(
+            urlEntity -> {
+
 
                     try {
                         LinkUpdateResponse linkUpdateResponse = linkManager.getLastUpdate(
@@ -54,11 +56,10 @@ public class AbstractUrlUpdater implements UrlUpdater {
         log.info("update method");
     }
 
-    private List<UrlEntity> getNotCheckedForLingTimeUrls() {
-        return urlService.findNotCheckedForLongTime(OffsetDateTime.now()
-                                                                  .minus(
-                                                                          applicationConfig.scheduler()
-                                                                                           .interval()));
+    private List<UrlEntity> getNotCheckedForLongTimeUrls() {
+        return urlService.findNotCheckedForLongTime(OffsetDateTime.now().minus(
+            applicationConfig.scheduler().interval()));
+
     }
 
 

@@ -6,21 +6,17 @@ import edu.java.exception.NotExistException;
 import edu.java.repository.TgChatRepository;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class JdbcTgChatRepository implements TgChatRepository {
 
     private final JdbcClient jdbcClient;
-
-    @Autowired
-    public JdbcTgChatRepository(JdbcClient jdbcClient) {
-        this.jdbcClient = jdbcClient;
-    }
 
     @Override
     public long add(long tgChatId) {
