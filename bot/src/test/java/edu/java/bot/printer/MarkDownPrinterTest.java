@@ -15,8 +15,10 @@ public class MarkDownPrinterTest {
     public void getMessage_shouldReturnSendMessageWithMarkdownMode() {
         MarkDownPrinter markDownPrinter = new MarkDownPrinter();
 
-        Map<String, Object> expected = new SendMessage(1L,"2").parseMode(ParseMode.Markdown).getParameters();
-        Map<String, Object> actual = markDownPrinter.getMessage(1L,"2").getParameters();
+        Map<String, Object> expected = new SendMessage(1L, "2").parseMode(ParseMode.Markdown)
+                                                               .getParameters();
+        Map<String, Object> actual = markDownPrinter.getMessage(1L, "2")
+                                                    .getParameters();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -27,7 +29,7 @@ public class MarkDownPrinterTest {
         MarkDownPrinter markDownPrinter = new MarkDownPrinter();
 
         String expected = "*text*";
-        String  actual = markDownPrinter.makeBold("text");
+        String actual = markDownPrinter.makeBold("text");
 
         Assertions.assertEquals(expected, actual);
     }
@@ -38,7 +40,7 @@ public class MarkDownPrinterTest {
         MarkDownPrinter markDownPrinter = new MarkDownPrinter();
 
         String expected = "_text_";
-        String  actual = markDownPrinter.makeItalic("text");
+        String actual = markDownPrinter.makeItalic("text");
 
         Assertions.assertEquals(expected, actual);
     }
@@ -50,7 +52,7 @@ public class MarkDownPrinterTest {
         MarkDownPrinter markDownPrinter = new MarkDownPrinter();
 
         String expected = "text";
-        String  actual = markDownPrinter.makeURL("text");
+        String actual = markDownPrinter.makeURL("text");
 
         Assertions.assertEquals(expected, actual);
     }
@@ -61,7 +63,7 @@ public class MarkDownPrinterTest {
         MarkDownPrinter markDownPrinter = new MarkDownPrinter();
 
         String expected = "[text](url)";
-        String  actual = markDownPrinter.makeURL("text", "url");
+        String actual = markDownPrinter.makeURL("text", "url");
 
         Assertions.assertEquals(expected, actual);
     }
@@ -73,7 +75,7 @@ public class MarkDownPrinterTest {
         MarkDownPrinter markDownPrinter = new MarkDownPrinter();
 
         String expected = "`text`";
-        String  actual = markDownPrinter.makeInlineCode("text");
+        String actual = markDownPrinter.makeInlineCode("text");
 
         Assertions.assertEquals(expected, actual);
     }
@@ -85,7 +87,7 @@ public class MarkDownPrinterTest {
         MarkDownPrinter markDownPrinter = new MarkDownPrinter();
 
         String expected = "```text```";
-        String  actual = markDownPrinter.makeFormatedInlineCode("text");
+        String actual = markDownPrinter.makeFormatedInlineCode("text");
 
         Assertions.assertEquals(expected, actual);
     }

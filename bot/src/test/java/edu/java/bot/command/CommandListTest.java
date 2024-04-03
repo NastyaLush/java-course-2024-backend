@@ -1,9 +1,9 @@
 package edu.java.bot.command;
 
+import edu.java.bot.exceptions.CustomWebClientException;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.Util;
 import edu.java.bot.client.LinksClient;
-import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.bot.print.MarkDownPrinter;
 import edu.java.bot.print.Printer;
 import edu.java.model.LinkResponse;

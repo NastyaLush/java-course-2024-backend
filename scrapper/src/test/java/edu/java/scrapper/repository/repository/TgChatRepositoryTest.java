@@ -25,7 +25,6 @@ public abstract class TgChatRepositoryTest extends IntegrationTest {
     void add_shouldCorrectlyAddChat() {
         tgChatRepository.add(1L);
         List<ChatEntity> chats = tgChatRepository.findAll();
-        System.out.println(chats.getFirst());
         assert chats.size() == 1;
         assert chats.getFirst()
                     .getTgChatId() == 1;

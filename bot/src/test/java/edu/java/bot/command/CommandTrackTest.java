@@ -1,9 +1,9 @@
 package edu.java.bot.command;
 
+import edu.java.bot.exceptions.CustomWebClientException;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.Util;
 import edu.java.bot.client.LinksClient;
-import edu.java.bot.exceptions.CustomWebClientException;
 import edu.java.bot.print.MarkDownPrinter;
 import edu.java.bot.print.Printer;
 import edu.java.bot.url.UrlService;
@@ -55,7 +55,7 @@ public class CommandTrackTest {
         CommandTrack commandTrack = new CommandTrack(urlService, linksClient);
 
         Map<String, Object> expectedAnswer =
-                printer.getMessage(ID, printer.makeURL("Url", EXAMPLE_URL)+" is tracking")
+                printer.getMessage(ID, printer.makeURL("Url", EXAMPLE_URL) + " is tracking")
                        .getParameters();
         Map<String, Object> givenAnswer = commandTrack.handle(update, printer)
                                                       .getParameters();

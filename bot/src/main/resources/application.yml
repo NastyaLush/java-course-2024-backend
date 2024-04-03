@@ -1,5 +1,21 @@
 app:
   telegram-token: "${BOT_TOKEN}"
+  client-config:
+    limit: 100
+    refill-limit: 20
+    delay-refill: 20s
+  retry-config:
+    back-off-type: fixed
+    retry-ports:
+      - 400
+      - 500
+      - 403
+      - 501
+    max-attempts: 2
+    delay: 2s
+    jitter: 0.75
+  link-client-url: "http://localhost:8080/links"
+  tg-chat-client-url: "http://localhost:8080/tg-chat"
 
 
 spring:
@@ -7,6 +23,8 @@ spring:
     name: bot
   jackson:
     time-zone: UTC
+
+
 
 
 

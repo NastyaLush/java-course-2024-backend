@@ -1,7 +1,7 @@
 package edu.java.util;
 
-import edu.java.linkClients.LinkUpdateResponse;
-import edu.java.linkClients.SupportableLinkService;
+import edu.java.client.linkClients.LinkUpdateResponse;
+import edu.java.client.linkClients.SupportableLinkService;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
