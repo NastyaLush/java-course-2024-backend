@@ -50,6 +50,24 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: false
+management:
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        prometheus: /metrics
+  server:
+    port: 8081
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 server:
   port: 8080
