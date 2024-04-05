@@ -32,10 +32,24 @@ spring:
     name: bot
   jackson:
     time-zone: UTC
-
-
-
-
+management:
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        prometheus: /metrics
+  server:
+    port: 8091
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 server:
   port: 8090
