@@ -16,20 +16,52 @@ app:
     jitter: 0.75
   link-client-url: "http://localhost:8080/links"
   tg-chat-client-url: "http://localhost:8080/tg-chat"
-
+  topic:
+    name: "topic"
+    partitions: 10
+    replicas: 1
+  dead-topic:
+    name: "topic_dlq"
+    partitions: 10
+    replicas: 1
 
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
   application:
     name: bot
   jackson:
     time-zone: UTC
-
-
-
-
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /
+      path-mapping:
+        prometheus: /metrics
+      exposure:
+        include:
+          - health
+          - info
+          - prometheus
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
+  server:
+    port: 8290
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
 
 server:
-  port: 8090
+  port: 8190
 
 logging:
   config: classpath:log4j2-plain.xml

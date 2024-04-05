@@ -14,7 +14,6 @@ public class DatabaseConfig {
     @Autowired
     private DataSource dataSource;
 
-
     @Bean
     JdbcClient jdbcClient(DataSource dataSource) {
         return JdbcClient.create(dataSource);

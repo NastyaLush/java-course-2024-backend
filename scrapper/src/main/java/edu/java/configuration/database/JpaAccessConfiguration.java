@@ -1,9 +1,9 @@
 package edu.java.configuration.database;
 
-import edu.java.bot.api.UpdatesApi;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.repository.jpa.JpaTgChatRepository;
 import edu.java.repository.jpa.JpaUrlRepository;
+import edu.java.service.SendMessageService;
 import edu.java.service.TgChatService;
 import edu.java.service.UrlService;
 import edu.java.service.UrlUpdater;
@@ -37,14 +37,14 @@ public class JpaAccessConfiguration {
     @Bean
     public UrlUpdater urlUpdater(
             ApplicationConfig applicationConfig,
-            UpdatesApi updatesApi,
+            SendMessageService service,
             LinkManager linkManager,
             JpaUrlRepository jooqUrlRepository,
             JpaTgChatRepository jooqTgChatRepository
     ) {
         return new JpaUrlUpdater(urlService(jooqUrlRepository, jooqTgChatRepository, linkManager),
                 applicationConfig,
-                updatesApi,
+                service,
                 linkManager);
     }
 }
