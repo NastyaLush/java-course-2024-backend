@@ -65,7 +65,7 @@ services:
     depends_on:
       - zoo1
   prometheus:
-    image: prom/prometheus:v2.36.2
+    image: prom/prometheus
     volumes:
       - ./prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -74,19 +74,18 @@ services:
       - '--storage.tsdb.path=/prometheus'
     ports:
       - 9090:9090
-    networks:
-      - back-tier
     restart: always
   grafana:
     image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
     ports:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
-    networks:
-      - back-tier
     restart: always
 
 
@@ -102,4 +101,3 @@ volumes:
 
 networks:
   backend: { }
-  back-tier:

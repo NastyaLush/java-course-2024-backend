@@ -51,6 +51,17 @@ spring:
       ddl-auto: validate
     show-sql: false
 management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /
+      path-mapping:
+        prometheus: /metrics
+      exposure:
+        include:
+          - health
+          - info
+          - prometheus
   endpoint:
     info:
       enabled: true
@@ -58,17 +69,14 @@ management:
       enabled: true
     prometheus:
       enabled: true
-  endpoints:
-    web:
-      base-path: /
-      path-mapping:
-        prometheus: /metrics
   server:
     port: 8081
   metrics:
     tags:
       application: ${spring.application.name}
-
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
 server:
   port: 8080
 
