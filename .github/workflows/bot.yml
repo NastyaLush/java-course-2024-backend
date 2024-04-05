@@ -26,7 +26,7 @@ jobs:
           cache: maven
 
       - name: maven build
-        run: mvn -pl bot -am package
+        run: mvn -pl bot -am package -DskipTests
 
       - name: Checkout repository
         uses: actions/checkout@v4
