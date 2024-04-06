@@ -6,9 +6,7 @@ on:
     paths:
       - .github/workflows/scrapper.yml
       - scrapper/**
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,7 +24,7 @@ jobs:
           cache: maven
 
       - name: maven build
-        run: mvn -pl scrapper -am  package
+        run: mvn -pl scrapper -am package
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -41,7 +39,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4mvn -pl scrapper -am  clean package
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: ./scrapper
           push: true
