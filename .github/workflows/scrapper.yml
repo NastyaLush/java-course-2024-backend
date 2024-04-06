@@ -41,7 +41,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4mvn -pl scrapper -am  clean package
         with:
           context: ./scrapper
           push: true
@@ -71,7 +71,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - run: mvn -pl scrapper -am checkstyle:check
+      - run: mvn -pl scrapper -am  clean checkstyle:check
 
   integration-test:
     name: integration tests
