@@ -26,7 +26,7 @@ jobs:
           cache: maven
 
       - name: maven build
-        run: mvn -pl scrapper -am  clean package
+        run: mvn -pl scrapper -am  package
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -71,7 +71,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - run: mvn -pl scrapper -am  clean checkstyle:check
+      - run: mvn -pl scrapper -am checkstyle:check
 
   integration-test:
     name: integration tests
