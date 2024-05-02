@@ -1,4 +1,4 @@
-package edu.java.configuration.database;
+package edu.java.configuration;
 
 import javax.sql.DataSource;
 import org.jooq.conf.RenderQuotedNames;
@@ -11,8 +11,6 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 
 @Configuration
 public class DatabaseConfig {
-    @Autowired
-    private DataSource dataSource;
 
     @Bean
     JdbcClient jdbcClient(DataSource dataSource) {
