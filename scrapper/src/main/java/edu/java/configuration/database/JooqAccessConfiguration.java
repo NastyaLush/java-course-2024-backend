@@ -1,10 +1,10 @@
 package edu.java.configuration.database;
 
-import edu.java.bot.api.UpdatesApi;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.repository.jooq.JooqTgChatRepository;
 import edu.java.repository.jooq.JooqTrackingUrlsRepository;
 import edu.java.repository.jooq.JooqUrlRepository;
+import edu.java.service.SendMessageService;
 import edu.java.service.TgChatService;
 import edu.java.service.UrlService;
 import edu.java.service.UrlUpdater;
@@ -39,7 +39,7 @@ public class JooqAccessConfiguration {
     @Bean
     public UrlUpdater urlUpdater(
             ApplicationConfig applicationConfig,
-            UpdatesApi updatesApi,
+            SendMessageService service,
             LinkManager linkManager,
             JooqUrlRepository jooqUrlRepository,
             JooqTrackingUrlsRepository jooqTrackingUrlsRepository,
@@ -53,7 +53,7 @@ public class JooqAccessConfiguration {
                         linkManager
                 ),
                 applicationConfig,
-                updatesApi,
+                service,
                 linkManager);
     }
 }

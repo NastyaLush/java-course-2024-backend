@@ -6,6 +6,7 @@ import edu.java.model.LinkResponse;
 import edu.java.model.ListLinksResponse;
 import edu.java.model.RemoveLinkRequest;
 import edu.java.service.UrlService;
+import io.micrometer.core.annotation.Counted;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class LinksController implements LinksApi {
     }
 
     @Override
+    @Counted(value = "bot_massages")
     public ResponseEntity<LinkResponse> linksDelete(Long tgChatId, RemoveLinkRequest removeLinkRequest) {
         log.info("links delete tgChatId {} removeLinkRequest {}", tgChatId, removeLinkRequest);
         LinkResponse linkResponse = urlService.remove(tgChatId, removeLinkRequest.getLink());
@@ -31,6 +33,7 @@ public class LinksController implements LinksApi {
     }
 
     @Override
+    @Counted(value = "bot_massages")
     public ResponseEntity<ListLinksResponse> linksGet(Long tgChatId) {
         log.info("links get tgChatId {}", tgChatId);
         ListLinksResponse listLinksResponse = urlService.listAll(tgChatId);
@@ -38,9 +41,11 @@ public class LinksController implements LinksApi {
     }
 
     @Override
+    @Counted(value = "bot_massages")
     public ResponseEntity<LinkResponse> linksPost(Long tgChatId, AddLinkRequest addLinkRequest) {
         log.info("links post tgChatId {} addLinkRequest {}", tgChatId, addLinkRequest);
         LinkResponse linkResponse = urlService.add(tgChatId, addLinkRequest.getLink());
         return new ResponseEntity<>(linkResponse, HttpStatus.OK);
     }
 }
+

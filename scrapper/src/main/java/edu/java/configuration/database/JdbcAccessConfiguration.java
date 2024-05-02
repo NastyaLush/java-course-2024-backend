@@ -1,10 +1,10 @@
 package edu.java.configuration.database;
 
-import edu.java.bot.api.UpdatesApi;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.repository.jdbc.JdbcTgChatRepository;
 import edu.java.repository.jdbc.JdbcTrackingUrlsRepository;
 import edu.java.repository.jdbc.JdbcUrlRepository;
+import edu.java.service.SendMessageService;
 import edu.java.service.TgChatService;
 import edu.java.service.UrlService;
 import edu.java.service.UrlUpdater;
@@ -41,7 +41,7 @@ public class JdbcAccessConfiguration {
     @Bean
     public UrlUpdater urlUpdater(
             ApplicationConfig applicationConfig,
-            UpdatesApi updatesApi,
+            SendMessageService service,
             LinkManager linkManager,
             JdbcUrlRepository jdbcUrlRepository,
             JdbcTrackingUrlsRepository jdbcTrackingUrlsRepository,
@@ -54,7 +54,7 @@ public class JdbcAccessConfiguration {
                 linkManager
         ),
                 applicationConfig,
-                updatesApi,
+                service,
                 linkManager);
     }
 }
